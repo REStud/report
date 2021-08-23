@@ -3,15 +3,11 @@
 import pandas as pd
 import json
 
-def read_json(file):
-    with open(file+'.json', 'r') as json_file:
-        json_data=json.load(json_file)
-    return json_data
-
 class Exporter(object):
-    def __init__(self, json_data):
-        self.json_data = json_data
-
+    def __init__(self, file):
+        self.file = file
+        with open(self.file+'.json', 'r') as json_file:
+            self.json_data = json.load(json_file)
 
     def lists_to_df(self):
         self.lists_df = pd.DataFrame(self.json_data['lists']).loc[:, ['id', 'name']].set_index('id')
@@ -105,9 +101,7 @@ class Exporter(object):
 
 if __name__ == '__main__':
 
-    json_data = read_json('table17aug21')
-
-    exporter = Exporter(json_data)
+    exporter = Exporter('table17aug21')
     exporter.lists_to_df()
     exporter.cards_to_df()
     exporter.merge_cards_to_lists()
