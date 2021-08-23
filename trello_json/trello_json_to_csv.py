@@ -101,7 +101,7 @@ class Exporter(object):
         # prepare new DataFrame from list of dicts
         df = pd.DataFrame(self.cards_list).set_index('name')
         # export to CSV
-        df.to_csv('table17aug21.csv')
+        df.transpose().to_csv('table17aug21.csv')
 
 if __name__ == '__main__':
 
