@@ -4,10 +4,14 @@ import pandas as pd
 import json
 
 class Exporter(object):
-    def __init__(self, file):
-        self.file = file
+    def __init__(self, board, actions):
+        self.file = board
+        self.actions = actions
         with open(self.file+'.json', 'r') as json_file:
             self.json_data = json.load(json_file)
+
+        with open(self.actions+'.json', 'r') as actions_file:
+            self.actions = json.load(actions_file)
 
     def lists_to_df(self):
         self.lists_df = pd.DataFrame(self.json_data['lists']).loc[:, ['id', 'name']].set_index('id')
@@ -31,13 +35,14 @@ class Exporter(object):
         self.cards = pd.merge(self.cards, self.lists_df, how='left', left_on='idList', right_on='id', 
                      suffixes=('_card', '_list'), right_index=True).drop(['idList'], axis=1)
 
-    def actions_to_df(self,):
+    def actions_to_df(self):
         columns = ['idMemberCreator','data','type','date']
-        self.actions = pd.DataFrame(self.json_data['actions']).loc[:, columns]
-        # filter DataFrame actions and sort in chronological order
-        card_actions = ['createCard', 'updateCard'] # for some reason this did not work as a parameter passed when callingthe funciton.
-        self.actions = self.actions[self.actions['type'].isin(card_actions)].reset_index(drop=True)
+        self.actions = pd.DataFrame(self.actions)
         self.actions = self.actions.sort_values(by='date').reset_index(drop=True)
+        self.actions = self.actions.sort_values(by='date').reset_index(drop=True)
+    
+    def remove_action_duplicates(self):
+        self.actions = self.actions.drop_duplicates(subset=['id','date','type','list_after','list_before']).reset_index()
 
     def fill_up_actions(self):
         # prepare new columns
@@ -97,14 +102,15 @@ class Exporter(object):
         # prepare new DataFrame from list of dicts
         df = pd.DataFrame(self.cards_list).set_index('name')
         # export to CSV
-        df.transpose().to_csv('table17aug21.csv')
+        df.transpose().to_csv(self.file+'.csv')
 
 if __name__ == '__main__':
 
-    exporter = Exporter('table17aug21')
+    exporter = Exporter('table31aug21', 'actions')
     exporter.lists_to_df()
     exporter.cards_to_df()
     exporter.merge_cards_to_lists()
     exporter.actions_to_df()
     exporter.fill_up_actions()
+    exporter.remove_action_duplicates()
     exporter.export_to_csv()
