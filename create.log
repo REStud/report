@@ -193,4 +193,18 @@ file
     > a saved
 
 . 
+. collapse (sum) duration, by(ms_number ever_accepted at_editor)
+
+. table at_editor if ever_accepted, statistic(mean duration)
+
+---------------------
+          |      Mean
+----------+----------
+at_editor |          
+  0       |  16.85484
+  1       |  24.40323
+  Total   |  20.62903
+---------------------
+
+. 
 end of do-file

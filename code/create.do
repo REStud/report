@@ -43,3 +43,6 @@ mvencode duration, mv(0) override
 table round_number at_editor if ever_accepted
 table round_number at_editor if ever_accepted, statistic(mean duration)
 save "`here'/data/durations.dta", replace
+
+collapse (sum) duration, by(ms_number ever_accepted at_editor)
+table at_editor if ever_accepted, statistic(mean duration)
