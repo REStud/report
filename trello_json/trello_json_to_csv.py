@@ -100,9 +100,11 @@ class Exporter(object):
             self.cards_list.append(card)
             
         # prepare new DataFrame from list of dicts
-        df = pd.DataFrame(self.cards_list).set_index('name')
+        df = pd.DataFrame(self.cards_list)
+        df['id'] = range(1,len(df)+1)
+        df = pd.wide_to_long(df, ['activity','date','list_before','list_after'],i="id", j="action_id")
         # export to CSV
-        df.transpose().to_csv(self.file+'.csv')
+        df.to_csv(self.file+'.csv')
 
 if __name__ == '__main__':
 
