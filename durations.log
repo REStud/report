@@ -21,7 +21,7 @@ Notes:
       3. More than 2 billion observations are allowed; see help obs_advice.
       4. Maximum number of variables is set to 5,000; see help set_maxvar.
 
-. do code/create.do 
+. do code/durations.do 
 
 . here
 /Users/koren/Tresorit/places/restud/data-editor/report/

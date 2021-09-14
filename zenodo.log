@@ -1,0 +1,113 @@
+
+  ___  ____  ____  ____  ____ ©
+ /__    /   ____/   /   ____/      17.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
+
+Stata license: Single-user 2-core  perpetual
+Serial number: 501706328764
+  Licensed to: Miklos Koren
+               CEU MicroData
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000; see help set_maxvar.
+
+. do code/zenodo.do 
+
+. here
+/Users/koren/Tresorit/places/restud/data-editor/report/
+
+. local here = r(here)
+
+. 
+. import delimited using "`here'/zenodo/zenodo_data.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(6 vars, 80 obs)
+
+. 
+. label variable unique_downloads "Downloads"
+
+. label variable unique_views "Views"
+
+. 
+. generate str lbl = ""
+(80 missing values generated)
+
+. replace lbl = "Identifying Shocks via Time-Varying Volatility" if zenodoid ==
+>  4448256
+variable lbl was str1 now str46
+(1 real change made)
+
+. replace lbl = "Property Rights, Land Misallocation and Agricultural Efficienc
+> y in China" if zenodoid == 4029206
+variable lbl was str46 now str72
+(1 real change made)
+
+. replace lbl = "Trade and Domestic Production Networks" if zenodoid == 3997900
+(1 real change made)
+
+. replace lbl = "The Macroeconomics of Microfinance" if zenodoid == 3959907
+(1 real change made)
+
+. replace lbl = "Measuring the Incentive to Collude: The Vitamin Cartels, 1990–
+> 1999" if zenodoid == 5104830
+(1 real change made)
+
+. replace lbl = "Stochastic Revealed Preferences with Measurement Error" if zen
+> odoid == 4007866
+(1 real change made)
+
+. 
+. foreach X of varlist unique_views unique_downloads {
+  2.     summarize `X', detail
+  3. }
+
+                            Views
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            8              8
+ 5%         19.5             15
+10%           24             15       Obs                  80
+25%           33             19       Sum of wgt.          80
+
+50%         48.5                      Mean            65.1625
+                        Largest       Std. dev.      67.65015
+75%         67.5            163
+90%        116.5            170       Variance       4576.543
+95%          148            402       Skewness       4.060541
+99%          454            454       Kurtosis       22.09522
+
+                          Downloads
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%          2.5              2
+10%          4.5              2       Obs                  80
+25%            7              2       Sum of wgt.          80
+
+50%           12                      Mean             17.475
+                        Largest       Std. dev.      17.35189
+75%         21.5             62
+90%         37.5             63       Variance        301.088
+95%           59             78       Skewness       2.465324
+99%          100            100       Kurtosis       10.16946
+
+. 
+. scatter unique_downloads unique_views, mcolor(blue%30) legend(off) graphregio
+> n(color(white)) mlabel(lbl) mlabposition(6) xscale(range(0 600))
+
+. graph export "`here'/downloads.png", replace width(800)
+file /Users/koren/Tresorit/places/restud/data-editor/report//downloads.png writ
+> ten in PNG format
+
+. 
+end of do-file
