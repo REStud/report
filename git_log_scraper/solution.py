@@ -12,7 +12,7 @@ for repo in list:
     cmd1 = "git pull --all".format(repo)
     os.system(cmd1)
     #git log all (for initial log) & then update it with --after=<date> (from a specified date - you can automate/schedule it)
-    cmd2 = "git log --all --after=2021-06-10 --pretty=format:'{},%h,%an,%ad,%s' > {}.csv".format(repo,repo)
+    cmd2 = "git log --all --after=2021-06-10 --pretty=format:'{},%h,%an,%ad,%s, %d' > {}.csv".format(repo,repo)
     os.system(cmd2)
     src = "{}.csv".format(repo)
     #To append here as CSV I have used csv module
