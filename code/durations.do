@@ -37,9 +37,10 @@ rename spell1 time_at_editor
 egen max_revision = max(revision), by(MS)
 
 local filter ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
-local opt width(7) start(0) frequency
+local opt width(7) start(0) frequency graphregion(color(white))
+
 twoway (histogram time_at_editor if `filter' & revision==0, `opt' color(blue%30)) (histogram time_at_editor if `filter' & revision>=1, `opt' color(red%30)), xtitle(Days at editor) legend(order(1 "First submission" 2 "Revision"))
 graph export "`here'time_at_editor.png", replace width(800)
 
-histogram max_revision if `filter' & revision == 0, color(blue%30) discrete start(0) frequency xtitle(Accepted revision)
+histogram max_revision if `filter' & revision == 0, color(blue%30) discrete start(0) frequency xtitle(Accepted revision) graphregion(color(white))
 graph export "`here'revision.png", replace width(800)
