@@ -2,7 +2,7 @@ clear all
 here
 local here = r(here)
 
-use "`here'output/gitlog.dta", clear
+use "`here'git_data/output/gitlog.dta", clear
 replace MS = "27827" if MS == "27827-1"
 destring MS, force replace
 
@@ -33,7 +33,7 @@ egen max_revision = max(revision), by(MS)
 
 local opt width(7) start(0) frequency
 twoway (histogram time_at_editor if ever_accepted & revision==0, `opt' color(blue%30)) (histogram time_at_editor if ever_accepted & revision>=1, `opt' color(red%30)), xtitle(Days at editor) legend(order(1 "First submission" 2 "Revision"))
-graph export "`here'output/time_at_editor.png", replace width(800)
+graph export "`here'time_at_editor.png", replace width(800)
 
 histogram max_revision if revision == 0 & ever_accepted, color(blue%30) discrete start(0) frequency xtitle(Accepted revision)
-graph export "`here'output/revision.png", replace width(800)
+graph export "`here'revision.png", replace width(800)
