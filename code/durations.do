@@ -1,48 +1,39 @@
+clear all
 here
 local here = r(here)
 
-import delimited using "`here'/trello_json/table31aug21.csv", clear
-rename list_before from_list
-rename list_after to_list
+use "`here'output/gitlog.dta", clear
+replace MS = "27827" if MS == "27827-1"
+destring MS, force replace
 
-* read MS number
-generate ms_number = real(ustrregexs(0)) if ustrregexm(name, "([0-9]){5}") 
+* keep only packages with new branch naming
+keep if inlist(branch_imputed, "author", "version1", "version2", "version3", "version4")
+egen byte ever_accepted = max(tag=="accepted"), by(MS)
 
-* convert date string to datetime
-generate double timestamp = date(date, "YMD#")
-format timestamp %tdCCYY-NN-DD
+bysort MS (numeric_date): generate t = _n
+xtset MS t
 
-* keep list moves and first action only
-keep if action_id == 0 | !missing(from_list, to_list)
-egen byte ever_accepted = max(to_list == "Editor accepted"), by(ms_number)
+generate spell = D.numeric_date/3600/24
+bysort MS (t): generate byte at_editor = (branch_imputed[_n-1] == branch_imputed[_n] ) | (branch_imputed[_n-1] == "author")
 
-* group actions
-egen action_number = rank(action_id), by(ms_number) unique
-xtset ms_number action_number
-* time spent in "from" list before moving it to "to" list
-* FIXME: some cards are created in "Author submitted", some are moved there. The former will have . for duration
-generate duration = datediff(L.timestamp, timestamp, "day")
-* round #: how many times have the card moved out from "Author submitted"?
-bysort ms_number (action_number): generate round_number = sum((from_list == "Author submitted"))
-tabulate round_number, missing
-* FIXME: move to analyze.do
-tabulate round_number if to_list == "Editor accepted"
+xtset MS t
+generate byte change = L.at_editor != at_editor
+bysort MS (t): generate byte spell_id = sum(change)
 
-generate byte at_editor = 1 if inlist(from_list, "Author submitted", "At team", "At editor", "WIP", "Revised")
-replace at_editor = 0 if inlist(from_list, "At author")
-tabulate at_editor, missing
+collapse (sum) spell, by(MS ever_accepted spell_id at_editor)
+drop if spell_id == 1
+replace spell_id = int((spell_id - 1)/2)
 
-* merge different lists at editor
-drop if round_number == 0 | missing(at_editor)
-replace round_number = 3 if round_number > 3
-collapse (sum) duration, by(ms_number ever_accepted round_number at_editor)
-reshape wide duration, i(ms_number round_number) j(at_editor)
-reshape long
-mvencode duration, mv(0) override
+reshape wide spell, i(MS spell_id) j(at_editor)
+rename spell_id revision
+rename spell0 time_at_author
+rename spell1 time_at_editor
 
-table round_number at_editor if ever_accepted
-table round_number at_editor if ever_accepted, statistic(mean duration)
-save "`here'/data/durations.dta", replace
+egen max_revision = max(revision), by(MS)
 
-collapse (sum) duration, by(ms_number ever_accepted at_editor)
-table at_editor if ever_accepted, statistic(mean duration)
+local opt width(7) start(0) frequency
+twoway (histogram time_at_editor if ever_accepted & revision==0, `opt' color(blue%30)) (histogram time_at_editor if ever_accepted & revision>=1, `opt' color(red%30)), xtitle(Days at editor) legend(order(1 "First submission" 2 "Revision"))
+graph export "`here'output/time_at_editor.png", replace width(800)
+
+histogram max_revision if revision == 0 & ever_accepted, color(blue%30) discrete start(0) frequency xtitle(Accepted revision)
+graph export "`here'output/revision.png", replace width(800)
