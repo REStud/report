@@ -29,16 +29,58 @@ Notes:
 . local here = r(here)
 
 . 
-. import delimited using "`here'/zenodo/zenodo_data_2022.csv", clear
+. clear 
+
+. tempfile zenodo
+
+. save `zenodo', emptyok replace
+(dataset contains 0 observations)
+(file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 not
+    found)
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 saved
+    as .dta format
+
+. forvalues year = 2021/2022 {
+  2.     import delimited using "`here'/zenodo/zenodo_data_`year'.csv", clear
+  3.     rename id zenodoid
+  4.     generate year = `year'
+  5.     append using `zenodo'
+  6.     save `zenodo', replace
+  7. }
+(encoding automatically selected: ISO-8859-1)
+(6 vars, 80 obs)
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 saved
+    as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 133 obs)
-
-. rename id zenodoid
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 saved
+    as .dta format
 
 . 
-. label variable unique_downloads "Downloads"
+. keep zenodoid year unique_views unique_downloads
 
-. label variable unique_views "Views"
+. rename unique_* *
+
+. reshape wide views downloads, i(zenodoid) j(year)
+(j = 2021 2022)
+
+Data                               Long   ->   Wide
+-----------------------------------------------------------------------------
+Number of observations              213   ->   133         
+Number of variables                   4   ->   5           
+j variable (2 values)              year   ->   (dropped)
+xij variables:
+                                  views   ->   views2021 views2022
+                              downloads   ->   downloads2021 downloads2022
+-----------------------------------------------------------------------------
+
+. 
+. * uncumulate cumulated stats
+. foreach X in views downloads {
+  2.     replace `X'2022 = `X'2022 - `X'2021 if !missing(`X'2021)
+  3. }
+(80 real changes made)
+(80 real changes made)
 
 . 
 . generate str lbl = ""
@@ -69,47 +111,56 @@ variable lbl was str46 now str72
 (1 real change made)
 
 . 
-. foreach X of varlist unique_views unique_downloads {
-  2.     summarize `X', detail
-  3. }
-
-                            Views
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%           11              7
- 5%           20             11
-10%           35             14       Obs                 133
-25%           52             17       Sum of wgt.         133
-
-50%           86                      Mean           108.1278
-                        Largest       Std. dev.      98.46822
-75%          127            296
-90%          197            309       Variance       9695.991
-95%          276            545       Skewness        3.96975
-99%          545            836       Kurtosis       26.45597
-
-                          Downloads
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%            1              1
- 5%            2              1
-10%            5              2       Obs                 133
-25%           11              2       Sum of wgt.         133
-
-50%           26                      Mean            34.7594
-                        Largest       Std. dev.      33.21992
-75%           48            140
-90%           82            147       Variance       1103.563
-95%          112            149       Skewness        1.68695
-99%          149            151       Kurtosis       5.834653
-
-. 
-. scatter unique_downloads unique_views, mcolor(blue%30) legend(off) graphregio
-> n(color(white)) mlabel(lbl) mlabposition(6) xscale(range(0 600))
+. scatter downloads2022 downloads2021, mcolor(blue%30) legend(off) graphregion(
+> color(white)) mlabel(lbl) mlabposition(6) xtitle(Downloads last year) ytitle(
+> Downloads in current year)
 
 . graph export "`here'/downloads.png", replace width(800)
 file /Users/koren/Tresorit/places/restud/data-editor/report//downloads.png writ
 > ten in PNG format
 
+. 
+. histogram downloads2022, color(blue%30) legend(off) graphregion(color(white))
+>  frequency xtitle(Cumulated downloads)
+(bin=11, start=1, width=11.545455)
+
+. graph export "`here'/downloads_histogram.png", replace width(800)
+(file /Users/koren/Tresorit/places/restud/data-editor/report//downloads_histogr
+> am.png not found)
+file /Users/koren/Tresorit/places/restud/data-editor/report//downloads_histogra
+> m.png written in PNG format
+
+. 
+. reshape long
+(j = 2021 2022)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              133   ->   266         
+Number of variables                   6   ->   5           
+j variable (2 values)                     ->   year
+xij variables:
+                    views2021 views2022   ->   views
+            downloads2021 downloads2022   ->   downloads
+-----------------------------------------------------------------------------
+
+. summarize downloads, detail
+
+                          downloads
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            2              1
+10%            4              1       Obs                 213
+25%            8              2       Sum of wgt.         213
+
+50%           15                      Mean           21.70423
+                        Largest       Std. dev.      21.25723
+75%           27            100
+90%           45            107       Variance       451.8697
+95%           63            115       Skewness       2.215364
+99%          107            128       Kurtosis       8.984347
+
+. 
 . 
 end of do-file
