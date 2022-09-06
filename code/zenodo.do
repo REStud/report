@@ -1,7 +1,8 @@
 here
 local here = r(here)
 
-import delimited using "`here'/zenodo/zenodo_data.csv", clear
+import delimited using "`here'/zenodo/zenodo_data_2022.csv", clear
+rename id zenodoid
 
 label variable unique_downloads "Downloads"
 label variable unique_views "Views"

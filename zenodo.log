@@ -1,5 +1,5 @@
 
-  ___  ____  ____  ____  ____ ©
+  ___  ____  ____  ____  ____ ®
  /__    /   ____/   /   ____/      17.0
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
@@ -29,9 +29,11 @@ Notes:
 . local here = r(here)
 
 . 
-. import delimited using "`here'/zenodo/zenodo_data.csv", clear
+. import delimited using "`here'/zenodo/zenodo_data_2022.csv", clear
 (encoding automatically selected: ISO-8859-1)
-(6 vars, 80 obs)
+(6 vars, 133 obs)
+
+. rename id zenodoid
 
 . 
 . label variable unique_downloads "Downloads"
@@ -40,7 +42,7 @@ Notes:
 
 . 
 . generate str lbl = ""
-(80 missing values generated)
+(133 missing values generated)
 
 . replace lbl = "Identifying Shocks via Time-Varying Volatility" if zenodoid ==
 >  4448256
@@ -74,32 +76,32 @@ variable lbl was str46 now str72
                             Views
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%            8              8
- 5%         19.5             15
-10%           24             15       Obs                  80
-25%           33             19       Sum of wgt.          80
+ 1%           11              7
+ 5%           20             11
+10%           35             14       Obs                 133
+25%           52             17       Sum of wgt.         133
 
-50%         48.5                      Mean            65.1625
-                        Largest       Std. dev.      67.65015
-75%         67.5            163
-90%        116.5            170       Variance       4576.543
-95%          148            402       Skewness       4.060541
-99%          454            454       Kurtosis       22.09522
+50%           86                      Mean           108.1278
+                        Largest       Std. dev.      98.46822
+75%          127            296
+90%          197            309       Variance       9695.991
+95%          276            545       Skewness        3.96975
+99%          545            836       Kurtosis       26.45597
 
                           Downloads
 -------------------------------------------------------------
       Percentiles      Smallest
  1%            1              1
- 5%          2.5              2
-10%          4.5              2       Obs                  80
-25%            7              2       Sum of wgt.          80
+ 5%            2              1
+10%            5              2       Obs                 133
+25%           11              2       Sum of wgt.         133
 
-50%           12                      Mean             17.475
-                        Largest       Std. dev.      17.35189
-75%         21.5             62
-90%         37.5             63       Variance        301.088
-95%           59             78       Skewness       2.465324
-99%          100            100       Kurtosis       10.16946
+50%           26                      Mean            34.7594
+                        Largest       Std. dev.      33.21992
+75%           48            140
+90%           82            147       Variance       1103.563
+95%          112            149       Skewness        1.68695
+99%          149            151       Kurtosis       5.834653
 
 . 
 . scatter unique_downloads unique_views, mcolor(blue%30) legend(off) graphregio
