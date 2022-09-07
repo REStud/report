@@ -10,7 +10,7 @@ class Zenodo(object):
         self.id = id
         self.meta = requests.get(self.__class__.URL + f'/{self.id}').json()
 
-FIELDS = 'id revision stats/downloads stats/views stats/unique_downloads stats/unique_views'.split()
+FIELDS = 'id created revision stats/downloads stats/views stats/unique_downloads stats/unique_views'.split()
 
 def get_field(json, field):
     parts = field.split('/')
