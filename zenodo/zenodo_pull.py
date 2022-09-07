@@ -1,15 +1,6 @@
 #need an empirical distribution of download and view numbers for zenodo packages
-from webbrowser import get
 import requests
-import json
 import csv
-import time
-class Zenodo(object):
-    URL = f'https://zenodo.org/api/records/'
-    def __init__(self, id):
-        self.id = id
-        self.meta = requests.get(self.__class__.URL + f'/{self.id}').json()
-
 FIELDS = 'id created revision stats/downloads stats/views stats/unique_downloads stats/unique_views'.split()
 
 def get_field(json, field):
