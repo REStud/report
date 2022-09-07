@@ -46,9 +46,9 @@ Notes:
 . rename views views2021
 
 . save `zenodo', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St23538.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24094.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St23538.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24094.000001 saved
 
 . 
 . import delimited using "`here'/zenodo/zenodo_data_2022.csv", clear
@@ -188,22 +188,22 @@ xij variables:
 downloads_per_month2021 downloads_per_month2022->downloads_per_month
 -----------------------------------------------------------------------------
 
-. summarize downloads, detail
+. summarize downloads_per_month if year==2022, detail
 
-                          downloads
+                     downloads_per_month
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%            1              1
- 5%            2              1
-10%            5              1       Obs                 213
-25%            8              2       Sum of Wgt.         213
+ 1%           .2             .2
+ 5%           .5             .2
+10%           .7       .4090909       Obs                 133
+25%          1.2             .5       Sum of Wgt.         133
 
-50%           18                      Mean           28.28169
-                        Largest       Std. Dev.      29.50624
-75%           37            140
-90%           62            147       Variance       870.6184
-95%           90            150       Skewness       2.058541
-99%          147            151       Kurtosis        7.70042
+50%            2                      Mean           2.368282
+                        Largest       Std. Dev.      1.637397
+75%            3              7
+90%     4.214286       7.214286       Variance        2.68107
+95%         6.25       8.166667       Skewness       1.648431
+99%     8.166667       8.846154       Kurtosis       6.048322
 
 . 
 . 

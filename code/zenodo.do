@@ -49,5 +49,5 @@ histogram downloads_per_month2022, color(blue%30) legend(off) graphregion(color(
 graph export "`here'/downloads_histogram.png", replace width(800)
 
 reshape long
-summarize downloads, detail
+summarize downloads_per_month if year==2022, detail
 

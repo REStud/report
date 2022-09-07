@@ -24,12 +24,11 @@ The average time authors spend with a revision is 25 days.
 
 ## Impact
 
-OLD DATA
-
-The median replication package is viewed on Zenodo 48 times and downloaded 12 times. This includes views and downloads by author and editorial team. As the figure shows, there is substantial heterogeneity across packages in their download statistics.
+The median replication package is downloaded from Zenodo 2 times a month. This includes views and downloads by author and editorial team. As the figure shows, there is substantial heterogeneity across packages in their download statistics, but all packages have some visibility.
 
 ![Unique downloads of packages from Zenodo](downloads_histogram.png){ width=75% }
 
+Download statistics are highly correlated over time. Packages that were popular last year are often downloaded also this year (next Figure). This suggests that the download statistics capture genuine interest and not only drive by early downloads by authors and the editorial team.
+
 ![Downloads are highly correlated over time](downloads.png){ width=75% }
 
-As we have no baseline measures about the use of replication packages, download statistics will be more useful after a period of observation. The 2022 report will include an analysis of trends and patterns.
