@@ -1,17 +1,16 @@
 
-  ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      17.0
-___/   /   /___/   /   /___/       MP—Parallel Edition
-
- Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
-                                   StataCorp
-                                   4905 Lakeway Drive
-                                   College Station, Texas 77845 USA
-                                   800-STATA-PC        https://www.stata.com
-                                   979-696-4600        stata@stata.com
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   16.1   Copyright 1985-2019 StataCorp LLC
+  Statistics/Data analysis            StataCorp
+                                      4905 Lakeway Drive
+     MP - Parallel Edition            College Station, Texas 77845 USA
+                                      800-STATA-PC        https://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
 
 Stata license: Single-user 2-core  perpetual
-Serial number: 501706328764
+Serial number: 501606204617
   Licensed to: Miklos Koren
                CEU MicroData
 
@@ -34,11 +33,10 @@ Notes:
 . tempfile zenodo
 
 . save `zenodo', emptyok replace
-(dataset contains 0 observations)
-(file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 not
-    found)
-file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 saved
-    as .dta format
+(note: dataset contains 0 observations)
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St11247.000001 no
+> t found)
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St11247.000001 saved
 
 . forvalues year = 2021/2022 {
   2.     import delimited using "`here'/zenodo/zenodo_data_`year'.csv", clear
@@ -47,14 +45,10 @@ file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 saved
   5.     append using `zenodo'
   6.     save `zenodo', replace
   7. }
-(encoding automatically selected: ISO-8859-1)
 (6 vars, 80 obs)
-file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 saved
-    as .dta format
-(encoding automatically selected: ISO-8859-1)
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St11247.000001 saved
 (6 vars, 133 obs)
-file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 saved
-    as .dta format
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St11247.000001 saved
 
 . 
 . keep zenodoid year unique_views unique_downloads
@@ -62,12 +56,12 @@ file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St54508.000001 saved
 . rename unique_* *
 
 . reshape wide views downloads, i(zenodoid) j(year)
-(j = 2021 2022)
+(note: j = 2021 2022)
 
-Data                               Long   ->   Wide
+Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of observations              213   ->   133         
-Number of variables                   4   ->   5           
+Number of obs.                      213   ->     133
+Number of variables                   4   ->       5
 j variable (2 values)              year   ->   (dropped)
 xij variables:
                                   views   ->   views2021 views2022
@@ -116,8 +110,8 @@ variable lbl was str46 now str72
 > Downloads in current year)
 
 . graph export "`here'/downloads.png", replace width(800)
-file /Users/koren/Tresorit/places/restud/data-editor/report//downloads.png writ
-> ten in PNG format
+(file /Users/koren/Tresorit/places/restud/data-editor/report//downloads.png wri
+> tten in PNG format)
 
 . 
 . histogram downloads2022, color(blue%30) legend(off) graphregion(color(white))
@@ -126,18 +120,16 @@ file /Users/koren/Tresorit/places/restud/data-editor/report//downloads.png writ
 
 . graph export "`here'/downloads_histogram.png", replace width(800)
 (file /Users/koren/Tresorit/places/restud/data-editor/report//downloads_histogr
-> am.png not found)
-file /Users/koren/Tresorit/places/restud/data-editor/report//downloads_histogra
-> m.png written in PNG format
+> am.png written in PNG format)
 
 . 
 . reshape long
-(j = 2021 2022)
+(note: j = 2021 2022)
 
-Data                               Wide   ->   Long
+Data                               wide   ->   long
 -----------------------------------------------------------------------------
-Number of observations              133   ->   266         
-Number of variables                   6   ->   5           
+Number of obs.                      133   ->     266
+Number of variables                   6   ->       5
 j variable (2 values)                     ->   year
 xij variables:
                     views2021 views2022   ->   views
@@ -152,10 +144,10 @@ xij variables:
  1%            1              1
  5%            2              1
 10%            4              1       Obs                 213
-25%            8              2       Sum of wgt.         213
+25%            8              2       Sum of Wgt.         213
 
 50%           15                      Mean           21.70423
-                        Largest       Std. dev.      21.25723
+                        Largest       Std. Dev.      21.25723
 75%           27            100
 90%           45            107       Variance       451.8697
 95%           63            115       Skewness       2.215364

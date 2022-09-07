@@ -1,36 +1,35 @@
 ---
 author: Koren, Miklós
-date: 2021-09-14
-title: Data Editor's Report 2021
+date: 2022-09-07
+title: Data Editor's Report 2022
+geometry: margin=2.54cm
 publisher: The Review of Economic Studies Ltd
 ---
 
+This report covers the period between September 1, 2021 and August 31, 2022. In this period, 87 replication packages have been submitted, and 78 packages have been accepted. There is no final decision yet on 36 packages, 8 are at the editorial team, 28 are with authors.
+
+We now have two complete years of data under the new Data Availability Policy. This makes it possible to make comparisons and identify changes. 
+
 ## Turnaround times
 
-Almost all packages are accepted only after revisions; most are accepted in two rounds. The table below shows the number of rounds before acceptance for packages accepted by the Data Editor in the 12 months before August 31, 2021.
+The vast majority of packages are accepted only after revisions; only six packages were accepted as submitted. Most packages are accepted on first revision. The Figure plots the number of packages by revisions at the time acceptance. Around 58 percent of packages are accepted after at most one revision (up from 52 percent last year).
 
-| Submission rounds | Number of packages |
-|---|---|
-| 1 | 2 |
-| 2 | 32 |
-| 3 | 24 |
-| 4 | 6 |
-| 6 | 1 |
-| **Total** | **65** | 
+![Number of revisions at time of acceptance](revision.png){ width=75% }
 
-Authors receive their first response from the Data Editor within 12 days, on average. This statistic excludes papers where the Data Availability Policy does not apply. Total time at editorial team has an interdecile range of 3 to 40 days, with a median of 17 and mean of 24.4.
+The average package accepted this year received their first response from the Data Editor in 15 days (up from 12 days last year). This statistic excludes papers where the Data Availability Policy does not apply. For revisions, the mean response time is 6 days, with the majority of packages decided in much shorter time (see Figure).
 
-| Round | Days at editor | Days at author |
-|---|---|---|
-| 1 | 11.8 | 11.8 |
-| 2 | 8.5 | 4.6 |
-| 3 and more | 8.8 | 1.4 |
-| **Total** | **24.4** | **16.9** |
+![Time at editorial team for accepted packages](time_at_editor.png){ width=75% }
+
+The average time authors spend with a revision is 25 days.
 
 ## Impact
 
+OLD DATA
+
 The median replication package is viewed on Zenodo 48 times and downloaded 12 times. This includes views and downloads by author and editorial team. As the figure shows, there is substantial heterogeneity across packages in their download statistics.
 
-![](downloads.png)
+![Unique downloads of packages from Zenodo](downloads_histogram.png){ width=75% }
+
+![Downloads are highly correlated over time](downloads.png){ width=75% }
 
 As we have no baseline measures about the use of replication packages, download statistics will be more useful after a period of observation. The 2022 report will include an analysis of trends and patterns.
