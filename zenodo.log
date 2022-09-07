@@ -46,9 +46,9 @@ Notes:
 . rename views views2021
 
 . save `zenodo', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St22749.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St23538.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St22749.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St23538.000001 saved
 
 . 
 . import delimited using "`here'/zenodo/zenodo_data_2022.csv", clear
@@ -132,28 +132,27 @@ xij variables:
 . generate str lbl = ""
 (133 missing values generated)
 
-. replace lbl = "Identifying Shocks via Time-Varying Volatility" if zenodoid ==
->  4448256
-variable lbl was str1 now str46
+. replace lbl = "Geography and Agricultural Productivity" if zenodoid == 525988
+> 3
+variable lbl was str1 now str39
 (1 real change made)
 
-. replace lbl = "Property Rights, Land Misallocation and Agricultural Efficienc
-> y in China" if zenodoid == 4029206
-variable lbl was str46 now str72
+. replace lbl = "Quasi-Experimental Shift-Share Research Designs" if zenodoid =
+> = 4619197
+variable lbl was str39 now str47
+(1 real change made)
+
+. replace lbl = "Identifying Shocks via Time-Varying Volatility" if zenodoid ==
+>  4448256
+(1 real change made)
+
+. replace lbl = "Skill-Biased Structural Change" if zenodoid == 4773516
 (1 real change made)
 
 . replace lbl = "Trade and Domestic Production Networks" if zenodoid == 3997900
 (1 real change made)
 
-. replace lbl = "The Macroeconomics of Microfinance" if zenodoid == 3959907
-(1 real change made)
-
-. replace lbl = "Measuring the Incentive to Collude: The Vitamin Cartels, 1990–
-> 1999" if zenodoid == 5104830
-(1 real change made)
-
-. replace lbl = "Stochastic Revealed Preferences with Measurement Error" if zen
-> odoid == 4007866
+. replace lbl = "Measuring the Incentive to Collude" if zenodoid == 5104830
 (1 real change made)
 
 . 

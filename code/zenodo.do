@@ -35,12 +35,12 @@ keep zenodo year since downloads downloads_per_month
 reshape wide since downloads downloads_per_month, i(zenodoid) j(year)
 
 generate str lbl = ""
+replace lbl = "Geography and Agricultural Productivity" if zenodoid == 5259883
+replace lbl = "Quasi-Experimental Shift-Share Research Designs" if zenodoid == 4619197
 replace lbl = "Identifying Shocks via Time-Varying Volatility" if zenodoid == 4448256
-replace lbl = "Property Rights, Land Misallocation and Agricultural Efficiency in China" if zenodoid == 4029206
+replace lbl = "Skill-Biased Structural Change" if zenodoid == 4773516
 replace lbl = "Trade and Domestic Production Networks" if zenodoid == 3997900
-replace lbl = "The Macroeconomics of Microfinance" if zenodoid == 3959907
-replace lbl = "Measuring the Incentive to Collude: The Vitamin Cartels, 1990–1999" if zenodoid == 5104830
-replace lbl = "Stochastic Revealed Preferences with Measurement Error" if zenodoid == 4007866
+replace lbl = "Measuring the Incentive to Collude" if zenodoid == 5104830
 
 scatter downloads_per_month2022 downloads_per_month2021, mcolor(blue%30) legend(off) graphregion(color(white)) mlabel(lbl) mlabposition(6) xtitle(Last year) ytitle(This year)
 graph export "`here'/downloads.png", replace width(800)
