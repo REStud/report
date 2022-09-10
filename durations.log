@@ -1,17 +1,16 @@
 
-  ___  ____  ____  ____  ____ ©
- /__    /   ____/   /   ____/      17.0
-___/   /   /___/   /   /___/       MP—Parallel Edition
-
- Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
-                                   StataCorp
-                                   4905 Lakeway Drive
-                                   College Station, Texas 77845 USA
-                                   800-STATA-PC        https://www.stata.com
-                                   979-696-4600        stata@stata.com
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   16.1   Copyright 1985-2019 StataCorp LLC
+  Statistics/Data analysis            StataCorp
+                                      4905 Lakeway Drive
+     MP - Parallel Edition            College Station, Texas 77845 USA
+                                      800-STATA-PC        https://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
 
 Stata license: Single-user 2-core  perpetual
-Serial number: 501706328764
+Serial number: 501606204617
   Licensed to: Miklos Koren
                CEU MicroData
 
@@ -23,188 +22,240 @@ Notes:
 
 . do code/durations.do 
 
+. clear all
+
 . here
 /Users/koren/Tresorit/places/restud/data-editor/report/
 
 . local here = r(here)
 
 . 
-. import delimited using "`here'/trello_json/table31aug21.csv", clear
-(encoding automatically selected: ISO-8859-1)
-(10 vars, 4,379 obs)
+. use "`here'git_data/output/gitlog.dta", clear
 
-. rename list_before from_list
+. replace MS = "27827" if MS == "27827-1"
+(20 real changes made)
 
-. rename list_after to_list
-
-. 
-. * read MS number
-. generate ms_number = real(ustrregexs(0)) if ustrregexm(name, "([0-9]){5}") 
-(116 missing values generated)
+. destring MS, force replace
+MS: contains nonnumeric characters; replaced as int
+(3 missing values generated)
 
 . 
-. * convert date string to datetime
-. generate double timestamp = date(date, "YMD#")
-(2,831 missing values generated)
+. * keep only packages with new branch naming
+. keep if inlist(branch_imputed, "author", "version1", "version2", "version3", 
+> "version4")
+(301 observations deleted)
 
-. format timestamp %tdCCYY-NN-DD
-
-. 
-. * keep list moves and first action only
-. keep if action_id == 0 | !missing(from_list, to_list)
-(3,444 observations deleted)
-
-. egen byte ever_accepted = max(to_list == "Editor accepted"), by(ms_number)
+. egen byte ever_accepted = max(tag=="accepted"), by(MS)
 
 . 
-. * group actions
-. egen action_number = rank(action_id), by(ms_number) unique
+. * keep backages accepted in 2021 fiscal year
+. egen accepted_at = max(cond(tag=="accepted", numeric_date, .)), by(MS)
+(214 missing values generated)
 
-. xtset ms_number action_number
+. scalar dbegin = 1630495609 - 13.4*3600
 
-Panel variable: ms_number (unbalanced)
- Time variable: action_number, 1 to 19
-         Delta: 1 unit
-
-. * time spent in "from" list before moving it to "to" list
-. * FIXME: some cards are created in "Author submitted", some are moved there. 
-> The former will have . for duration
-. generate duration = datediff(L.timestamp, timestamp, "day")
-(147 missing values generated)
-
-. * round #: how many times have the card moved out from "Author submitted"?
-. bysort ms_number (action_number): generate round_number = sum((from_list == "
-> Author submitted"))
-
-. tabulate round_number, missing
-
-round_numbe |
-          r |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |        207       22.14       22.14
-          1 |        335       35.83       57.97
-          2 |        250       26.74       84.71
-          3 |        112       11.98       96.68
-          4 |         24        2.57       99.25
-          5 |          4        0.43       99.68
-          6 |          3        0.32      100.00
-------------+-----------------------------------
-      Total |        935      100.00
-
-. * FIXME: move to analyze.do
-. tabulate round_number if to_list == "Editor accepted"
-
-round_numbe |
-          r |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          1 |          2        3.08        3.08
-          2 |         32       49.23       52.31
-          3 |         24       36.92       89.23
-          4 |          6        9.23       98.46
-          6 |          1        1.54      100.00
-------------+-----------------------------------
-      Total |         65      100.00
+. scalar dend = dbegin + 365 * 24 * 3600
 
 . 
-. generate byte at_editor = 1 if inlist(from_list, "Author submitted", "At team
-> ", "At editor", "WIP", "Revised")
-(329 missing values generated)
+. bysort MS (numeric_date): generate t = _n
 
-. replace at_editor = 0 if inlist(from_list, "At author")
-(126 real changes made)
-
-. tabulate at_editor, missing
-
-  at_editor |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |        126       13.48       13.48
-          1 |        606       64.81       78.29
-          . |        203       21.71      100.00
-------------+-----------------------------------
-      Total |        935      100.00
+. xtset MS t
+       panel variable:  MS (unbalanced)
+        time variable:  t, 1 to 27
+                delta:  1 unit
 
 . 
-. * merge different lists at editor
-. drop if round_number == 0 | missing(at_editor)
-(220 observations deleted)
+. generate spell = D.numeric_date/3600/24
+(146 missing values generated)
 
-. replace round_number = 3 if round_number > 3
-(31 real changes made)
+. bysort MS (t): generate byte at_editor = (branch_imputed[_n-1] == branch_impu
+> ted[_n] ) | (branch_imputed[_n-1] == "author")
 
-. collapse (sum) duration, by(ms_number ever_accepted round_number at_editor)
+. 
+. xtset MS t
+       panel variable:  MS (unbalanced)
+        time variable:  t, 1 to 27
+                delta:  1 unit
 
-. reshape wide duration, i(ms_number round_number) j(at_editor)
-(j = 0 1)
+. generate byte change = L.at_editor != at_editor
 
-Data                               Long   ->   Wide
+. bysort MS (t): generate byte spell_id = sum(change)
+
+. 
+. * count of packages in pipeline
+. egen submitted_at = max(cond(spell_id==1, numeric_date, .)), by(MS)
+
+. egen last_commit = max(t), by(MS)
+
+. 
+. codebook MS if inrange(submitted_at, dbegin, dend)
+
+-------------------------------------------------------------------------------
+MS                                                                  (unlabeled)
+-------------------------------------------------------------------------------
+
+                  type:  numeric (int)
+
+                 range:  [17262,31051]                units:  1
+         unique values:  87                       missing .:  0/661
+
+                  mean:   27719.2
+              std. dev:   2043.53
+
+           percentiles:        10%       25%       50%       75%       90%
+                             25474     26817     27825     29220     29948
+
+. codebook MS if inrange(accepted_at, dbegin, dend)
+
+-------------------------------------------------------------------------------
+MS                                                                  (unlabeled)
+-------------------------------------------------------------------------------
+
+                  type:  numeric (int)
+
+                 range:  [17262,31051]                units:  1
+         unique values:  78                       missing .:  0/692
+
+                  mean:   27535.7
+              std. dev:   1967.24
+
+           percentiles:        10%       25%       50%       75%       90%
+                             25306     26222     27720     29023     29699
+
+. codebook MS if !ever_accepted 
+
+-------------------------------------------------------------------------------
+MS                                                                  (unlabeled)
+-------------------------------------------------------------------------------
+
+                  type:  numeric (int)
+
+                 range:  [18075,30633]                units:  1
+         unique values:  36                       missing .:  1/214
+
+                  mean:   27132.2
+              std. dev:   2157.62
+
+           percentiles:        10%       25%       50%       75%       90%
+                             25355     26454     27007     28269     29375
+
+. 
+. collapse (sum) spell, by(MS ever_accepted accepted_at spell_id at_editor)
+
+. drop if spell_id == 1
+(146 observations deleted)
+
+. replace spell_id = int((spell_id - 1)/2)
+(496 real changes made)
+
+. 
+. reshape wide spell, i(MS spell_id) j(at_editor)
+(note: j = 0 1)
+
+Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of observations              333   ->   217         
-Number of variables                   5   ->   5           
+Number of obs.                      496   ->     327
+Number of variables                   6   ->       6
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
-                               duration   ->   duration0 duration1
+                                  spell   ->   spell0 spell1
 -----------------------------------------------------------------------------
 
-. reshape long
-(j = 0 1)
+. rename spell_id revision
 
-Data                               Wide   ->   Long
------------------------------------------------------------------------------
-Number of observations              217   ->   434         
-Number of variables                   5   ->   5           
-j variable (2 values)                     ->   at_editor
-xij variables:
-                    duration0 duration1   ->   duration
------------------------------------------------------------------------------
+. rename spell0 time_at_author
 
-. mvencode duration, mv(0) override
-    duration: 101 missing values recoded
+. rename spell1 time_at_editor
 
 . 
-. table round_number at_editor if ever_accepted
-
----------------------------------
-             |      at_editor    
-             |    0     1   Total
--------------+-------------------
-round_number |                   
-  1          |   62    62     124
-  2          |   60    60     120
-  3          |   31    31      62
-  Total      |  153   153     306
----------------------------------
-
-. table round_number at_editor if ever_accepted, statistic(mean duration)
-
-----------------------------------------------
-             |             at_editor          
-             |         0          1      Total
--------------+--------------------------------
-round_number |                                
-  1          |  11.75806   11.77419   11.76613
-  2          |  4.566667   8.483333      6.525
-  3          |  1.354839    8.83871   5.096774
-  Total      |  6.830065   9.888889   8.359477
-----------------------------------------------
-
-. save "`here'/data/durations.dta", replace
-file
-    /Users/koren/Tresorit/places/restud/data-editor/report//data/durations.dt
-    > a saved
+. egen max_revision = max(revision), by(MS)
 
 . 
-. collapse (sum) duration, by(ms_number ever_accepted at_editor)
+. local filter ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
 
-. table at_editor if ever_accepted, statistic(mean duration)
+. local opt width(7) start(0) frequency graphregion(color(white))
 
----------------------
-          |      Mean
-----------+----------
-at_editor |          
-  0       |  16.85484
-  1       |  24.40323
-  Total   |  20.62903
----------------------
+. 
+. summarize time_at_editor if `filter' & revision==0, detail
+
+                           1 spell
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0136458       .0136458
+ 5%     .1725926       .0214931
+10%     .2930208       .0232292       Obs                  78
+25%     5.446239       .1725926       Sum of Wgt.          78
+
+50%      14.6084                      Mean           15.23669
+                        Largest       Std. Dev.      11.57361
+75%     24.17817       37.45621
+90%     29.92918       41.77692       Variance       133.9486
+95%     37.45621       48.69926       Skewness       .7322221
+99%      48.9295        48.9295       Kurtosis       3.294127
+
+. summarize time_at_editor if `filter' & revision>=1, detail
+
+                           1 spell
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0007407       .0006713
+ 5%     .0015162       .0007407
+10%     .0031713       .0011574       Obs                 102
+25%     .0066782        .001331       Sum of Wgt.         102
+
+50%     .0670312                      Mean           6.243692
+                        Largest       Std. Dev.      12.40641
+75%     7.230243       42.16417
+90%     22.10207       46.75144       Variance        153.919
+95%     35.19346       49.76304       Skewness       2.628459
+99%     49.76304       66.20853       Kurtosis       10.10251
+
+. summarize time_at_author if `filter', detail
+
+                           0 spell
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%     1.845787              0
+10%     4.256215       .0009722       Obs                 113
+25%     7.140012       .0030671       Sum of Wgt.         113
+
+50%      15.6159                      Mean           25.77073
+                        Largest       Std. Dev.      40.05122
+75%     31.66794       89.88801
+90%     50.71971       93.59702       Variance       1604.101
+95%      79.0111        98.0571       Skewness       6.596768
+99%      98.0571       383.9647       Kurtosis       58.00522
+
+. twoway (histogram time_at_editor if `filter' & revision==0, `opt' color(blue%
+> 30)) (histogram time_at_editor if `filter' & revision>=1, `opt' color(red%30)
+> ), xtitle(Days at editor) legend(order(1 "First submission" 2 "Revision"))
+
+. graph export "`here'time_at_editor.png", replace width(800)
+(file /Users/koren/Tresorit/places/restud/data-editor/report/time_at_editor.png
+>  written in PNG format)
+
+. 
+. tabulate max_revision if `filter' & revision == 0
+
+max_revisio |
+          n |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |          6        7.69        7.69
+          1 |         40       51.28       58.97
+          2 |         26       33.33       92.31
+          3 |          3        3.85       96.15
+          4 |          3        3.85      100.00
+------------+-----------------------------------
+      Total |         78      100.00
+
+. histogram max_revision if `filter' & revision == 0, color(blue%30) discrete s
+> tart(0) frequency xtitle(Accepted revision) graphregion(color(white))
+(start=0, width=1)
+
+. graph export "`here'revision.png", replace width(800)
+(file /Users/koren/Tresorit/places/restud/data-editor/report/revision.png writt
+> en in PNG format)
 
 . 
 end of do-file

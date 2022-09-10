@@ -1,17 +1,16 @@
 
-  ___  ____  ____  ____  ____ ©
- /__    /   ____/   /   ____/      17.0
-___/   /   /___/   /   /___/       MP—Parallel Edition
-
- Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
-                                   StataCorp
-                                   4905 Lakeway Drive
-                                   College Station, Texas 77845 USA
-                                   800-STATA-PC        https://www.stata.com
-                                   979-696-4600        stata@stata.com
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   16.1   Copyright 1985-2019 StataCorp LLC
+  Statistics/Data analysis            StataCorp
+                                      4905 Lakeway Drive
+     MP - Parallel Edition            College Station, Texas 77845 USA
+                                      800-STATA-PC        https://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
 
 Stata license: Single-user 2-core  perpetual
-Serial number: 501706328764
+Serial number: 501606204617
   Licensed to: Miklos Koren
                CEU MicroData
 
@@ -29,85 +28,183 @@ Notes:
 . local here = r(here)
 
 . 
-. import delimited using "`here'/zenodo/zenodo_data.csv", clear
-(encoding automatically selected: ISO-8859-1)
+. clear 
+
+. tempfile zenodo
+
+. import delimited using "`here'/zenodo/zenodo_data_2021.csv", clear
 (6 vars, 80 obs)
 
-. 
-. label variable unique_downloads "Downloads"
+. rename id zenodoid
 
-. label variable unique_views "Views"
+. keep zenodoid unique_views unique_downloads
+
+. rename unique_* *
+
+. rename downloads downloads2021
+
+. rename views views2021
+
+. save `zenodo', replace
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24094.000001 no
+> t found)
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24094.000001 saved
+
+. 
+. import delimited using "`here'/zenodo/zenodo_data_2022.csv", clear
+(7 vars, 133 obs)
+
+. rename id zenodoid
+
+. generate created_at = date(created,"YMD##")
+
+. keep zenodoid unique_views unique_downloads created_at
+
+. rename unique_* *
+
+. rename downloads downloads2022
+
+. rename views views2022
+
+. merge 1:1 zenodoid using `zenodo', nogenerate
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                            53
+        from master                        53  
+        from using                          0  
+
+    matched                                80  
+    -----------------------------------------
+
+. 
+. reshape long views downloads, i(zenodoid) j(year)
+(note: j = 2021 2022)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                      133   ->     266
+Number of variables                   6   ->       5
+j variable (2 values)                     ->   year
+xij variables:
+                    views2021 views2022   ->   views
+            downloads2021 downloads2022   ->   downloads
+-----------------------------------------------------------------------------
+
+. generate stats_at = date("2021-09-14","YMD##") if year == 2021
+(133 missing values generated)
+
+. replace stats_at = date("2022-09-07","YMD##") if year == 2022
+(133 real changes made)
+
+. 
+. format created_at %tdCCYY-NN-DD
+
+. format stats_at %tdCCYY-NN-DD
+
+. 
+. generate since = round((stats_at - created_at)/30)
+
+. drop if missing(downloads) & year == 2021
+(53 observations deleted)
+
+. generate downloads_per_month = downloads / since
+
+. 
+. keep zenodo year since downloads downloads_per_month
+
+. reshape wide since downloads downloads_per_month, i(zenodoid) j(year)
+(note: j = 2021 2022)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                      213   ->     133
+Number of variables                   5   ->       7
+j variable (2 values)              year   ->   (dropped)
+xij variables:
+                                  since   ->   since2021 since2022
+                              downloads   ->   downloads2021 downloads2022
+                    downloads_per_month   ->   downloads_per_month2021 download
+> s_per_month2022
+-----------------------------------------------------------------------------
 
 . 
 . generate str lbl = ""
-(80 missing values generated)
+(133 missing values generated)
+
+. replace lbl = "Geography and Agricultural Productivity" if zenodoid == 525988
+> 3
+variable lbl was str1 now str39
+(1 real change made)
+
+. replace lbl = "Quasi-Experimental Shift-Share Research Designs" if zenodoid =
+> = 4619197
+variable lbl was str39 now str47
+(1 real change made)
 
 . replace lbl = "Identifying Shocks via Time-Varying Volatility" if zenodoid ==
 >  4448256
-variable lbl was str1 now str46
 (1 real change made)
 
-. replace lbl = "Property Rights, Land Misallocation and Agricultural Efficienc
-> y in China" if zenodoid == 4029206
-variable lbl was str46 now str72
+. replace lbl = "Skill-Biased Structural Change" if zenodoid == 4773516
 (1 real change made)
 
 . replace lbl = "Trade and Domestic Production Networks" if zenodoid == 3997900
 (1 real change made)
 
-. replace lbl = "The Macroeconomics of Microfinance" if zenodoid == 3959907
-(1 real change made)
-
-. replace lbl = "Measuring the Incentive to Collude: The Vitamin Cartels, 1990–
-> 1999" if zenodoid == 5104830
-(1 real change made)
-
-. replace lbl = "Stochastic Revealed Preferences with Measurement Error" if zen
-> odoid == 4007866
+. replace lbl = "Measuring the Incentive to Collude" if zenodoid == 5104830
 (1 real change made)
 
 . 
-. foreach X of varlist unique_views unique_downloads {
-  2.     summarize `X', detail
-  3. }
-
-                            Views
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%            8              8
- 5%         19.5             15
-10%           24             15       Obs                  80
-25%           33             19       Sum of wgt.          80
-
-50%         48.5                      Mean            65.1625
-                        Largest       Std. dev.      67.65015
-75%         67.5            163
-90%        116.5            170       Variance       4576.543
-95%          148            402       Skewness       4.060541
-99%          454            454       Kurtosis       22.09522
-
-                          Downloads
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%            1              1
- 5%          2.5              2
-10%          4.5              2       Obs                  80
-25%            7              2       Sum of wgt.          80
-
-50%           12                      Mean             17.475
-                        Largest       Std. dev.      17.35189
-75%         21.5             62
-90%         37.5             63       Variance        301.088
-95%           59             78       Skewness       2.465324
-99%          100            100       Kurtosis       10.16946
-
-. 
-. scatter unique_downloads unique_views, mcolor(blue%30) legend(off) graphregio
-> n(color(white)) mlabel(lbl) mlabposition(6) xscale(range(0 600))
+. scatter downloads_per_month2022 downloads_per_month2021, mcolor(blue%30) lege
+> nd(off) graphregion(color(white)) mlabel(lbl) mlabposition(6) xtitle(Last yea
+> r) ytitle(This year)
 
 . graph export "`here'/downloads.png", replace width(800)
-file /Users/koren/Tresorit/places/restud/data-editor/report//downloads.png writ
-> ten in PNG format
+(file /Users/koren/Tresorit/places/restud/data-editor/report//downloads.png wri
+> tten in PNG format)
 
+. 
+. histogram downloads_per_month2022, color(blue%30) legend(off) graphregion(col
+> or(white)) frequency xtitle(Downloads per month)
+(bin=11, start=.2, width=.78601402)
+
+. graph export "`here'/downloads_histogram.png", replace width(800)
+(file /Users/koren/Tresorit/places/restud/data-editor/report//downloads_histogr
+> am.png written in PNG format)
+
+. 
+. reshape long
+(note: j = 2021 2022)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                      133   ->     266
+Number of variables                   8   ->       6
+j variable (2 values)                     ->   year
+xij variables:
+                    since2021 since2022   ->   since
+            downloads2021 downloads2022   ->   downloads
+downloads_per_month2021 downloads_per_month2022->downloads_per_month
+-----------------------------------------------------------------------------
+
+. summarize downloads_per_month if year==2022, detail
+
+                     downloads_per_month
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           .2             .2
+ 5%           .5             .2
+10%           .7       .4090909       Obs                 133
+25%          1.2             .5       Sum of Wgt.         133
+
+50%            2                      Mean           2.368282
+                        Largest       Std. Dev.      1.637397
+75%            3              7
+90%     4.214286       7.214286       Variance        2.68107
+95%         6.25       8.166667       Skewness       1.648431
+99%     8.166667       8.846154       Kurtosis       6.048322
+
+. 
 . 
 end of do-file
