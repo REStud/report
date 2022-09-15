@@ -1,5 +1,7 @@
 report.pdf: report.md downloads.png downloads_histogram.png revision.png time_at_editor.png
 	pandoc $< -o $@
+main_issues.png: code/issues.do data/git-events.dta data/issues.dta
+	stata -b do $<
 downloads.png downloads_histogram.png&: code/zenodo.do zenodo/zenodo_data_2022.csv zenodo/zenodo_data_2021.csv
 	stata -b do $<
 revision.png time_at_editor.png&: code/durations.do data/git-events.dta
