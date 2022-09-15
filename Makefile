@@ -1,4 +1,4 @@
-report.pdf: report.md downloads.png downloads_histogram.png revision.png time_at_editor.png
+report.pdf: report.md downloads.png downloads_histogram.png revision.png time_at_editor.png main_issues.png
 	pandoc $< -o $@
 main_issues.png: code/issues.do data/git-events.dta data/issues.dta
 	stata -b do $<
