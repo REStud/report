@@ -1,17 +1,18 @@
 
-  ___  ____  ____  ____  ____ (R)
- /__    /   ____/   /   ____/
-___/   /   /___/   /   /___/   16.1   Copyright 1985-2019 StataCorp LLC
-  Statistics/Data analysis            StataCorp
-                                      4905 Lakeway Drive
-     MP - Parallel Edition            College Station, Texas 77845 USA
-                                      800-STATA-PC        https://www.stata.com
-                                      979-696-4600        stata@stata.com
-                                      979-696-4601 (fax)
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      17.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
 
 Stata license: Single-user 2-core  perpetual
-Serial number: 501606204617
-  Licensed to: Miklos Koren
+Serial number: 501706328764
+  Licensed to: Miklós Koren
                CEU MicroData
 
 Notes:
@@ -25,57 +26,35 @@ Notes:
 . clear all
 
 . here
-/Users/koren/Tresorit/places/restud/data-editor/report/
+/Users/koren/Documents/web/report/
 
 . local here = r(here)
 
 . 
-. use "`here'git_data/output/gitlog.dta", clear
-
-. replace MS = "27827" if MS == "27827-1"
-(20 real changes made)
-
-. destring MS, force replace
-MS: contains nonnumeric characters; replaced as int
-(3 missing values generated)
-
-. 
-. * keep only packages with new branch naming
-. keep if inlist(branch_imputed, "author", "version1", "version2", "version3", 
-> "version4")
-(301 observations deleted)
-
-. egen byte ever_accepted = max(tag=="accepted"), by(MS)
-
-. 
-. * keep backages accepted in 2021 fiscal year
-. egen accepted_at = max(cond(tag=="accepted", numeric_date, .)), by(MS)
-(214 missing values generated)
-
-. scalar dbegin = 1630495609 - 13.4*3600
-
-. scalar dend = dbegin + 365 * 24 * 3600
+. use "`here'data/git-events.dta", clear
 
 . 
 . bysort MS (numeric_date): generate t = _n
 
 . xtset MS t
-       panel variable:  MS (unbalanced)
-        time variable:  t, 1 to 27
-                delta:  1 unit
+
+Panel variable: MS (unbalanced)
+ Time variable: t, 1 to 27
+         Delta: 1 unit
 
 . 
 . generate spell = D.numeric_date/3600/24
-(146 missing values generated)
+(78 missing values generated)
 
 . bysort MS (t): generate byte at_editor = (branch_imputed[_n-1] == branch_impu
 > ted[_n] ) | (branch_imputed[_n-1] == "author")
 
 . 
 . xtset MS t
-       panel variable:  MS (unbalanced)
-        time variable:  t, 1 to 27
-                delta:  1 unit
+
+Panel variable: MS (unbalanced)
+ Time variable: t, 1 to 27
+         Delta: 1 unit
 
 . generate byte change = L.at_editor != at_editor
 
@@ -83,79 +62,43 @@ MS: contains nonnumeric characters; replaced as int
 
 . 
 . * count of packages in pipeline
-. egen submitted_at = max(cond(spell_id==1, numeric_date, .)), by(MS)
-
 . egen last_commit = max(t), by(MS)
 
 . 
-. codebook MS if inrange(submitted_at, dbegin, dend)
+. codebook MS
 
 -------------------------------------------------------------------------------
 MS                                                                  (unlabeled)
 -------------------------------------------------------------------------------
 
-                  type:  numeric (int)
+                  Type: Numeric (int)
 
-                 range:  [17262,31051]                units:  1
-         unique values:  87                       missing .:  0/661
+                 Range: [17262,31051]                 Units: 1
+         Unique values: 78                        Missing .: 0/692
 
-                  mean:   27719.2
-              std. dev:   2043.53
+                  Mean: 27535.7
+             Std. dev.: 1967.24
 
-           percentiles:        10%       25%       50%       75%       90%
-                             25474     26817     27825     29220     29948
-
-. codebook MS if inrange(accepted_at, dbegin, dend)
-
--------------------------------------------------------------------------------
-MS                                                                  (unlabeled)
--------------------------------------------------------------------------------
-
-                  type:  numeric (int)
-
-                 range:  [17262,31051]                units:  1
-         unique values:  78                       missing .:  0/692
-
-                  mean:   27535.7
-              std. dev:   1967.24
-
-           percentiles:        10%       25%       50%       75%       90%
-                             25306     26222     27720     29023     29699
-
-. codebook MS if !ever_accepted 
-
--------------------------------------------------------------------------------
-MS                                                                  (unlabeled)
--------------------------------------------------------------------------------
-
-                  type:  numeric (int)
-
-                 range:  [18075,30633]                units:  1
-         unique values:  36                       missing .:  1/214
-
-                  mean:   27132.2
-              std. dev:   2157.62
-
-           percentiles:        10%       25%       50%       75%       90%
-                             25355     26454     27007     28269     29375
+           Percentiles:     10%       25%       50%       75%       90%
+                          25306     26222     27720     29023     29699
 
 . 
-. collapse (sum) spell, by(MS ever_accepted accepted_at spell_id at_editor)
+. collapse (sum) spell, by(MS accepted_at spell_id at_editor)
 
 . drop if spell_id == 1
-(146 observations deleted)
+(78 observations deleted)
 
 . replace spell_id = int((spell_id - 1)/2)
-(496 real changes made)
+(293 real changes made)
 
 . 
 . reshape wide spell, i(MS spell_id) j(at_editor)
-(note: j = 0 1)
+(j = 0 1)
 
-Data                               long   ->   wide
+Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of obs.                      496   ->     327
-Number of variables                   6   ->       6
+Number of observations              293   ->   191         
+Number of variables                   5   ->   5           
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
                                   spell   ->   spell0 spell1
@@ -171,12 +114,10 @@ xij variables:
 . egen max_revision = max(revision), by(MS)
 
 . 
-. local filter ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
-
 . local opt width(7) start(0) frequency graphregion(color(white))
 
 . 
-. summarize time_at_editor if `filter' & revision==0, detail
+. summarize time_at_editor if revision==0, detail
 
                            1 spell
 -------------------------------------------------------------
@@ -184,16 +125,16 @@ xij variables:
  1%     .0136458       .0136458
  5%     .1725926       .0214931
 10%     .2930208       .0232292       Obs                  78
-25%     5.446239       .1725926       Sum of Wgt.          78
+25%     5.446239       .1725926       Sum of wgt.          78
 
 50%      14.6084                      Mean           15.23669
-                        Largest       Std. Dev.      11.57361
+                        Largest       Std. dev.      11.57361
 75%     24.17817       37.45621
 90%     29.92918       41.77692       Variance       133.9486
 95%     37.45621       48.69926       Skewness       .7322221
 99%      48.9295        48.9295       Kurtosis       3.294127
 
-. summarize time_at_editor if `filter' & revision>=1, detail
+. summarize time_at_editor if revision>=1, detail
 
                            1 spell
 -------------------------------------------------------------
@@ -201,42 +142,41 @@ xij variables:
  1%     .0007407       .0006713
  5%     .0015162       .0007407
 10%     .0031713       .0011574       Obs                 102
-25%     .0066782        .001331       Sum of Wgt.         102
+25%     .0066782        .001331       Sum of wgt.         102
 
-50%     .0670312                      Mean           6.243692
-                        Largest       Std. Dev.      12.40641
+50%     .0670312                      Mean           6.243679
+                        Largest       Std. dev.      12.40637
 75%     7.230243       42.16417
-90%     22.10207       46.75144       Variance        153.919
-95%     35.19346       49.76304       Skewness       2.628459
-99%     49.76304       66.20853       Kurtosis       10.10251
+90%     22.10207       46.75144       Variance       153.9179
+95%     35.19346       49.76176       Skewness       2.628452
+99%     49.76176       66.20853       Kurtosis       10.10249
 
-. summarize time_at_author if `filter', detail
+. summarize time_at_author, detail
 
                            0 spell
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%            0              0
- 5%     1.845787              0
-10%     4.256215       .0009722       Obs                 113
-25%     7.140012       .0030671       Sum of Wgt.         113
+ 1%     .0009722              0
+ 5%     1.845787       .0009722
+10%     4.256215       .0012847       Obs                 113
+25%     7.140012       .0030671       Sum of wgt.         113
 
-50%      15.6159                      Mean           25.77073
-                        Largest       Std. Dev.      40.05122
+50%      15.6159                      Mean           25.77075
+                        Largest       Std. dev.      40.05122
 75%     31.66794       89.88801
-90%     50.71971       93.59702       Variance       1604.101
-95%      79.0111        98.0571       Skewness       6.596768
-99%      98.0571       383.9647       Kurtosis       58.00522
+90%     50.71971       93.59702       Variance         1604.1
+95%      79.0111        98.0571       Skewness       6.596771
+99%      98.0571       383.9647       Kurtosis       58.00526
 
-. twoway (histogram time_at_editor if `filter' & revision==0, `opt' color(blue%
-> 30)) (histogram time_at_editor if `filter' & revision>=1, `opt' color(red%30)
-> ), xtitle(Days at editor) legend(order(1 "First submission" 2 "Revision"))
+. twoway (histogram time_at_editor if revision==0, `opt' color(blue%30)) (histo
+> gram time_at_editor if revision>=1, `opt' color(red%30)), xtitle(Days at edit
+> or) legend(order(1 "First submission" 2 "Revision"))
 
 . graph export "`here'time_at_editor.png", replace width(800)
-(file /Users/koren/Tresorit/places/restud/data-editor/report/time_at_editor.png
->  written in PNG format)
+file /Users/koren/Documents/web/report/time_at_editor.png written in PNG format
 
 . 
-. tabulate max_revision if `filter' & revision == 0
+. tabulate max_revision if revision == 0
 
 max_revisio |
           n |      Freq.     Percent        Cum.
@@ -249,13 +189,12 @@ max_revisio |
 ------------+-----------------------------------
       Total |         78      100.00
 
-. histogram max_revision if `filter' & revision == 0, color(blue%30) discrete s
-> tart(0) frequency xtitle(Accepted revision) graphregion(color(white))
+. histogram max_revision if revision == 0, color(blue%30) discrete start(0) fre
+> quency xtitle(Accepted revision) graphregion(color(white))
 (start=0, width=1)
 
 . graph export "`here'revision.png", replace width(800)
-(file /Users/koren/Tresorit/places/restud/data-editor/report/revision.png writt
-> en in PNG format)
+file /Users/koren/Documents/web/report/revision.png written in PNG format
 
 . 
 end of do-file
