@@ -8,6 +8,7 @@
 # Date: 29 Aug 2022
 # 
 
+# For this you need to generate an API key token on github under settings/developer/Personal access tokens
 USERNAME=`head -n1 temp/secrets`
 TOKEN=`tail -n1 temp/secrets`
 

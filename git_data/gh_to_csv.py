@@ -1,6 +1,7 @@
 import os
 import csv
 import re
+import pandas as pd
 
 def parse_report(repo:str, path:str):
   '''
@@ -42,7 +43,7 @@ def logger(repo:str):
   Create csv from git log output, and parse report.
   -------------------------------------------------------
   Input: repo MS id number as string
-  Output: csv format of git commits, csv fromat of report template answer labels
+  Output: csv format of git commits, csv format of report template answer labels
   '''
   os.chdir(repo)
   cmd = "git log --all --pretty=format:'{},%h,%an,\"%ad\",\"%s\",\"%d\"' > {}.csv".format(repo,repo)
@@ -67,16 +68,24 @@ def main():
   gh_list = "temp/gh_list.csv"
   rowcount=countrow(gh_list)
   #iterating through the whole file
-  tf = open('output/Gitlog-output.csv', 'a+', newline="\n")
-  tf.write('MS,commit,author,date,message,branch')
+
+  if os.path.exists('output/Gitlog-output.csv') == False:
+    tf = open('output/Gitlog-output.csv', 'a+', newline="\n")
+    tf.write('MS,commit,author,date,message,branch')
+
+  loaded_list = pd.read_csv('output/Gitlog-output.csv')['MS'].unique()
 
   with open(gh_list, 'r') as csvfile:
     reader = csv.reader(csvfile)
     os.chdir("temp")
     for repo in reader:
+        if repo[0] in loaded_list:
+          print("Passing through {}".format(repo[0]))
+          rowcount -= 1
+          continue
         # # git pull all the remote origin updates from all branches
         clone(repo[1])
-        # #git log all (for initial log) & then update it with --after=<date> (from a specified date - you can automate/schedule it) + log report temp answers
+        # # git log all (for initial log) & then update it with --after=<date> (from a specified date - you can automate/schedule it) + log report temp answers
         logger(repo[0])
         # #To append here as CSV I have used csv module
         tf = open('../output/Gitlog-output.csv', 'a+', newline="\n")
@@ -92,7 +101,7 @@ def main():
 
         print("Finished logging {}".format(repo[0]))
         # To track the list of remaining repos from your list
-        rowcount = rowcount -1
+        rowcount -= 1
         print("Remaining Repos: {}".format(rowcount))
         print("#####################################")
 
