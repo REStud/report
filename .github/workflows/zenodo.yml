@@ -1,0 +1,37 @@
+name: Download Zenodo Metadata Monthly
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # Runs at 00:00 on the 1st day of every month
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install Poetry
+      run: pip install poetry
+
+    - name: Install Dependencies using Poetry
+      run: poetry install
+      working-directory: ./zenodo  # Adjust if your pyproject.toml is in another directory
+
+    - name: Download Zenodo Metadata
+      working-directory: ./zenodo  # Adjust if your pyproject.toml is in another directory
+      run: poetry run python zenodo_pull.py
+
+    - name: Commit and Push
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add zenodo/zenodo_data.csv
+        git commit -m "Update Zenodo metadata" || echo "No changes to commit"
+        git push
