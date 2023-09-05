@@ -1,4 +1,6 @@
 #need an empirical distribution of download and view numbers for zenodo packages
+import os
+from datetime import datetime
 import requests
 import csv
 FIELDS = 'id created revision stats/downloads stats/views stats/unique_downloads stats/unique_views'.split()
@@ -20,10 +22,15 @@ def get_collection(collection):
 
 def main():
     zenodo_data = get_collection('restud-replication')
-    zenodo = csv.DictWriter(open('zenodo_data_2022.csv','wt'), fieldnames=list(zenodo_data[0].keys()))
-    zenodo.writeheader()
-    
+    fname = 'zenodo_data.csv'
+    current_time = datetime.now().isoformat()
+    if not os.path.exists(fname):
+        zenodo = csv.DictWriter(open('zenodo_data.csv','wt'), fieldnames=list(zenodo_data[0].keys()) + ['update_time'])
+        zenodo.writeheader()
+    else:    
+        zenodo = csv.DictWriter(open('zenodo_data.csv','at'), fieldnames=list(zenodo_data[0].keys()) + ['update_time'])
     for row in zenodo_data:
+        row['update_time'] = current_time
         zenodo.writerow(row)
 
 
