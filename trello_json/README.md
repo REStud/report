@@ -10,14 +10,14 @@ For further description on the trello API click [here](https://developer.atlassi
 
 1. The .json file is not included in the git repo. However, to run the scripts export a trello board as json and save it in the folder of the code.
 2. The `trello_json_to_csv.py` is a class, but in default running the script creates a .csv from an exported .json trello board. 
-3. If you want to use a differnet trello board then *REStud replications* tweak the appropriate parts of the code.
+3. If you want to use a different trello board then *REStud replications* tweak the appropriate parts of the code.
 
 ## How to use `get_action_history.py`?
 
 Save the key and token in a `secrets.json` file in the same folder as the code and give the two parameters of the scrape. The first is the most recent date you want to include, while the second is the latest date you want to include. For example:
 
 ```
-python3 get_action_history.py -t 2021-08-31T08:00:00.977 -s 2020-08-01T08:00:00.977
+python3 get_action_history.py -t 2023-09-05T08:00:00.977 -s 2020-08-01T08:00:00.977
 ```
 
 The output is actions.json.

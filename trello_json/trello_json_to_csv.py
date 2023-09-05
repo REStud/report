@@ -108,7 +108,7 @@ class Exporter(object):
 
 if __name__ == '__main__':
 
-    exporter = Exporter('table31aug21', 'actions')
+    exporter = Exporter('table05sep23', 'actions')
     exporter.lists_to_df()
     exporter.cards_to_df()
     exporter.merge_cards_to_lists()
