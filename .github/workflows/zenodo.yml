@@ -1,7 +1,11 @@
 name: Download Zenodo Metadata Monthly
 
 on:
-  schedule:
+  push:
+    branches:
+    - main
+
+    schedule:
     - cron: '0 0 1 * *'  # Runs at 00:00 on the 1st day of every month
 
 jobs:
