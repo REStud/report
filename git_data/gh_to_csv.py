@@ -66,14 +66,16 @@ def countrow(path:str) -> int:
 def main():
   #find a file that is the list of repos.
   gh_list = "temp/gh_list.csv"
-  rowcount=countrow(gh_list)
+  rowcount = countrow(gh_list)
+ 
   #iterating through the whole file
 
   if os.path.exists('output/Gitlog-output.csv') == False:
     tf = open('output/Gitlog-output.csv', 'a+', newline="\n")
     tf.write('MS,commit,author,date,message,branch')
-
-  loaded_list = pd.read_csv('output/Gitlog-output.csv')['MS'].unique()
+    loaded_list = []
+  else:
+    loaded_list = list(pd.read_csv('output/Gitlog-output.csv')['MS'].unique())
 
   with open(gh_list, 'r') as csvfile:
     reader = csv.reader(csvfile)
