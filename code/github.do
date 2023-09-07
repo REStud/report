@@ -23,10 +23,10 @@ use "`here'git_data/output/report_labs.dta", clear
 replace MS = "27827" if MS == "27827-1"
 destring MS, force replace
 
-local vars cite_data DAS confidential_data save_output relative_path include_data stata_packages matlab_toolboxes 
+local vars cite_data DAS confidential_data save_output relative_path include_data stata_packages matlab_toolboxes requirements
 foreach X in `vars' {
     generate byte `X' = 0
-    forvalues j=1/6 {
+    forvalues j=1/7 {
         replace `X' = 1 if lab`j' == "`X'"
     }
 }
