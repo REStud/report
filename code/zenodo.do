@@ -3,7 +3,7 @@ local here = r(here)
 
 clear 
 tempfile zenodo
-import delimited using "`here'/zenodo/zenodo_data_2021.csv", clear
+import delimited using "`here'zenodo/zenodo_data_2021.csv", clear
 rename id zenodoid
 keep zenodoid unique_views unique_downloads
 rename unique_* *
@@ -11,7 +11,8 @@ rename downloads downloads2021
 rename views views2021
 save `zenodo', replace
 
-import delimited using "`here'/zenodo/zenodo_data_2022.csv", clear
+tempfile zenodo22
+import delimited using "`here'zenodo/zenodo_data_2022.csv", clear
 rename id zenodoid
 generate created_at = date(created,"YMD##")
 keep zenodoid unique_views unique_downloads created_at
@@ -19,10 +20,22 @@ rename unique_* *
 rename downloads downloads2022
 rename views views2022
 merge 1:1 zenodoid using `zenodo', nogenerate
+save `zenodo22', replace
+
+import delimited using "`here'zenodo/zenodo_data.csv", clear
+rename id zenodoid
+generate created_at = date(created,"YMD##")
+keep zenodoid unique_views unique_downloads created_at
+rename unique_* *
+rename downloads downloads2023
+rename views views2023
+duplicates drop zenodoid, force
+merge 1:1 zenodoid using `zenodo22', nogenerate
 
 reshape long views downloads, i(zenodoid) j(year)
 generate stats_at = date("2021-09-14","YMD##") if year == 2021
 replace stats_at = date("2022-09-07","YMD##") if year == 2022
+replace stats_at = date("2023-09-07","YMD##") if year == 2023
 
 format created_at %tdCCYY-NN-DD
 format stats_at %tdCCYY-NN-DD
@@ -33,6 +46,8 @@ generate downloads_per_month = downloads / since
 
 keep zenodo year since downloads downloads_per_month
 reshape wide since downloads downloads_per_month, i(zenodoid) j(year)
+
+save "`here'temp/zenodo.dta", replace
 
 generate str lbl = ""
 replace lbl = "Geography and Agricultural Productivity" if zenodoid == 5259883
