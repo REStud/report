@@ -14,7 +14,7 @@ egen byte ever_accepted = max(tag=="accepted"), by(MS)
 egen submitted_at = min(numeric_date), by(MS)
 egen accepted_at = max(cond(tag=="accepted", numeric_date, .)), by(MS)
 scalar dbegin = 1630495609 - 13.4*3600
-scalar dend = dbegin + 365 * 24 * 3600
+scalar dend = dbegin + 2 * 365 * 24 * 3600 // 2 is the year factor here
 
 keep if ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
 save "`here'data/git-events.dta", replace
