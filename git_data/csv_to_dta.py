@@ -1,7 +1,7 @@
 import pandas as pd
 import datetime as dt
 
-def branchExtractor(branch_data:list) -> str:
+def branch_extractor(branch_data:list) -> str:
     '''
     Returns git branch out of the git branch/tag list of the repo.
     ---------------------------------------------------
@@ -22,7 +22,7 @@ def branchExtractor(branch_data:list) -> str:
             pass
     return(branch)
 
-def tagExtractor(branch_data:list) -> str:
+def tag_extractor(branch_data:list) -> str:
     '''
     Returns git tag out of the git branch/tag list of the repo.
     ---------------------------------------------------
@@ -41,7 +41,7 @@ def tagExtractor(branch_data:list) -> str:
             pass
     return(tag)
 
-def branchImputer(report_data:pd.DataFrame) -> pd.Series:
+def branch_imputer(report_data:pd.DataFrame) -> pd.Series:
     '''
     Imputes branch names based on previous value of the branch name based on the previous value of branch column under the same MS id.
     --------------------------------------------------------------
@@ -58,7 +58,7 @@ def branchImputer(report_data:pd.DataFrame) -> pd.Series:
             pass
     return(branch)
 
-def tagUnifier(report_data:pd.DataFrame) -> pd.Series:
+def tag_unifier(report_data:pd.DataFrame) -> pd.Series:
     '''
     Unifies accepted tag labels.
     --------------------------------------------------------------
@@ -74,26 +74,26 @@ def tagUnifier(report_data:pd.DataFrame) -> pd.Series:
             tag[i] = tag_lab
     return(tag)
 
-def gitlogToDta(in_path:str, out_path:str):
+def gitlog_to_dta(in_path:str, out_path:str):
     # read in
     report_data = pd.read_csv(in_path)
     # parse date
-    report_data.date = report_data.date.apply(lambda x: datetime.datetime.strptime(x, "%a %b %d %H:%M:%S %Y %z"))
+    report_data.date = report_data.date.apply(lambda x: dt.datetime.strptime(x, "%a %b %d %H:%M:%S %Y %z"))
     # fill in na branch values
     report_data.branch = report_data.branch.fillna("")
     # Create proper branch names out of the list of branch data
     report_data.branch = report_data.branch.apply(lambda x: x.strip(" (").strip(")"))
     report_data['branch_data'] = report_data.branch.apply(lambda x: x.split(","))
-    report_data["branch"] = report_data.branch_data.apply(lambda x: branchExtractor(x))
-    report_data["tag"] = report_data.branch_data.apply(lambda x: tagExtractor(x))
+    report_data["branch"] = report_data.branch_data.apply(lambda x: branch_extractor(x))
+    report_data["tag"] = report_data.branch_data.apply(lambda x: tag_extractor(x))
     report_data = report_data.drop(["branch_data"], axis=1)
     # Add author branch for each initial commit
     report_data.branch[(report_data.message == 'initial commit') & (report_data.branch == "")] = 'author'
     # Impute branch names
-    report_data['imputed_branch'] = branchImputer(report_data)
-    report_data.tag = tagUnifier(report_data)
+    report_data['imputed_branch'] = branch_imputer(report_data)
+    report_data.tag = tag_unifier(report_data)
     #transferm datetime object to be exportable
-    report_data['numeric_date'] = report_data.date.apply(lambda x: datetime.datetime.timestamp(x))
+    report_data['numeric_date'] = report_data.date.apply(lambda x: dt.datetime.timestamp(x))
     report_data['date'] = report_data.date.apply(lambda x: str(x))
     report_data.to_stata(out_path)
 
