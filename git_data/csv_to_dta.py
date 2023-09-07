@@ -8,19 +8,21 @@ def branch_extractor(branch_data:list) -> str:
     Input: Branch data list
     Output: Branch name
     '''
+    # 1st guard clause: extraction for '->' in branch data
     if '->' in branch_data[0]:
         branch = branch_data[0].split('-> ')[1]
-    elif '/' in branch_data[0]:
+        return branch
+    # 2nd guard clause: extraction for '/' in branch data
+    if '/' in branch_data[0]:
         branch = branch_data[0].split('/')[1]
-    else: 
-        branch = ""
-        
-    if branch == "":
-        try: 
-            branch = branch_data[1].split('/')[1]
-        except IndexError:
-            pass
-    return(branch)
+        return branch
+      
+    try: 
+        branch = branch_data[1].split('/')[1]
+    except IndexError:
+        branch = ''
+
+    return branch
 
 def tag_extractor(branch_data:list) -> str:
     '''
@@ -29,17 +31,17 @@ def tag_extractor(branch_data:list) -> str:
     Input: Branch data list
     Output: Tag name
     '''
+    # Guard clause: extraction for ':' in branch data
     if ':' in branch_data[0]:
         tag = branch_data[0].split(': ')[1]
-    else: 
-        tag = ""
-        
-    if tag == "":
-        try:
-            tag = branch_data[1].split(': ')[1]
-        except IndexError:
-            pass
-    return(tag)
+        return tag
+       
+    try:
+        tag = branch_data[1].split(': ')[1]
+    except IndexError:
+        tag = ''
+
+    return tag
 
 def branch_imputer(report_data:pd.DataFrame) -> pd.Series:
     '''
@@ -56,7 +58,7 @@ def branch_imputer(report_data:pd.DataFrame) -> pd.Series:
                 branch[i+1] = branch[i]
         except KeyError:
             pass
-    return(branch)
+    return branch
 
 def tag_unifier(report_data:pd.DataFrame) -> pd.Series:
     '''
@@ -72,7 +74,7 @@ def tag_unifier(report_data:pd.DataFrame) -> pd.Series:
             tag[i] = 'accepted'
         else:
             tag[i] = tag_lab
-    return(tag)
+    return tag
 
 def gitlog_to_dta(in_path:str, out_path:str):
     # read in
@@ -90,7 +92,7 @@ def gitlog_to_dta(in_path:str, out_path:str):
     # Add author branch for each initial commit
     report_data.branch[(report_data.message == 'initial commit') & (report_data.branch == "")] = 'author'
     # Impute branch names
-    report_data['imputed_branch'] = branch_imputer(report_data)
+    report_data['branch_imputed'] = branch_imputer(report_data)
     report_data.tag = tag_unifier(report_data)
     #transferm datetime object to be exportable
     report_data['numeric_date'] = report_data.date.apply(lambda x: dt.datetime.timestamp(x))
