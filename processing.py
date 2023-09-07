@@ -29,16 +29,52 @@ def create_collapsed_git_data(path:str) -> pd.DataFrame:
 
     return collapsed
 
-def create_main_issues_data(path:str) -> pd.DataFrame:
+def create_revisions_year_data(path:str) -> pd.DataFrame:
     '''
     
     '''
-    issues = pd.read_stata(path)
-    issues.drop(['MS'],axis=1, inplace=True)
+    collapsed_year = pd.read_stata(path)
+    collapsed_year = collapsed_year[['MS', 'year', 'max_revision']]
+    revisions = collapsed_year.groupby(['MS', 'year']).mean().reset_index()
+    revisions['max_revision'] = revisions['max_revision'].apply(lambda x:int(x))
+    revisions = revisions.groupby(['year','max_revision']).count().reset_index()
+    years = revisions[['year','MS']].groupby('year').sum()
+    revisions.loc[revisions['year']=='2021','percent'] = revisions.loc[revisions['year']=='2021', 'MS']/years.loc['2021','MS']
+    revisions.loc[revisions['year']=='2022','percent'] = revisions.loc[revisions['year']=='2022', 'MS']/years.loc['2022','MS']
+    revisions.loc[revisions['year']=='2023','percent'] = revisions.loc[revisions['year']=='2023', 'MS']/years.loc['2023','MS']
+
+    return revisions
+
+def create_time_tables(path:str) -> pd.DataFrame:
+    '''
+    
+    '''
+    collapsed_year = pd.read_stata(path)
+    time_tables = collapsed_year.groupby('MS').sum()[['time_at_author','time_at_editor']]
+    time_tables = time_tables.merge(collapsed_year[['MS','year']], how='left', on='MS')
+    time_tables = time_tables.drop_duplicates(['MS','year'])
+    time_tables['total_time'] = time_tables['time_at_author'] + time_tables['time_at_editor']
+    time_tables = time_tables[time_tables['year']=='2022']
+    time_tables['total_time'] = time_tables['total_time'].apply(lambda x: round(x))
+    time_tables['time_at_author'] = time_tables['time_at_author'].apply(lambda x: round(x))
+    time_tables['time_at_editor'] = time_tables['time_at_editor'].apply(lambda x: round(x))
+
+    return time_tables
+
+def create_main_issues_data(issues:str, git_data:str) -> pd.DataFrame:
+    '''
+    
+    '''
+    issues_data = pd.read_stata(issues)
+    issues_data.drop_duplicates(['MS'],inplace=True)
+    ms = pd.read_stata(git_data)
+    ms = ms[['MS']].drop_duplicates(['MS'])
+    issues_data = ms.merge(issues_data,how='left',on='MS')
+    issues_data.drop('MS',axis=1,inplace=True)
 
     mean_issues = dict()
-    for col in issues.columns:
-        mean_issues[col] = issues[col].mean()
+    for col in issues_data.columns:
+        mean_issues[col] = issues_data[col].mean()
 
     mean_issues = pd.DataFrame(mean_issues,index=[0]).melt()
     mean_issues.columns = ['issue', 'value']
@@ -50,6 +86,10 @@ def create_main_issues_data(path:str) -> pd.DataFrame:
     mean_issues.loc[5,'issue'] = "Include data"
     mean_issues.loc[6,'issue'] = "Stata packages"
     mean_issues.loc[7,'issue'] = "Matlab toolboxes"
+    mean_issues.loc[8,'issue'] = "Requirements"
+    mean_issues = mean_issues.sort_values('value').reset_index(drop=True)
+    mean_issues.drop(0,inplace=True)
+    mean_issues.reset_index(drop=True,inplace=True)
 
     return mean_issues
 
@@ -140,13 +180,13 @@ def time_at_editor_chart(data:pd.DataFrame) -> go.Figure:
     time_at_editor_chart = go.Figure()
     time_at_editor_chart.add_trace(go.Histogram(
             x=data[data['revision']==0]['time_at_editor'],
-            hovertemplate="%{y}",
+            hovertemplate="Bin:%{x} - %{y}",
             name='First submission',
             )
         )
     time_at_editor_chart.add_trace(go.Histogram(
             x=data[data['revision']>0]['time_at_editor'],
-            hovertemplate="%{y}",
+            hovertemplate="Bin:%{x} - %{y}",
             name='Revision',
         )
     )
@@ -157,7 +197,7 @@ def time_at_editor_chart(data:pd.DataFrame) -> go.Figure:
         font = dict(
                 size = 14
                 ),
-        showlegend = False,
+        showlegend = True,
         hoverlabel = dict(
                 font_size = 14,
                 font_family = "Rockwell"
@@ -196,6 +236,51 @@ def revisions_chart(data:pd.DataFrame) -> go.Figure:
     )
     revisions_chart.update_traces(opacity=0.5)
     return revisions_chart
+
+def revisions_year_chart(data:pd.DataFrame) -> go.Figure:
+    '''
+    
+    '''
+    revision_years_chart = go.Figure()
+    revision_years_chart.add_trace(go.Bar(
+            x=data.loc[data['year']=='2021','max_revision'],
+            y=data.loc[data['year']=='2021','percent'],
+            hovertemplate="%{y:.1%}",
+            name='2021',
+            )
+        )
+    revision_years_chart.add_trace(go.Bar(
+            x=data.loc[data['year']=='2022','max_revision'],
+            y=data.loc[data['year']=='2022','percent'],
+            hovertemplate="%{y:.1%}",
+            name='2022',
+        )
+    )
+    revision_years_chart.add_trace(go.Bar(
+            x=data.loc[data['year']=='2023','max_revision'],
+            y=data.loc[data['year']=='2023','percent'],
+            hovertemplate="%{y:.1%}",
+            name='2023',
+        )
+    )
+    revision_years_chart.update_layout(
+        title={
+                "text": f"Number of revisions needed in 2021-23",
+                },
+        font = dict(
+                size = 14
+                ),
+        showlegend = True,
+        hoverlabel = dict(
+                font_size = 14,
+                font_family = "Rockwell"
+            ),
+        barmode='group',
+        xaxis_title_text='Revisions needed',
+        yaxis_title_text='Percentage',
+    )
+    revision_years_chart.update_traces(opacity=0.5)
+    return revision_years_chart
 
 def main_issues_chart(data:pd.DataFrame) ->go.Figure:
     '''
@@ -241,8 +326,27 @@ def downloads_chart(data:pd.DataFrame) -> go.Figure:
     downloads_chart = go.Figure(data=go.Scatter(
         x=data['downloads_per_month2022'],
         y=data['downloads_per_month2021'],
-        hovertemplate="%{x} : %{y}<extra></extra>",
-        mode='markers'
+        hovertemplate="2021-2022<extra></extra>",
+        mode='markers',
+        name='2021-2022'
+        )
+    )
+
+    downloads_chart.add_trace(go.Scatter(
+        x=data['downloads_per_month2023'],
+        y=data['downloads_per_month2022'],
+        hovertemplate="2022-2023<extra></extra>",
+        mode='markers',
+        name='2021-2022'
+        )
+    )
+
+    downloads_chart.add_trace(go.Scatter(
+        x=data['downloads_per_month2023'],
+        y=data['downloads_per_month2021'],
+        hovertemplate="2021-2023<extra></extra>",
+        mode='markers',
+        name='2021-2023'
         )
     )
 
@@ -253,14 +357,13 @@ def downloads_chart(data:pd.DataFrame) -> go.Figure:
         font = dict(
                 size = 14
                 ),
-        showlegend = False,
+        showlegend = True,
         hoverlabel = dict(
                 font_size = 14,
                 font_family = "Rockwell"
             ),
-        xaxis_title_text='Downloads in 2022',
-        yaxis_title_text='Downloads in 2021',
-        #FIXME: set up overlaying markers
+        xaxis_title_text='Downloads per month',
+        yaxis_title_text='Downloads per month',
     )
     downloads_chart.update_traces(marker_size=10,opacity=0.5)
     return downloads_chart
@@ -271,27 +374,86 @@ def downloads_per_month_chart(data:pd.DataFrame) -> go.Figure:
     '''
     downloads_per_month_chart = go.Figure(data = go.Histogram(
                 x=data['downloads_per_month2022'],
-                hovertemplate="%{y}<extra></extra>",
+                hovertemplate="%{x} : %{y}<extra></extra>",
                 xbins=dict(
                     start=0,
                     end=9,
                     size=1
                 ),
+                name='2022'
             )
         )
+    
+    downloads_per_month_chart.add_trace(
+            go.Histogram(
+                x=data['downloads_per_month2023'],
+                hovertemplate="%{x} : %{y}<extra></extra>",
+                xbins=dict(
+                    start=0,
+                    end=9,
+                    size=1
+                ),
+                name='2023'
+            )
+        )
+
     downloads_per_month_chart.update_layout(
         title={
-                "text": f"Downloads per months in 2022",
+                "text": f"Downloads per months in 2022 & 2023",
                 },
         font = dict(
                 size = 14
                 ),
-        showlegend = False,
+        showlegend = True,
         hoverlabel = dict(
                 font_size = 14,
                 font_family = "Rockwell"
             ),
-        xaxis_title_text='Downloads per month in 2022',
+        xaxis_title_text='Downloads per month',
+        barmode='overlay'
     )
     downloads_per_month_chart.update_traces(opacity=0.3)
     return downloads_per_month_chart
+
+def top_table(data:pd.DataFrame, filter:str) -> go.Figure:
+    '''
+    
+    '''
+    table = data.sort_values(
+                    filter, ascending=False
+                ).drop(
+                    'year',axis=1
+                ).reset_index(
+                    drop=True
+                ).head()
+
+    odd_row='white'
+    even_row='lightgrey'
+    table_chart = go.Figure()
+    table_chart.add_trace(
+        go.Table(
+            header = dict(
+                        values=list(table.columns),
+                        line_color='darkslategray',
+                        fill_color='royalblue',
+                        align=['left','center'],
+                        font=dict(color='white', size=12),
+                        height=40
+                    ),
+            cells = dict(
+                        values = [table.loc[:,col] for col in table.columns],
+                        line_color='darkslategray',
+                        fill_color = [[odd_row,even_row]*40],
+                        align=['left', 'center'],
+                        font_size=12,
+                        height=30
+                    )
+        )
+    )
+    table_chart.update_layout(
+        title={
+                "text": f"Top 5 time spent in queue by {filter}",
+                },
+        )
+
+    return table_chart
