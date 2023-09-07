@@ -16,8 +16,24 @@ bysort MS (t): generate byte spell_id = sum(change)
 
 * count of packages in pipeline
 egen last_commit = max(t), by(MS)
+gen year = substr(date,1,4)
 
 codebook MS
+save "`here'temp/git-events-processed.dta", replace
+
+preserve
+collapse (sum) spell, by(MS year spell_id at_editor)
+drop if spell_id == 1
+replace spell_id = int((spell_id - 1)/2)
+
+reshape wide spell, i(MS spell_id year) j(at_editor)
+rename spell_id revision
+rename spell0 time_at_author
+rename spell1 time_at_editor
+
+egen max_revision = max(revision), by(MS)
+save "`here'temp/collapsed_year", replace
+restore
 
 collapse (sum) spell, by(MS accepted_at spell_id at_editor)
 drop if spell_id == 1
@@ -29,6 +45,8 @@ rename spell0 time_at_author
 rename spell1 time_at_editor
 
 egen max_revision = max(revision), by(MS)
+save "`here'temp/collapsed_accepted_at", replace
+
 
 local opt width(7) start(0) frequency graphregion(color(white))
 

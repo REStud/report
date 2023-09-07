@@ -9,6 +9,7 @@ duplicates drop
 save `git', replace
 
 use "`here'data/issues.dta", clear
+duplicates drop MS, force
 merge 1:1 MS using `git', keep(match using) nogenerate
 
 drop MS
