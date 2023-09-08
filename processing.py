@@ -39,9 +39,9 @@ def create_revisions_year_data(path:str) -> pd.DataFrame:
     revisions['max_revision'] = revisions['max_revision'].apply(lambda x:int(x))
     revisions = revisions.groupby(['year','max_revision']).count().reset_index()
     years = revisions[['year','MS']].groupby('year').sum()
-    revisions.loc[revisions['year']=='2021','percent'] = revisions.loc[revisions['year']=='2021', 'MS']/years.loc['2021','MS']
-    revisions.loc[revisions['year']=='2022','percent'] = revisions.loc[revisions['year']=='2022', 'MS']/years.loc['2022','MS']
-    revisions.loc[revisions['year']=='2023','percent'] = revisions.loc[revisions['year']=='2023', 'MS']/years.loc['2023','MS']
+    revisions.loc[revisions['year']==2021,'percent'] = revisions.loc[revisions['year']==2021, 'MS']/years.loc[2021,'MS']
+    revisions.loc[revisions['year']==2022,'percent'] = revisions.loc[revisions['year']==2022, 'MS']/years.loc[2022,'MS']
+    revisions.loc[revisions['year']==2023,'percent'] = revisions.loc[revisions['year']==2023, 'MS']/years.loc[2023,'MS']
 
     return revisions
 
@@ -53,8 +53,8 @@ def create_time_tables(path:str) -> pd.DataFrame:
     time_tables = collapsed_year.groupby('MS').sum()[['time_at_author','time_at_editor']]
     time_tables = time_tables.merge(collapsed_year[['MS','year']], how='left', on='MS')
     time_tables = time_tables.drop_duplicates(['MS','year'])
+    time_tables = time_tables[time_tables['year']==2023]
     time_tables['total_time'] = time_tables['time_at_author'] + time_tables['time_at_editor']
-    time_tables = time_tables[time_tables['year']=='2022']
     time_tables['total_time'] = time_tables['total_time'].apply(lambda x: round(x))
     time_tables['time_at_author'] = time_tables['time_at_author'].apply(lambda x: round(x))
     time_tables['time_at_editor'] = time_tables['time_at_editor'].apply(lambda x: round(x))
@@ -243,24 +243,24 @@ def revisions_year_chart(data:pd.DataFrame) -> go.Figure:
     '''
     revision_years_chart = go.Figure()
     revision_years_chart.add_trace(go.Bar(
-            x=data.loc[data['year']=='2021','max_revision'],
-            y=data.loc[data['year']=='2021','percent'],
+            x=data.loc[data['year']==2021,'max_revision'],
+            y=data.loc[data['year']==2021,'percent'],
             hovertemplate="%{y:.1%}",
             name='2021',
             )
         )
     revision_years_chart.add_trace(go.Bar(
-            x=data.loc[data['year']=='2022','max_revision'],
-            y=data.loc[data['year']=='2022','percent'],
+            x=data.loc[data['year']==2022,'max_revision'],
+            y=data.loc[data['year']==2022,'percent'],
             hovertemplate="%{y:.1%}",
-            name='2022',
+            name=2022,
         )
     )
     revision_years_chart.add_trace(go.Bar(
-            x=data.loc[data['year']=='2023','max_revision'],
-            y=data.loc[data['year']=='2023','percent'],
+            x=data.loc[data['year']==2023,'max_revision'],
+            y=data.loc[data['year']==2023,'percent'],
             hovertemplate="%{y:.1%}",
-            name='2023',
+            name=2023,
         )
     )
     revision_years_chart.update_layout(

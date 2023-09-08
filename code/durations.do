@@ -7,7 +7,7 @@ use "`here'data/git-events.dta", clear
 bysort MS (numeric_date): generate t = _n
 xtset MS t
 
-generate spell = D.numeric_date/3600/24
+generate spell = D.numeric_date
 bysort MS (t): generate byte at_editor = (branch_imputed[_n-1] == branch_imputed[_n] ) | (branch_imputed[_n-1] == "author")
 
 xtset MS t
@@ -16,11 +16,11 @@ bysort MS (t): generate byte spell_id = sum(change)
 
 * count of packages in pipeline
 egen last_commit = max(t), by(MS)
-gen year = substr(date,1,4)
 
 codebook MS
 save "`here'temp/git-events-processed.dta", replace
 
+rename accepted_year year
 preserve
 collapse (sum) spell, by(MS year spell_id at_editor)
 drop if spell_id == 1
@@ -34,6 +34,8 @@ rename spell1 time_at_editor
 egen max_revision = max(revision), by(MS)
 save "`here'temp/collapsed_year", replace
 restore
+
+keep if year == 2023
 
 collapse (sum) spell, by(MS accepted_at spell_id at_editor)
 drop if spell_id == 1
