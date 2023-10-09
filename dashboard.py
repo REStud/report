@@ -1,10 +1,9 @@
 from dash import Dash, dcc, html, Input, Output
 import socket
 import processing
-import slider_dates
 import pandas as pd
 
-HOST = socket.gethostbyname(socket.gethostname())
+HOST = socket.gethostbyname('localhost')
 SEED = 20230620
 TABLE_DICT = {'total_time':'total_time', 'time_at_author':'time_at_author', 'time_at_editor':'time_at_editor'}
 
@@ -37,9 +36,9 @@ app.layout = html.Div(
         html.Div(
             children=[
                 dcc.Markdown('''
-                This report covers the period between September 1, 2021 and August 31, 2023. In this period, xxx replication packages have been submitted and xxx packages have been accepted. There is no final decision yet on xx packages; x are at the editorial team, x are with authors.
+                This report covers the period between September 1, 2022 and August 31, 2023. In this period, 91 replication packages have been submitted and 89 packages have been accepted. 
 
-                We now have two complete years of data under the new Data Availability Policy. This makes it possible to make comparisons and identify changes.
+                We now have three complete years of data under the new Data Availability Policy. This makes it possible to make comparisons and identify changes.
                              
                 ## Turnaround times
 
@@ -185,4 +184,4 @@ def create_charts(table):
     return revision_chart, revision_year_chart, time_at_chart, main_issues_chart, download_histograms_chart, downloads_chart, top_table_chart
 
 if __name__ == "__main__":
-    app.run_server(debug=True, host=HOST, port=1234)
+    app.run_server(debug=True, host=HOST, port=4440)
