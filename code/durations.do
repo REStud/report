@@ -8,7 +8,7 @@ bysort MS (numeric_date): generate t = _n
 xtset MS t
 
 generate spell = D.numeric_date
-bysort MS (t): generate byte at_editor = (branch_imputed[_n-1] == branch_imputed[_n] ) | (branch_imputed[_n-1] == "author")
+bysort MS (t): generate byte at_editor = (branch[_n-1] == branch[_n] ) | (branch[_n-1] == "author")
 
 xtset MS t
 generate byte change = L.at_editor != at_editor

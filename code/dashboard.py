@@ -36,13 +36,13 @@ app.layout = html.Div(
         html.Div(
             children=[
                 dcc.Markdown('''
-                This report covers the period between September 1, 2022 and August 31, 2023. In this period, 91 replication packages have been submitted and 89 packages have been accepted. 
+                This report covers the period between September 1, 2022 and August 31, 2024. In this period, xx replication packages have been submitted and xx packages have been accepted. 
 
-                We now have three complete years of data under the new Data Availability Policy. This makes it possible to make comparisons and identify changes.
+                We now have four complete years of data under the new Data Availability Policy. This makes it possible to make comparisons and identify changes.
                              
                 ## Turnaround times
 
-                The vast majority of packages are accepted only after revisions; only six packages were accepted as submitted. Most packages are accepted on first revision. The Figure plots the number of packages by revisions at the time acceptance. Around 58 percent of packages are accepted after at most one revision (up from 52 percent last year).
+                The vast majority of packages are accepted only after revisions; only XXX packages were accepted as submitted. Most packages are accepted on first revision. The Figure plots the number of packages by revisions at the time acceptance. Around 58 percent of packages are accepted after at most one revision (up from 52 percent last year).
                 '''),
                 # revision chart
                 html.Div(
@@ -75,7 +75,7 @@ app.layout = html.Div(
                     className="card",
                 ),
                 dcc.Markdown('''
-                The average time authors spend with a revision is 25 days.
+                The average time authors spend with a revision is XX days.
 
                 ## Reasons for revision
 
@@ -153,8 +153,8 @@ app.layout = html.Div(
             ],
             className='wrapper',
         ),
-        ]
-    )
+    ]
+)
     
 @app.callback(
     Output("revision-chart", "figure"),
@@ -167,11 +167,11 @@ app.layout = html.Div(
     Input("table-filter","value") # here i have to create some interactive thingy
 )
 def create_charts(table):
-    collapsed = pd.read_stata('../temp/collapsed_accepted_at.dta')
-    revisions = processing.create_revisions_year_data('../temp/collapsed_year.dta')
-    issues_data = processing.create_main_issues_data('../data/issues.dta', '../temp/git-events-processed.dta')
-    zenodo_data = pd.read_stata('../temp/zenodo.dta')
-    time_table = processing.create_time_tables('../temp/collapsed_year.dta')
+    collapsed = pd.read_stata('temp/collapsed_accepted_at.dta')
+    revisions = processing.create_revisions_year_data('temp/collapsed_year.dta')
+    issues_data = processing.create_main_issues_data('data/issues.dta', 'temp/git-events-processed.dta')
+    zenodo_data = pd.read_stata('temp/zenodo.dta')
+    time_table = processing.create_time_tables('temp/collapsed_year.dta')
     
     revision_chart = processing.revisions_chart(collapsed)
     revision_year_chart = processing.revisions_year_chart(revisions)

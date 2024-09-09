@@ -12,7 +12,7 @@ use "`here'data/issues.dta", clear
 duplicates drop MS, force
 merge 1:1 MS using `git', keep(match using) nogenerate
 
-drop MS
+drop MS branch commit
 unab vars: _all
 collapse (mean) `vars'
 

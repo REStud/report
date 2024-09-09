@@ -22,20 +22,36 @@ rename views views2022
 merge 1:1 zenodoid using `zenodo', nogenerate
 save `zenodo22', replace
 
+tempfile zenodo23
 import delimited using "`here'zenodo/zenodo_data.csv", clear
 rename id zenodoid
 generate created_at = date(created,"YMD##")
 keep zenodoid unique_views unique_downloads created_at
+keep if created_at < 23260 // fy2023
 rename unique_* *
 rename downloads downloads2023
 rename views views2023
 duplicates drop zenodoid, force
 merge 1:1 zenodoid using `zenodo22', nogenerate
+save `zenodo23', replace
+
+import delimited using "`here'zenodo/zenodo_data.csv", clear
+rename id zenodoid
+generate created_at = date(created,"YMD##")
+keep zenodoid unique_views unique_downloads created_at
+keep if created_at < 23626 // fy2024
+rename unique_* *
+rename downloads downloads2024
+rename views views2024
+duplicates drop zenodoid, force
+merge 1:1 zenodoid using `zenodo23', nogenerate
+
 
 reshape long views downloads, i(zenodoid) j(year)
 generate stats_at = date("2021-09-14","YMD##") if year == 2021
 replace stats_at = date("2022-09-07","YMD##") if year == 2022
 replace stats_at = date("2023-09-07","YMD##") if year == 2023
+replace stats_at = date("2024-09-07","YMD##") if year == 2024
 
 format created_at %tdCCYY-NN-DD
 format stats_at %tdCCYY-NN-DD
