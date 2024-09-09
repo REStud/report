@@ -26,7 +26,7 @@ app.layout = html.Div(
         html.Div(
             children=[
                 html.H1(
-                    children="Date Editor's Report 2023",          
+                    children="Date Editor's Report 2024",          
                     className="header-title"
                     ),
                 ],
@@ -167,11 +167,11 @@ app.layout = html.Div(
     Input("table-filter","value") # here i have to create some interactive thingy
 )
 def create_charts(table):
-    collapsed = pd.read_stata('temp/collapsed_accepted_at.dta')
-    revisions = processing.create_revisions_year_data('temp/collapsed_year.dta')
-    issues_data = processing.create_main_issues_data('data/issues.dta', 'temp/git-events-processed.dta')
-    zenodo_data = pd.read_stata('temp/zenodo.dta')
-    time_table = processing.create_time_tables('temp/collapsed_year.dta')
+    collapsed = pd.read_stata('../temp/collapsed_accepted_at.dta')
+    revisions = processing.create_revisions_year_data('../temp/collapsed_year.dta')
+    issues_data = processing.create_main_issues_data('../data/issues.dta', '../temp/git-events-processed.dta')
+    zenodo_data = pd.read_stata('../temp/zenodo.dta')
+    time_table = processing.create_time_tables('../temp/collapsed_year.dta')
     
     revision_chart = processing.revisions_chart(collapsed)
     revision_year_chart = processing.revisions_year_chart(revisions)

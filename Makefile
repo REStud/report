@@ -8,5 +8,5 @@ output/revision.png output/time_at_editor.png&: code/durations.do data/git-event
 	stata -b do $<
 zenodo/zenodo_data_2022.csv: zenodo/zenodo_pull.py
 	cd zenodo; python3 zenodo_pull.py
-data/git-events.dta data/issues.dta: code/github.do github-data/output/gitlog.dta github-data/output/report_labs.dta
+data/git-events.dta data/issues.dta: code/github.do github-data/output/gitlog.csv github-data/output/report-labs.csv
 	stata -b do $<

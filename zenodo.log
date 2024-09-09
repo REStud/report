@@ -25,8 +25,239 @@ Notes:
 . do code/zenodo.do 
 
 . here
-command here is unrecognized
-r(199);
+/home/kissg/Desktop/RASHIP/report/
 
+. local here = r(here)
+
+. 
+. clear 
+
+. tempfile zenodo
+
+. import delimited using "`here'zenodo/zenodo_data_2021.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(6 vars, 80 obs)
+
+. rename id zenodoid
+
+. keep zenodoid unique_views unique_downloads
+
+. rename unique_* *
+
+. rename downloads downloads2021
+
+. rename views views2021
+
+. save `zenodo', replace
+(file /tmp/St21155.000001 not found)
+file /tmp/St21155.000001 saved as .dta format
+
+. 
+. tempfile zenodo22
+
+. import delimited using "`here'zenodo/zenodo_data_2022.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(7 vars, 133 obs)
+
+. rename id zenodoid
+
+. generate created_at = date(created,"YMD##")
+
+. keep zenodoid unique_views unique_downloads created_at
+
+. rename unique_* *
+
+. rename downloads downloads2022
+
+. rename views views2022
+
+. merge 1:1 zenodoid using `zenodo', nogenerate
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                            53
+        from master                        53  
+        from using                          0  
+
+    Matched                                80  
+    -----------------------------------------
+
+. save `zenodo22', replace
+(file /tmp/St21155.000002 not found)
+file /tmp/St21155.000002 saved as .dta format
+
+. 
+. import delimited using "`here'zenodo/zenodo_data.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(8 vars, 5,261 obs)
+
+. rename id zenodoid
+
+. generate created_at = date(created,"YMD##")
+
+. keep zenodoid unique_views unique_downloads created_at
+
+. rename unique_* *
+
+. rename downloads downloads2023
+
+. rename views views2023
+
+. duplicates drop zenodoid, force
+
+Duplicates in terms of zenodoid
+
+(4,922 observations deleted)
+
+. merge 1:1 zenodoid using `zenodo22', nogenerate
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                           208
+        from master                       207  
+        from using                          1  
+
+    Matched                               132  
+    -----------------------------------------
+
+. 
+. reshape long views downloads, i(zenodoid) j(year)
+(j = 2021 2022 2023)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              340   ->   1,020       
+Number of variables                   8   ->   5           
+j variable (3 values)                     ->   year
+xij variables:
+          views2021 views2022 views2023   ->   views
+downloads2021 downloads2022 downloads2023 ->   downloads
+-----------------------------------------------------------------------------
+
+. generate stats_at = date("2021-09-14","YMD##") if year == 2021
+(680 missing values generated)
+
+. replace stats_at = date("2022-09-07","YMD##") if year == 2022
+(340 real changes made)
+
+. replace stats_at = date("2023-09-07","YMD##") if year == 2023
+(340 real changes made)
+
+. 
+. format created_at %tdCCYY-NN-DD
+
+. format stats_at %tdCCYY-NN-DD
+
+. 
+. generate since = round((stats_at - created_at)/30)
+
+. drop if missing(downloads) & year == 2021
+(260 observations deleted)
+
+. generate downloads_per_month = downloads / since
+(216 missing values generated)
+
+. 
+. keep zenodo year since downloads downloads_per_month
+
+. reshape wide since downloads downloads_per_month, i(zenodoid) j(year)
+(j = 2021 2022 2023)
+
+Data                               Long   ->   Wide
+-----------------------------------------------------------------------------
+Number of observations              760   ->   340         
+Number of variables                   5   ->   10          
+j variable (3 values)              year   ->   (dropped)
+xij variables:
+                                  since   ->   since2021 since2022 since2023
+                              downloads   ->   downloads2021 downloads2022 down
+> loads2023
+                    downloads_per_month   ->   downloads_per_month2021 download
+> s_per_month2022 downloads_per_month2023
+-----------------------------------------------------------------------------
+
+. 
+. save "`here'temp/zenodo.dta", replace
+file /home/kissg/Desktop/RASHIP/report/temp/zenodo.dta saved
+
+. 
+. generate str lbl = ""
+(340 missing values generated)
+
+. replace lbl = "Geography and Agricultural Productivity" if zenodoid == 525988
+> 3
+variable lbl was str1 now str39
+(1 real change made)
+
+. replace lbl = "Quasi-Experimental Shift-Share Research Designs" if zenodoid =
+> = 4619197
+variable lbl was str39 now str47
+(1 real change made)
+
+. replace lbl = "Identifying Shocks via Time-Varying Volatility" if zenodoid ==
+>  4448256
+(1 real change made)
+
+. replace lbl = "Skill-Biased Structural Change" if zenodoid == 4773516
+(1 real change made)
+
+. replace lbl = "Trade and Domestic Production Networks" if zenodoid == 3997900
+(1 real change made)
+
+. replace lbl = "Measuring the Incentive to Collude" if zenodoid == 5104830
+(1 real change made)
+
+. 
+. scatter downloads_per_month2022 downloads_per_month2021, mcolor(blue%30) lege
+> nd(off) graphregion(color(white)) mlabel(lbl) mlabposition(6) xtitle(Last yea
+> r) ytitle(This year)
+
+. graph export "`here'output/downloads.png", replace width(800)
+file /home/kissg/Desktop/RASHIP/report/output/downloads.png written in PNG form
+> at
+
+. 
+. histogram downloads_per_month2022, color(blue%30) legend(off) graphregion(col
+> or(white)) frequency xtitle(Downloads per month)
+(bin=11, start=.2, width=.78601402)
+
+. graph export "`here'output/downloads_histogram.png", replace width(800)
+file /home/kissg/Desktop/RASHIP/report/output/downloads_histogram.png written i
+> n PNG format
+
+. 
+. reshape long
+(j = 2021 2022 2023)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations              340   ->   1,020       
+Number of variables                  11   ->   6           
+j variable (3 values)                     ->   year
+xij variables:
+          since2021 since2022 since2023   ->   since
+downloads2021 downloads2022 downloads2023 ->   downloads
+downloads_per_month2021 downloads_per_month2022 downloads_per_month2023->downlo
+> ads_per_month
+-----------------------------------------------------------------------------
+
+. summarize downloads_per_month if year==2022, detail
+
+                     downloads_per_month
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           .2             .2
+ 5%           .5             .2
+10%           .7       .4090909       Obs                 133
+25%          1.2             .5       Sum of wgt.         133
+
+50%            2                      Mean           2.368282
+                        Largest       Std. dev.      1.637397
+75%            3              7
+90%     4.214286       7.214286       Variance        2.68107
+95%         6.25       8.166667       Skewness       1.648431
+99%     8.166667       8.846154       Kurtosis       6.048322
+
+. 
+. 
 end of do-file
-r(199);

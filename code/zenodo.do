@@ -58,10 +58,10 @@ replace lbl = "Trade and Domestic Production Networks" if zenodoid == 3997900
 replace lbl = "Measuring the Incentive to Collude" if zenodoid == 5104830
 
 scatter downloads_per_month2022 downloads_per_month2021, mcolor(blue%30) legend(off) graphregion(color(white)) mlabel(lbl) mlabposition(6) xtitle(Last year) ytitle(This year)
-graph export "`here'/downloads.png", replace width(800)
+graph export "`here'output/downloads.png", replace width(800)
 
 histogram downloads_per_month2022, color(blue%30) legend(off) graphregion(color(white)) frequency xtitle(Downloads per month)
-graph export "`here'/downloads_histogram.png", replace width(800)
+graph export "`here'output/downloads_histogram.png", replace width(800)
 
 reshape long
 summarize downloads_per_month if year==2022, detail

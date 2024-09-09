@@ -31,4 +31,4 @@ label values issue_num IV
 
 local opt graphregion(color(white)) horizontal ylab(#4, value) xtitle(Percent) ytitle("")
 twoway dropline V issue_num, `opt' color(blue)
-graph export "`here'main_issues.png", replace width(800)
+graph export "`here'output/main_issues.png", replace width(800)

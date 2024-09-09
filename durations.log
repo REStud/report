@@ -1,32 +1,33 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      17.0
+ /__    /   ____/   /   ____/      18.0
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
                                    800-STATA-PC        https://www.stata.com
                                    979-696-4600        stata@stata.com
 
-Stata license: Single-user 2-core  perpetual
-Serial number: 501706328764
-  Licensed to: Miklós Koren
-               CEU MicroData
+Stata license: Single-user 2-core , expiring 20 Mar 2025
+Serial number: 501809319773
+  Licensed to: CEU MicroData
+               Gergely Attila Kiss
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
       3. More than 2 billion observations are allowed; see help obs_advice.
-      4. Maximum number of variables is set to 5,000; see help set_maxvar.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
 . do code/durations.do 
 
 . clear all
 
 . here
-/Users/koren/Documents/web/report/
+/home/kissg/Desktop/RASHIP/report/
 
 . local here = r(here)
 
@@ -43,8 +44,8 @@ Panel variable: MS (unbalanced)
          Delta: 1 unit
 
 . 
-. generate spell = D.numeric_date/3600/24
-(78 missing values generated)
+. generate spell = D.numeric_date
+(198 missing values generated)
 
 . bysort MS (t): generate byte at_editor = (branch_imputed[_n-1] == branch_impu
 > ted[_n] ) | (branch_imputed[_n-1] == "author")
@@ -73,31 +74,38 @@ MS                                                                  (unlabeled)
 
                   Type: Numeric (int)
 
-                 Range: [17262,31051]                 Units: 1
-         Unique values: 78                        Missing .: 0/692
+                 Range: [17262,31799]                 Units: 1
+         Unique values: 198                       Missing .: 0/1,462
 
-                  Mean: 27535.7
-             Std. dev.: 1967.24
+                  Mean: 27855.6
+             Std. dev.: 1984.13
 
            Percentiles:     10%       25%       50%       75%       90%
-                          25306     26222     27720     29023     29699
+                          25310     26804     27912     29292     30274
+
+. save "`here'temp/git-events-processed.dta", replace
+file /home/kissg/Desktop/RASHIP/report/temp/git-events-processed.dta saved
 
 . 
-. collapse (sum) spell, by(MS accepted_at spell_id at_editor)
+. rename accepted_year year
+
+. preserve
+
+. collapse (sum) spell, by(MS year spell_id at_editor)
 
 . drop if spell_id == 1
-(78 observations deleted)
+(198 observations deleted)
 
 . replace spell_id = int((spell_id - 1)/2)
-(293 real changes made)
+(683 real changes made)
 
 . 
-. reshape wide spell, i(MS spell_id) j(at_editor)
+. reshape wide spell, i(MS spell_id year) j(at_editor)
 (j = 0 1)
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations              293   ->   191         
+Number of observations              683   ->   473         
 Number of variables                   5   ->   5           
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
@@ -113,6 +121,50 @@ xij variables:
 . 
 . egen max_revision = max(revision), by(MS)
 
+. save "`here'temp/collapsed_year", replace
+file /home/kissg/Desktop/RASHIP/report/temp/collapsed_year.dta saved
+
+. restore
+
+. 
+. keep if year == 2023
+(945 observations deleted)
+
+. 
+. collapse (sum) spell, by(MS accepted_at spell_id at_editor)
+
+. drop if spell_id == 1
+(89 observations deleted)
+
+. replace spell_id = int((spell_id - 1)/2)
+(265 real changes made)
+
+. 
+. reshape wide spell, i(MS spell_id) j(at_editor)
+(j = 0 1)
+
+Data                               Long   ->   Wide
+-----------------------------------------------------------------------------
+Number of observations              265   ->   191         
+Number of variables                   5   ->   5           
+j variable (2 values)         at_editor   ->   (dropped)
+xij variables:
+                                  spell   ->   spell0 spell1
+-----------------------------------------------------------------------------
+
+. rename spell_id revision
+
+. rename spell0 time_at_author
+
+. rename spell1 time_at_editor
+
+. 
+. egen max_revision = max(revision), by(MS)
+
+. save "`here'temp/collapsed_accepted_at", replace
+file /home/kissg/Desktop/RASHIP/report/temp/collapsed_accepted_at.dta saved
+
+. 
 . 
 . local opt width(7) start(0) frequency graphregion(color(white))
 
@@ -122,58 +174,59 @@ xij variables:
                            1 spell
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0136458       .0136458
- 5%     .1725926       .0214931
-10%     .2930208       .0232292       Obs                  78
-25%     5.446239       .1725926       Sum of wgt.          78
+ 1%            0              0
+ 5%            0              0
+10%            1              0       Obs                  87
+25%           17              0       Sum of wgt.          87
 
-50%      14.6084                      Mean           15.23669
-                        Largest       Std. dev.      11.57361
-75%     24.17817       37.45621
-90%     29.92918       41.77692       Variance       133.9486
-95%     37.45621       48.69926       Skewness       .7322221
-99%      48.9295        48.9295       Kurtosis       3.294127
+50%           23                      Mean           25.88506
+                        Largest       Std. dev.       22.8399
+75%           30             69
+90%           49             69       Variance       521.6611
+95%           66             72       Skewness       3.425242
+99%          174            174       Kurtosis        21.7952
 
 . summarize time_at_editor if revision>=1, detail
 
                            1 spell
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0007407       .0006713
- 5%     .0015162       .0007407
-10%     .0031713       .0011574       Obs                 102
-25%     .0066782        .001331       Sum of wgt.         102
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs                  74
+25%            0              0       Sum of wgt.          74
 
-50%     .0670312                      Mean           6.243679
-                        Largest       Std. dev.      12.40637
-75%     7.230243       42.16417
-90%     22.10207       46.75144       Variance       153.9179
-95%     35.19346       49.76176       Skewness       2.628452
-99%     49.76176       66.20853       Kurtosis       10.10249
+50%            0                      Mean           13.14865
+                        Largest       Std. dev.      27.15288
+75%           16             50
+90%           42             67       Variance        737.279
+95%           50            123       Skewness       3.361898
+99%          161            161       Kurtosis       16.39263
 
 . summarize time_at_author, detail
 
                            0 spell
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0009722              0
- 5%     1.845787       .0009722
-10%     4.256215       .0012847       Obs                 113
-25%     7.140012       .0030671       Sum of wgt.         113
+ 1%            0              0
+ 5%            0              0
+10%            4              0       Obs                 104
+25%          9.5              0       Sum of wgt.         104
 
-50%      15.6159                      Mean           25.77075
-                        Largest       Std. dev.      40.05122
-75%     31.66794       89.88801
-90%     50.71971       93.59702       Variance         1604.1
-95%      79.0111        98.0571       Skewness       6.596771
-99%      98.0571       383.9647       Kurtosis       58.00526
+50%           20                      Mean             35.625
+                        Largest       Std. dev.      59.59331
+75%         34.5            187
+90%           70            191       Variance       3551.363
+95%          158            307       Skewness       4.195934
+99%          307            426       Kurtosis       23.66453
 
 . twoway (histogram time_at_editor if revision==0, `opt' color(blue%30)) (histo
 > gram time_at_editor if revision>=1, `opt' color(red%30)), xtitle(Days at edit
 > or) legend(order(1 "First submission" 2 "Revision"))
 
-. graph export "`here'time_at_editor.png", replace width(800)
-file /Users/koren/Documents/web/report/time_at_editor.png written in PNG format
+. graph export "`here'output/time_at_editor.png", replace width(800)
+file /home/kissg/Desktop/RASHIP/report/output/time_at_editor.png written in PNG
+>  format
 
 . 
 . tabulate max_revision if revision == 0
@@ -181,20 +234,20 @@ file /Users/koren/Documents/web/report/time_at_editor.png written in PNG format
 max_revisio |
           n |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |          6        7.69        7.69
-          1 |         40       51.28       58.97
-          2 |         26       33.33       92.31
-          3 |          3        3.85       96.15
-          4 |          3        3.85      100.00
+          0 |          7        8.05        8.05
+          1 |         59       67.82       75.86
+          2 |         18       20.69       96.55
+          3 |          3        3.45      100.00
 ------------+-----------------------------------
-      Total |         78      100.00
+      Total |         87      100.00
 
 . histogram max_revision if revision == 0, color(blue%30) discrete start(0) fre
 > quency xtitle(Accepted revision) graphregion(color(white))
 (start=0, width=1)
 
-. graph export "`here'revision.png", replace width(800)
-file /Users/koren/Documents/web/report/revision.png written in PNG format
+. graph export "`here'output/revision.png", replace width(800)
+file /home/kissg/Desktop/RASHIP/report/output/revision.png written in PNG forma
+> t
 
 . 
 end of do-file
