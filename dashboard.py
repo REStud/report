@@ -17,7 +17,7 @@ external_stylesheets = [
 ]
 
 app = Dash(__name__, external_stylesheets=external_stylesheets)
-app.title = "REStud replication performance"
+app.title = "REStud Data Editor's Report 2023"
 
 
 app.layout = html.Div(
@@ -26,7 +26,11 @@ app.layout = html.Div(
         html.Div(
             children=[
                 html.H1(
-                    children="Date Editor's Report 2023",          
+                    children="REStud Data Editor's Report 2023",          
+                    className="header-title"
+                    ),
+                html.H2(
+                    children="Miklós Koren",          
                     className="header-title"
                     ),
                 ],
@@ -42,7 +46,7 @@ app.layout = html.Div(
                              
                 ## Turnaround times
 
-                The vast majority of packages are accepted only after revisions; only six packages were accepted as submitted. Most packages are accepted on first revision. The Figure plots the number of packages by revisions at the time acceptance. Around 58 percent of packages are accepted after at most one revision (up from 52 percent last year).
+                The vast majority of packages are accepted only after revisions; only seven packages were accepted as submitted. Most packages are accepted on first revision. The Figure plots the number of packages by revisions at the time acceptance. Around 78 percent of packages are accepted after at most one revision (up from 55 percent last year).
                 '''),
                 # revision chart
                 html.Div(
@@ -53,7 +57,7 @@ app.layout = html.Div(
                     className="card",
                 ),
                 dcc.Markdown('''
-                Some comparison how the team efficiency is changing by years....
+                The share of packages accepted with or at most one revision is an important indicator. This has been going up over the three years, indicating that authors are increasingly familiar with the requirements and the editorial team is increasingly effective in communicating them.
                 '''),
                 # revision year chart
                 html.Div(
@@ -64,7 +68,8 @@ app.layout = html.Div(
                     className="card",
                 ),
                 dcc.Markdown('''
-                The average package accepted this year received their first response from the Data Editor in xx days (up from xx days last year). This statistic excludes papers where the Data Availability Policy does not apply. For revisions, the mean response time is x days, with the majority of packages decided in much shorter time (see Figure).
+                The average package accepted this year received their first response from the Data Editor in 27 days (up from 15 days last year). There were some notable outliers, as discussed below.
+                This statistic excludes papers where the Data Availability Policy does not apply. For revisions, the mean response time is 14 days, with the majority of packages decided in much shorter time (see Figure).
                 '''),
                 # time at editor chart
                 html.Div(
@@ -75,11 +80,11 @@ app.layout = html.Div(
                     className="card",
                 ),
                 dcc.Markdown('''
-                The average time authors spend with a revision is 25 days.
+                The average time authors spend with a revision is 36 days.
 
                 ## Reasons for revision
 
-                The Figure shows the main reasons for sending back the first version of the package for revision. About half of the packages miss data citations, a Data Availability Statement, or both. About a third of the packages do not save or include the reproducible exhibits to be verified. Specific Stata requirements are also often inadequately explained. 
+                The Figure shows the main reasons for sending back the first version of the package for revision. More than half of the packages miss or have incomplete data citations, a Data Availability Statement, or both. About a third of the packages do not save or include the reproducible exhibits to be verified. (We stopped requiring this in the Data Availability Policy, but it is still recommended.) Specific Stata requirements are also often inadequately explained. 
                 '''),
                 
                 # main issues chart
@@ -93,7 +98,7 @@ app.layout = html.Div(
                 dcc.Markdown('''
                 ## Impact
 
-                The median replication package is downloaded from Zenodo x times a month. This includes views and downloads by author and editorial team. As the figure shows, there is substantial heterogeneity across packages in their download statistics, but all packages have some visibility.
+                The median replication package is downloaded from Zenodo 2.4 times a month. This includes views and downloads by author and editorial team. As the figure shows, there is substantial heterogeneity across packages in their download statistics, but all packages have some visibility.
                 '''),
                 # download histograms
                 html.Div(
@@ -104,7 +109,7 @@ app.layout = html.Div(
                     className="card",
                 ),
                 dcc.Markdown('''
-                Download statistics are highly correlated over time. Packages that were popular last year are often downloaded also this year (next Figure). This suggests that the download statistics capture genuine interest and not only driven by early downloads by authors and the editorial team. 
+                Download statistics are highly correlated over time. Packages that were popular in the last two years are often downloaded also this year (next Figure). This suggests that the download statistics capture genuine interest and not only driven by early downloads by authors and the editorial team. 
                 '''),
                 # download scatter chart
                 html.Div(
@@ -141,7 +146,7 @@ app.layout = html.Div(
                 html.Br(),
                 # top table chart
                 dcc.Markdown('''
-                Here should be some information on the tables....
+                Finally, we can spot some outlier packages in terms of waiting times. The extrement wait times are due to miscommunicaton or a glitch in our tracking system, but there are some longer wait times for very complex packages.
                 '''),
                 html.Div(
                     children=dcc.Graph(
