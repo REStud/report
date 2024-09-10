@@ -1,29 +1,31 @@
 
-  ___  ____  ____  ____  ____ (R)
- /__    /   ____/   /   ____/
-___/   /   /___/   /   /___/   16.1   Copyright 1985-2019 StataCorp LLC
-  Statistics/Data analysis            StataCorp
-                                      4905 Lakeway Drive
-     MP - Parallel Edition            College Station, Texas 77845 USA
-                                      800-STATA-PC        https://www.stata.com
-                                      979-696-4600        stata@stata.com
-                                      979-696-4601 (fax)
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      18.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
 
-Stata license: Single-user 2-core  perpetual
-Serial number: 501606204617
-  Licensed to: Miklos Koren
-               CEU MicroData
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
+
+Stata license: Single-user 2-core , expiring 20 Mar 2025
+Serial number: 501809319773
+  Licensed to: CEU MicroData
+               Gergely Attila Kiss
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
       3. More than 2 billion observations are allowed; see help obs_advice.
-      4. Maximum number of variables is set to 5,000; see help set_maxvar.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
 . do code/zenodo.do 
 
 . here
-/Users/koren/Tresorit/places/restud/data-editor/report/
+/home/kissg/Desktop/RASHIP/report/
 
 . local here = r(here)
 
@@ -32,7 +34,8 @@ Notes:
 
 . tempfile zenodo
 
-. import delimited using "`here'/zenodo/zenodo_data_2021.csv", clear
+. import delimited using "`here'zenodo/zenodo_data_2021.csv", clear
+(encoding automatically selected: ISO-8859-1)
 (6 vars, 80 obs)
 
 . rename id zenodoid
@@ -46,12 +49,14 @@ Notes:
 . rename views views2021
 
 . save `zenodo', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24094.000001 no
-> t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24094.000001 saved
+(file /tmp/St21155.000001 not found)
+file /tmp/St21155.000001 saved as .dta format
 
 . 
-. import delimited using "`here'/zenodo/zenodo_data_2022.csv", clear
+. tempfile zenodo22
+
+. import delimited using "`here'zenodo/zenodo_data_2022.csv", clear
+(encoding automatically selected: ISO-8859-1)
 (7 vars, 133 obs)
 
 . rename id zenodoid
@@ -68,34 +73,75 @@ file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24094.000001 saved
 
 . merge 1:1 zenodoid using `zenodo', nogenerate
 
-    Result                           # of obs.
+    Result                      Number of obs
     -----------------------------------------
-    not matched                            53
+    Not matched                            53
         from master                        53  
         from using                          0  
 
-    matched                                80  
+    Matched                                80  
+    -----------------------------------------
+
+. save `zenodo22', replace
+(file /tmp/St21155.000002 not found)
+file /tmp/St21155.000002 saved as .dta format
+
+. 
+. import delimited using "`here'zenodo/zenodo_data.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(8 vars, 5,261 obs)
+
+. rename id zenodoid
+
+. generate created_at = date(created,"YMD##")
+
+. keep zenodoid unique_views unique_downloads created_at
+
+. rename unique_* *
+
+. rename downloads downloads2023
+
+. rename views views2023
+
+. duplicates drop zenodoid, force
+
+Duplicates in terms of zenodoid
+
+(4,922 observations deleted)
+
+. merge 1:1 zenodoid using `zenodo22', nogenerate
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                           208
+        from master                       207  
+        from using                          1  
+
+    Matched                               132  
     -----------------------------------------
 
 . 
 . reshape long views downloads, i(zenodoid) j(year)
-(note: j = 2021 2022)
+(j = 2021 2022 2023)
 
-Data                               wide   ->   long
+Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
-Number of obs.                      133   ->     266
-Number of variables                   6   ->       5
-j variable (2 values)                     ->   year
+Number of observations              340   ->   1,020       
+Number of variables                   8   ->   5           
+j variable (3 values)                     ->   year
 xij variables:
-                    views2021 views2022   ->   views
-            downloads2021 downloads2022   ->   downloads
+          views2021 views2022 views2023   ->   views
+downloads2021 downloads2022 downloads2023 ->   downloads
 -----------------------------------------------------------------------------
 
 . generate stats_at = date("2021-09-14","YMD##") if year == 2021
-(133 missing values generated)
+(680 missing values generated)
 
 . replace stats_at = date("2022-09-07","YMD##") if year == 2022
-(133 real changes made)
+(340 real changes made)
+
+. replace stats_at = date("2023-09-07","YMD##") if year == 2023
+(340 real changes made)
 
 . 
 . format created_at %tdCCYY-NN-DD
@@ -106,31 +152,37 @@ xij variables:
 . generate since = round((stats_at - created_at)/30)
 
 . drop if missing(downloads) & year == 2021
-(53 observations deleted)
+(260 observations deleted)
 
 . generate downloads_per_month = downloads / since
+(216 missing values generated)
 
 . 
 . keep zenodo year since downloads downloads_per_month
 
 . reshape wide since downloads downloads_per_month, i(zenodoid) j(year)
-(note: j = 2021 2022)
+(j = 2021 2022 2023)
 
-Data                               long   ->   wide
+Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of obs.                      213   ->     133
-Number of variables                   5   ->       7
-j variable (2 values)              year   ->   (dropped)
+Number of observations              760   ->   340         
+Number of variables                   5   ->   10          
+j variable (3 values)              year   ->   (dropped)
 xij variables:
-                                  since   ->   since2021 since2022
-                              downloads   ->   downloads2021 downloads2022
+                                  since   ->   since2021 since2022 since2023
+                              downloads   ->   downloads2021 downloads2022 down
+> loads2023
                     downloads_per_month   ->   downloads_per_month2021 download
-> s_per_month2022
+> s_per_month2022 downloads_per_month2023
 -----------------------------------------------------------------------------
 
 . 
+. save "`here'temp/zenodo.dta", replace
+file /home/kissg/Desktop/RASHIP/report/temp/zenodo.dta saved
+
+. 
 . generate str lbl = ""
-(133 missing values generated)
+(340 missing values generated)
 
 . replace lbl = "Geography and Agricultural Productivity" if zenodoid == 525988
 > 3
@@ -160,32 +212,33 @@ variable lbl was str39 now str47
 > nd(off) graphregion(color(white)) mlabel(lbl) mlabposition(6) xtitle(Last yea
 > r) ytitle(This year)
 
-. graph export "`here'/downloads.png", replace width(800)
-(file /Users/koren/Tresorit/places/restud/data-editor/report//downloads.png wri
-> tten in PNG format)
+. graph export "`here'output/downloads.png", replace width(800)
+file /home/kissg/Desktop/RASHIP/report/output/downloads.png written in PNG form
+> at
 
 . 
 . histogram downloads_per_month2022, color(blue%30) legend(off) graphregion(col
 > or(white)) frequency xtitle(Downloads per month)
 (bin=11, start=.2, width=.78601402)
 
-. graph export "`here'/downloads_histogram.png", replace width(800)
-(file /Users/koren/Tresorit/places/restud/data-editor/report//downloads_histogr
-> am.png written in PNG format)
+. graph export "`here'output/downloads_histogram.png", replace width(800)
+file /home/kissg/Desktop/RASHIP/report/output/downloads_histogram.png written i
+> n PNG format
 
 . 
 . reshape long
-(note: j = 2021 2022)
+(j = 2021 2022 2023)
 
-Data                               wide   ->   long
+Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
-Number of obs.                      133   ->     266
-Number of variables                   8   ->       6
-j variable (2 values)                     ->   year
+Number of observations              340   ->   1,020       
+Number of variables                  11   ->   6           
+j variable (3 values)                     ->   year
 xij variables:
-                    since2021 since2022   ->   since
-            downloads2021 downloads2022   ->   downloads
-downloads_per_month2021 downloads_per_month2022->downloads_per_month
+          since2021 since2022 since2023   ->   since
+downloads2021 downloads2022 downloads2023 ->   downloads
+downloads_per_month2021 downloads_per_month2022 downloads_per_month2023->downlo
+> ads_per_month
 -----------------------------------------------------------------------------
 
 . summarize downloads_per_month if year==2022, detail
@@ -196,10 +249,10 @@ downloads_per_month2021 downloads_per_month2022->downloads_per_month
  1%           .2             .2
  5%           .5             .2
 10%           .7       .4090909       Obs                 133
-25%          1.2             .5       Sum of Wgt.         133
+25%          1.2             .5       Sum of wgt.         133
 
 50%            2                      Mean           2.368282
-                        Largest       Std. Dev.      1.637397
+                        Largest       Std. dev.      1.637397
 75%            3              7
 90%     4.214286       7.214286       Variance        2.68107
 95%         6.25       8.166667       Skewness       1.648431

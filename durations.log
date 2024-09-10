@@ -1,9 +1,9 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      17.0
+ /__    /   ____/   /   ____/      18.0
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
@@ -11,22 +11,23 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
                                    979-696-4600        stata@stata.com
 
 Stata license: Single-user 2-core  perpetual
-Serial number: 501706328764
-  Licensed to: Miklós Koren
+Serial number: 501806323834
+  Licensed to: Miklos Koren
                CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
       3. More than 2 billion observations are allowed; see help obs_advice.
-      4. Maximum number of variables is set to 5,000; see help set_maxvar.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
 . do code/durations.do 
 
 . clear all
 
 . here
-/Users/koren/Documents/web/report/
+/Users/koren/Tresorit/Mac/places/restud/data-editor/report/
 
 . local here = r(here)
 
@@ -43,11 +44,11 @@ Panel variable: MS (unbalanced)
          Delta: 1 unit
 
 . 
-. generate spell = D.numeric_date/3600/24
-(78 missing values generated)
+. generate spell = D.numeric_date
+(248 missing values generated)
 
-. bysort MS (t): generate byte at_editor = (branch_imputed[_n-1] == branch_impu
-> ted[_n] ) | (branch_imputed[_n-1] == "author")
+. bysort MS (t): generate byte at_editor = (branch[_n-1] == branch[_n] ) | (bra
+> nch[_n-1] == "author")
 
 . 
 . xtset MS t
@@ -71,25 +72,76 @@ Panel variable: MS (unbalanced)
 MS                                                                  (unlabeled)
 -------------------------------------------------------------------------------
 
-                  Type: Numeric (int)
+                  Type: Numeric (long)
 
-                 Range: [17262,31051]                 Units: 1
-         Unique values: 78                        Missing .: 0/692
+                 Range: [17262,34171]                 Units: 1
+         Unique values: 248                       Missing .: 0/1,861
 
-                  Mean: 27535.7
-             Std. dev.: 1967.24
+                  Mean: 28746.2
+             Std. dev.: 2479.09
 
            Percentiles:     10%       25%       50%       75%       90%
-                          25306     26222     27720     29023     29699
+                          25485     27039     28876     30613     32139
+
+. save "`here'temp/git-events-processed.dta", replace
+file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/git-event
+    > s-processed.dta saved
+
+. 
+. rename accepted_year year
+
+. preserve
+
+.     collapse (sum) spell, by(MS year spell_id at_editor)
+
+.     drop if spell_id == 1
+(248 observations deleted)
+
+.     replace spell_id = int((spell_id - 1)/2)
+(886 real changes made)
+
+. 
+.     reshape wide spell, i(MS spell_id year) j(at_editor)
+(j = 0 1)
+
+Data                               Long   ->   Wide
+-----------------------------------------------------------------------------
+Number of observations              886   ->   600         
+Number of variables                   5   ->   5           
+j variable (2 values)         at_editor   ->   (dropped)
+xij variables:
+                                  spell   ->   spell0 spell1
+-----------------------------------------------------------------------------
+
+.     rename spell_id revision
+
+.     rename spell0 time_at_author
+
+.     rename spell1 time_at_editor
+
+. 
+.     egen max_revision = max(revision), by(MS)
+
+.     save "`here'temp/collapsed_year.dta", replace
+file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/collapsed
+    > _year.dta saved
+
+. restore
+
+. 
+. keep if year == 2024
+(1,185 observations deleted)
 
 . 
 . collapse (sum) spell, by(MS accepted_at spell_id at_editor)
 
 . drop if spell_id == 1
-(78 observations deleted)
+(90 observations deleted)
 
 . replace spell_id = int((spell_id - 1)/2)
-(293 real changes made)
+(303 real changes made)
 
 . 
 . reshape wide spell, i(MS spell_id) j(at_editor)
@@ -97,7 +149,7 @@ MS                                                                  (unlabeled)
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations              293   ->   191         
+Number of observations              303   ->   206         
 Number of variables                   5   ->   5           
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
@@ -113,6 +165,12 @@ xij variables:
 . 
 . egen max_revision = max(revision), by(MS)
 
+. save "`here'temp/collapsed_accepted_at.dta", replace
+file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/collapsed
+    > _accepted_at.dta saved
+
+. 
 . 
 . local opt width(7) start(0) frequency graphregion(color(white))
 
@@ -122,58 +180,59 @@ xij variables:
                            1 spell
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0136458       .0136458
- 5%     .1725926       .0214931
-10%     .2930208       .0232292       Obs                  78
-25%     5.446239       .1725926       Sum of wgt.          78
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs                  87
+25%           12              0       Sum of wgt.          87
 
-50%      14.6084                      Mean           15.23669
-                        Largest       Std. dev.      11.57361
-75%     24.17817       37.45621
-90%     29.92918       41.77692       Variance       133.9486
-95%     37.45621       48.69926       Skewness       .7322221
-99%      48.9295        48.9295       Kurtosis       3.294127
+50%           24                      Mean           22.35632
+                        Largest       Std. dev.      16.41183
+75%           29             55
+90%           37             57       Variance       269.3483
+95%           48             66       Skewness       1.090488
+99%           95             95       Kurtosis       6.398857
 
 . summarize time_at_editor if revision>=1, detail
 
                            1 spell
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0007407       .0006713
- 5%     .0015162       .0007407
-10%     .0031713       .0011574       Obs                 102
-25%     .0066782        .001331       Sum of wgt.         102
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs                  97
+25%            0              0       Sum of wgt.          97
 
-50%     .0670312                      Mean           6.243679
-                        Largest       Std. dev.      12.40637
-75%     7.230243       42.16417
-90%     22.10207       46.75144       Variance       153.9179
-95%     35.19346       49.76176       Skewness       2.628452
-99%     49.76176       66.20853       Kurtosis       10.10249
+50%            1                      Mean           13.18557
+                        Largest       Std. dev.      18.56426
+75%           25             59
+90%           42             59       Variance       344.6319
+95%           56             62       Skewness       1.277188
+99%           67             67       Kurtosis       3.449495
 
 . summarize time_at_author, detail
 
                            0 spell
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0009722              0
- 5%     1.845787       .0009722
-10%     4.256215       .0012847       Obs                 113
-25%     7.140012       .0030671       Sum of wgt.         113
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs                 119
+25%            5              0       Sum of wgt.         119
 
-50%      15.6159                      Mean           25.77075
-                        Largest       Std. dev.      40.05122
-75%     31.66794       89.88801
-90%     50.71971       93.59702       Variance         1604.1
-95%      79.0111        98.0571       Skewness       6.596771
-99%      98.0571       383.9647       Kurtosis       58.00526
+50%           13                      Mean           26.10084
+                        Largest       Std. dev.      37.30574
+75%           28            154
+90%           74            161       Variance       1391.719
+95%          125            184       Skewness       2.617122
+99%          184            184       Kurtosis       9.884171
 
 . twoway (histogram time_at_editor if revision==0, `opt' color(blue%30)) (histo
 > gram time_at_editor if revision>=1, `opt' color(red%30)), xtitle(Days at edit
 > or) legend(order(1 "First submission" 2 "Revision"))
 
-. graph export "`here'time_at_editor.png", replace width(800)
-file /Users/koren/Documents/web/report/time_at_editor.png written in PNG format
+. graph export "`here'output/time_at_editor.png", replace width(800)
+file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/time_at_
+> editor.png written in PNG format
 
 . 
 . tabulate max_revision if revision == 0
@@ -181,20 +240,21 @@ file /Users/koren/Documents/web/report/time_at_editor.png written in PNG format
 max_revisio |
           n |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |          6        7.69        7.69
-          1 |         40       51.28       58.97
-          2 |         26       33.33       92.31
-          3 |          3        3.85       96.15
-          4 |          3        3.85      100.00
+          0 |         10       11.49       11.49
+          1 |         45       51.72       63.22
+          2 |         25       28.74       91.95
+          3 |          4        4.60       96.55
+          4 |          3        3.45      100.00
 ------------+-----------------------------------
-      Total |         78      100.00
+      Total |         87      100.00
 
 . histogram max_revision if revision == 0, color(blue%30) discrete start(0) fre
 > quency xtitle(Accepted revision) graphregion(color(white))
 (start=0, width=1)
 
-. graph export "`here'revision.png", replace width(800)
-file /Users/koren/Documents/web/report/revision.png written in PNG format
+. graph export "`here'output/revision.png", replace width(800)
+file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/revision
+> .png written in PNG format
 
 . 
 end of do-file

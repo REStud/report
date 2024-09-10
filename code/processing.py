@@ -42,6 +42,7 @@ def create_revisions_year_data(path:str) -> pd.DataFrame:
     revisions.loc[revisions['year']==2021,'percent'] = revisions.loc[revisions['year']==2021, 'MS']/years.loc[2021,'MS']
     revisions.loc[revisions['year']==2022,'percent'] = revisions.loc[revisions['year']==2022, 'MS']/years.loc[2022,'MS']
     revisions.loc[revisions['year']==2023,'percent'] = revisions.loc[revisions['year']==2023, 'MS']/years.loc[2023,'MS']
+    revisions.loc[revisions['year']==2024,'percent'] = revisions.loc[revisions['year']==2024, 'MS']/years.loc[2024,'MS']
 
     return revisions
 
@@ -53,7 +54,7 @@ def create_time_tables(path:str) -> pd.DataFrame:
     time_tables = collapsed_year.groupby('MS').sum()[['time_at_author','time_at_editor']]
     time_tables = time_tables.merge(collapsed_year[['MS','year']], how='left', on='MS')
     time_tables = time_tables.drop_duplicates(['MS','year'])
-    time_tables = time_tables[time_tables['year']==2023]
+    time_tables = time_tables[time_tables['year']==2024]
     time_tables['total_time'] = time_tables['time_at_author'] + time_tables['time_at_editor']
     time_tables['total_time'] = time_tables['total_time'].apply(lambda x: round(x))
     time_tables['time_at_author'] = time_tables['time_at_author'].apply(lambda x: round(x))
@@ -66,11 +67,13 @@ def create_main_issues_data(issues:str, git_data:str) -> pd.DataFrame:
     
     '''
     issues_data = pd.read_stata(issues)
-    issues_data.drop_duplicates(['MS'],inplace=True)
     ms = pd.read_stata(git_data)
+    issues_data.drop_duplicates(['MS'],inplace=True)
     ms = ms[['MS']].drop_duplicates(['MS'])
     issues_data = ms.merge(issues_data,how='left',on='MS')
-    issues_data.drop('MS',axis=1,inplace=True)
+    issues_data.drop(['branch', 'commit'],axis=1,inplace=True)
+    issues_data = issues_data.drop_duplicates(['MS'])
+    issues_data.drop(['MS', 'macosx', 'forward_slash', 'relative_path', ],axis=1,inplace=True)
 
     mean_issues = dict()
     for col in issues_data.columns:
@@ -79,14 +82,16 @@ def create_main_issues_data(issues:str, git_data:str) -> pd.DataFrame:
     mean_issues = pd.DataFrame(mean_issues,index=[0]).melt()
     mean_issues.columns = ['issue', 'value']
     mean_issues['value'] = mean_issues['value'] * 100 
+    mean_issues.sort_values('value',inplace=True, ascending=False, ignore_index=True)
     mean_issues.loc[0,'issue'] = "Cite data"
-    mean_issues.loc[2,'issue'] = "Confidential data"
-    mean_issues.loc[3,'issue'] = "Save output"
-    mean_issues.loc[4,'issue'] = "Relative path"
-    mean_issues.loc[5,'issue'] = "Include data"
-    mean_issues.loc[6,'issue'] = "Stata packages"
-    mean_issues.loc[7,'issue'] = "Matlab toolboxes"
-    mean_issues.loc[8,'issue'] = "Requirements"
+    mean_issues.loc[2,'issue'] = "Save output"
+    mean_issues.loc[3,'issue'] = "Stata packages"
+    mean_issues.loc[4,'issue'] = "Matlab toolboxes"
+    mean_issues.loc[5,'issue'] = "Confidential Data"
+    mean_issues.loc[6,'issue'] = "Include Data"
+    mean_issues.loc[7,'issue'] = "Insufficient hardware doc"
+    mean_issues.loc[8,'issue'] = "Insufficient sotfware doc"
+    mean_issues.loc[9,'issue'] = "No/multiple readme(s)"
     mean_issues = mean_issues.sort_values('value').reset_index(drop=True)
     mean_issues.drop(0,inplace=True)
     mean_issues.reset_index(drop=True,inplace=True)
@@ -263,6 +268,13 @@ def revisions_year_chart(data:pd.DataFrame) -> go.Figure:
             name=2023,
         )
     )
+    revision_years_chart.add_trace(go.Bar(
+            x=data.loc[data['year']==2024,'max_revision'],
+            y=data.loc[data['year']==2024,'percent'],
+            hovertemplate="%{y:.1%}",
+            name=2024,
+        )
+    )
     revision_years_chart.update_layout(
         title={
                 "text": f"Number of revisions needed in 2021-23",
@@ -334,19 +346,46 @@ def downloads_chart(data:pd.DataFrame) -> go.Figure:
 
     downloads_chart.add_trace(go.Scatter(
         x=data['downloads_per_month2023'],
-        y=data['downloads_per_month2022'],
-        hovertemplate="2022-2023<extra></extra>",
+        y=data['downloads_per_month2021'],
+        hovertemplate="2021-2023<extra></extra>",
         mode='markers',
-        name='2021-2022'
+        name='2021-2023'
+        )
+    )
+
+    downloads_chart.add_trace(go.Scatter(
+        x=data['downloads_per_month2024'],
+        y=data['downloads_per_month2021'],
+        hovertemplate="2021-2024<extra></extra>",
+        mode='markers',
+        name='2021-2024'
         )
     )
 
     downloads_chart.add_trace(go.Scatter(
         x=data['downloads_per_month2023'],
-        y=data['downloads_per_month2021'],
-        hovertemplate="2021-2023<extra></extra>",
+        y=data['downloads_per_month2022'],
+        hovertemplate="2022-2023<extra></extra>",
         mode='markers',
-        name='2021-2023'
+        name='2022-2023'
+        )
+    )
+
+    downloads_chart.add_trace(go.Scatter(
+        x=data['downloads_per_month2024'],
+        y=data['downloads_per_month2022'],
+        hovertemplate="2022-2024<extra></extra>",
+        mode='markers',
+        name='2022-2024'
+        )
+    )
+
+    downloads_chart.add_trace(go.Scatter(
+        x=data['downloads_per_month2024'],
+        y=data['downloads_per_month2023'],
+        hovertemplate="2022-2023<extra></extra>",
+        mode='markers',
+        name='2023-2024'
         )
     )
 
@@ -396,10 +435,23 @@ def downloads_per_month_chart(data:pd.DataFrame) -> go.Figure:
                 name='2023'
             )
         )
+    
+    downloads_per_month_chart.add_trace(
+            go.Histogram(
+                x=data['downloads_per_month2024'],
+                hovertemplate="%{x} : %{y}<extra></extra>",
+                xbins=dict(
+                    start=0,
+                    end=9,
+                    size=1
+                ),
+                name='2024'
+            )
+        )
 
     downloads_per_month_chart.update_layout(
         title={
-                "text": f"Downloads per months in 2022 & 2023",
+                "text": f"Downloads per months in each year from 2022",
                 },
         font = dict(
                 size = 14

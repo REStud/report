@@ -1,0 +1,3 @@
+[submodule "github-data"]
+	path = github-data
+	url = git@github.com:REStud/github-data.git
