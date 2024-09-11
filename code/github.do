@@ -13,6 +13,8 @@ scalar fy2021 = date("2020-09-01", "YMD")
 scalar fy2022 = fy2021 + 365
 scalar fy2023 = fy2022 + 365
 scalar fy2024 = fy2023 + 365
+* 2024 is a leap year	
+scalar fy2025 = fy2024 + 366
 
 * keep only packages with new branch naming
 keep if inlist(branch, "author", "version1", "version2", "version3", "version4")
@@ -22,13 +24,16 @@ egen byte ever_accepted = max(tag=="accepted"), by(MS)
 egen submitted_at = min(numeric_date), by(MS)
 egen accepted_at = max(cond(tag=="accepted", numeric_date, .)), by(MS)
 scalar dbegin = fy2021
-scalar dend = fy2024 + 365
+* 2024 is a leap year
+scalar dend = fy2024 + 366
 
 generate submitted_year = .
 generate accepted_year = .
 forvalues fy = 2021/2024 {
-    replace submitted_year = `fy' if inrange(submitted_at, fy`fy', fy`fy'+365) & submitted_year == .
-    replace accepted_year = `fy' if inrange(accepted_at, fy`fy', fy`fy'+365) & accepted_year == .
+	local begindate = fy`fy'
+	local enddate = fy`=`fy'+1' - 1
+    replace submitted_year = `fy' if inrange(submitted_at, `begindate', `enddate') & submitted_year == .
+    replace accepted_year = `fy' if inrange(accepted_at, `begindate', `enddate') & accepted_year == .
 }
 
 egen ms_tag = tag(MS)

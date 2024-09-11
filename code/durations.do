@@ -22,20 +22,20 @@ save "`here'temp/git-events-processed.dta", replace
 
 rename accepted_year year
 preserve
-collapse (sum) spell, by(MS year spell_id at_editor)
-drop if spell_id == 1
-replace spell_id = int((spell_id - 1)/2)
+    collapse (sum) spell, by(MS year spell_id at_editor)
+    drop if spell_id == 1
+    replace spell_id = int((spell_id - 1)/2)
 
-reshape wide spell, i(MS spell_id year) j(at_editor)
-rename spell_id revision
-rename spell0 time_at_author
-rename spell1 time_at_editor
+    reshape wide spell, i(MS spell_id year) j(at_editor)
+    rename spell_id revision
+    rename spell0 time_at_author
+    rename spell1 time_at_editor
 
-egen max_revision = max(revision), by(MS)
-save "`here'temp/collapsed_year", replace
+    egen max_revision = max(revision), by(MS)
+    save "`here'temp/collapsed_year.dta", replace
 restore
 
-keep if year == 2023
+keep if year == 2024
 
 collapse (sum) spell, by(MS accepted_at spell_id at_editor)
 drop if spell_id == 1
@@ -47,7 +47,7 @@ rename spell0 time_at_author
 rename spell1 time_at_editor
 
 egen max_revision = max(revision), by(MS)
-save "`here'temp/collapsed_accepted_at", replace
+save "`here'temp/collapsed_accepted_at.dta", replace
 
 
 local opt width(7) start(0) frequency graphregion(color(white))
