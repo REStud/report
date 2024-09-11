@@ -1,6 +1,6 @@
 clear all
-here
-local here = r(here)
+*here
+local here = "/home/kissg/Desktop/raship/report/" //r(here)
 
 use "`here'data/git-events.dta", clear
 

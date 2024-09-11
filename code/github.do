@@ -1,12 +1,12 @@
 clear all
-here
-local here = r(here)
+*here
+local here = "/home/kissg/Desktop/raship/report/" // r(here)
 
 import delimited "`here'/github-data/output/gitlog.csv", clear varn(1) case(preserve)
 replace MS = "27827" if MS == "27827-1"
 destring MS, force replace
 
-* Julia datetime is in timestamps with seconds (2019-12-10T17:28:33Z), let's use days.
+* Julia datetime is in timestamps with seconds (2019-12-10T17:28:33Z)
 replace date = substr(date, 1, 10)
 gen numeric_date = date(date, "YMD")
 scalar fy2021 = date("2020-09-01", "YMD")
@@ -18,20 +18,21 @@ scalar fy2025 = fy2024 + 366
 
 * keep only packages with new branch naming
 keep if inlist(branch, "author", "version1", "version2", "version3", "version4")
-egen byte ever_accepted = max(tag=="accepted"), by(MS)
+egen byte ever_accepted = max(tag=="accepted" | tag == "accept"), by(MS)
 
 * keep backages accepted in 2021 fiscal year
 egen submitted_at = min(numeric_date), by(MS)
-egen accepted_at = max(cond(tag=="accepted", numeric_date, .)), by(MS)
+egen accepted_at = max(cond(tag=="accepted" | tag == "accept", numeric_date, .)), by(MS)
 scalar dbegin = fy2021
 * 2024 is a leap year
-scalar dend = fy2024 + 366
+scalar dend = fy2025
 
 generate submitted_year = .
 generate accepted_year = .
+
 forvalues fy = 2021/2024 {
 	local begindate = fy`fy'
-	local enddate = fy`=`fy'+1' - 1
+	local enddate = fy`=`fy'+1' -1
     replace submitted_year = `fy' if inrange(submitted_at, `begindate', `enddate') & submitted_year == .
     replace accepted_year = `fy' if inrange(accepted_at, `begindate', `enddate') & accepted_year == .
 }
