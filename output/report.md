@@ -1,24 +1,30 @@
 ---
 author: Koren, Miklós
-date: 2022-09-15
-title: Data Editor's Report 2022
+date: 2024-09-19
+title: Data Editor's Report 2024
 geometry: margin=2.54cm
 publisher: The Review of Economic Studies Ltd
 ---
 
-This report covers the period between September 1, 2021 and August 31, 2022. In this period, 87 replication packages have been submitted and 78 packages have been accepted. There is no final decision yet on 36 packages; 8 are at the editorial team, 28 are with authors.
+This report covers the period between September 1, 2023 and August 31, 2024. In this period, 79 replication packages have been submitted and 90 packages have been accepted. 
 
-We now have two complete years of data under the new Data Availability Policy. This makes it possible to make comparisons and identify changes. 
+We now have four complete years of data under the new Data Availability Policy. This makes it possible to make comparisons and identify changes. 
 
 ## Turnaround times
 
-The vast majority of packages are accepted only after revisions; only six packages were accepted as submitted. Most packages are accepted on first revision. The Figure plots the number of packages by revisions at the time acceptance. Around 58 percent of packages are accepted after at most one revision (up from 52 percent last year).
+A key performance indicator is the number of revisions a package goes through before acceptance. 
 
-![Number of revisions at time of acceptance](revision.png){ width=60% }
+The majority of packages are accepted only after revisions, but the number and share of packages accepted without revisions have increased. This year, 13 packages were accepted without revisions. Most packages are accepted on first revision. The Figure plots the number of packages by revisions over time. Around 78 percent of packages are accepted after at most one revision (approximately same as last year).
+
+![Three quarters of packages are accepted after at most one revision](revisions_time.png){ width=70% }
 
 The average package accepted this year received their first response from the Data Editor in 15 days (up from 12 days last year). This statistic excludes papers where the Data Availability Policy does not apply. For revisions, the mean response time is 6 days, with the majority of packages decided in much shorter time (see Figure).
 
-![Time at editorial team for accepted packages](time_at_editor.png){ width=60% }
+![Average time at editorial team](editor_time.png){ width=70% }
+
+![Distribution of time at editorial team](editor_time0.png){ width=70% }
+
+![Distribution of time at editorial team](editor_time1.png){ width=70% }
 
 The average time authors spend with a revision is 25 days.
 

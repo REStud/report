@@ -4,7 +4,7 @@ local here = r(here)
 
 use "`here'data/git-events.dta", clear
 
-bysort MS (numeric_date): generate t = _n
+bysort MS (numeric_date branch tag): generate t = _n
 xtset MS t
 
 generate spell = D.numeric_date
@@ -15,7 +15,9 @@ generate byte change = L.at_editor != at_editor
 bysort MS (t): generate byte spell_id = sum(change)
 
 * count of packages in pipeline
-egen last_commit = max(t), by(MS)
+egen last_commit = max(cond(substr(tag, 1, 6) == "accept", t, .)), by(MS)
+* drop updates after acceptance
+keep if t <= last_commit
 
 codebook MS
 save "`here'temp/git-events-processed.dta", replace
@@ -34,7 +36,6 @@ preserve
     egen max_revision = max(revision), by(MS)
     save "`here'temp/collapsed_year.dta", replace
 restore
-
 keep if year == 2024
 
 collapse (sum) spell, by(MS accepted_at spell_id at_editor)
