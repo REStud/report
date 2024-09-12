@@ -10,10 +10,10 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
                                    800-STATA-PC        https://www.stata.com
                                    979-696-4600        stata@stata.com
 
-Stata license: Single-user 2-core , expiring 20 Mar 2025
-Serial number: 501809319773
-  Licensed to: CEU MicroData
-               Gergely Attila Kiss
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -27,7 +27,7 @@ Notes:
 . clear all
 
 . here
-/home/kissg/Desktop/RASHIP/report/
+/Users/koren/Tresorit/Mac/places/restud/data-editor/report/
 
 . local here = r(here)
 
@@ -42,11 +42,13 @@ Notes:
 
 Duplicates in terms of all variables
 
-(1,264 observations deleted)
+(1,858 observations deleted)
 
 . save `git', replace
-(file /tmp/St21287.000001 not found)
-file /tmp/St21287.000001 saved as .dta format
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St92920.000001 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St92920.000001 saved
+    as .dta format
 
 . 
 . use "`here'data/issues.dta", clear
@@ -55,21 +57,18 @@ file /tmp/St21287.000001 saved as .dta format
 
 Duplicates in terms of MS
 
-(2 observations deleted)
+(388 observations deleted)
 
 . merge 1:1 MS using `git', keep(match using) nogenerate
 
     Result                      Number of obs
     -----------------------------------------
-    Not matched                             2
-        from master                         0  
-        from using                          2  
-
-    Matched                               196  
+    Not matched                             0
+    Matched                               290  
     -----------------------------------------
 
 . 
-. drop MS
+. drop MS branch commit
 
 . unab vars: _all
 
@@ -81,24 +80,25 @@ Duplicates in terms of MS
 . generate i = 1
 
 . reshape long V, i(i) j(issue) string
-(j = DAS cite_data confidential_data include_data matlab_toolboxes relative_pat
-> h requirements save_output stata_packages)
+(j = DAS cite_data confidential_data forward_slash hardware_requirements includ
+> e_data macosx matlab_toolboxes merge_readme relative_path save_output softwar
+> e_requirements stata_packages)
 
 Data                               Wide   ->   Long
 -----------------------------------------------------------------------------
-Number of observations                1   ->   9           
-Number of variables                  10   ->   3           
-j variable (9 values)                     ->   issue
+Number of observations                1   ->   13          
+Number of variables                  14   ->   3           
+j variable (13 values)                    ->   issue
 xij variables:
     VDAS Vcite_data ... Vstata_packages   ->   V
 -----------------------------------------------------------------------------
 
 . replace V = 100*V
-(8 real changes made)
+(13 real changes made)
 
 . 
 . generate issue_num = 4 if issue=="cite_data"
-(8 missing values generated)
+(12 missing values generated)
 
 . replace issue_num = 3 if issue=="DAS"
 (1 real change made)
@@ -121,8 +121,8 @@ xij variables:
 . twoway dropline V issue_num, `opt' color(blue)
 
 . graph export "`here'output/main_issues.png", replace width(800)
-file /home/kissg/Desktop/RASHIP/report/output/main_issues.png written in PNG fo
-> rmat
+file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/main_iss
+> ues.png written in PNG format
 
 . 
 end of do-file

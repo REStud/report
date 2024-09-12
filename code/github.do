@@ -1,6 +1,6 @@
 clear all
-*here
-local here = "/home/kissg/Desktop/raship/report/" // r(here)
+here
+local here = r(here)
 
 import delimited "`here'/github-data/output/gitlog.csv", clear varn(1) case(preserve)
 replace MS = "27827" if MS == "27827-1"

@@ -45,8 +45,7 @@ MS: contains nonnumeric characters; replaced as long
 (3 missing values generated)
 
 . 
-. * Julia datetime is in timestamps with seconds (2019-12-10T17:28:33Z), let's 
-> use days.
+. * Julia datetime is in timestamps with seconds (2019-12-10T17:28:33Z)
 . replace date = substr(date, 1, 10)
 (2,703 real changes made)
 
@@ -69,19 +68,20 @@ MS: contains nonnumeric characters; replaced as long
 > 4")
 (271 observations deleted)
 
-. egen byte ever_accepted = max(tag=="accepted"), by(MS)
+. egen byte ever_accepted = max(tag=="accepted" | tag == "accept"), by(MS)
 
 . 
 . * keep backages accepted in 2021 fiscal year
 . egen submitted_at = min(numeric_date), by(MS)
 
-. egen accepted_at = max(cond(tag=="accepted", numeric_date, .)), by(MS)
-(571 missing values generated)
+. egen accepted_at = max(cond(tag=="accepted" | tag == "accept", numeric_date, 
+> .)), by(MS)
+(284 missing values generated)
 
 . scalar dbegin = fy2021
 
 . * 2024 is a leap year
-. scalar dend = fy2024 + 366
+. scalar dend = fy2025
 
 . 
 . generate submitted_year = .
@@ -90,20 +90,21 @@ MS: contains nonnumeric characters; replaced as long
 . generate accepted_year = .
 (2,432 missing values generated)
 
+. 
 . forvalues fy = 2021/2024 {
   2.         local begindate = fy`fy'
-  3.         local enddate = fy`=`fy'+1' - 1
+  3.         local enddate = fy`=`fy'+1' -1
   4.     replace submitted_year = `fy' if inrange(submitted_at, `begindate', `e
 > nddate') & submitted_year == .
   5.     replace accepted_year = `fy' if inrange(accepted_at, `begindate', `end
 > date') & accepted_year == .
   6. }
 (511 real changes made)
-(241 real changes made)
+(255 real changes made)
 (699 real changes made)
-(453 real changes made)
+(691 real changes made)
 (509 real changes made)
-(491 real changes made)
+(526 real changes made)
 (691 real changes made)
 (676 real changes made)
 
@@ -127,16 +128,16 @@ submitted_y |
 accepted_ye |
          ar |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-       2021 |         29       11.69       11.69
-       2022 |         45       18.15       29.84
-       2023 |         84       33.87       63.71
-       2024 |         90       36.29      100.00
+       2021 |         31       10.69       10.69
+       2022 |         78       26.90       37.59
+       2023 |         91       31.38       68.97
+       2024 |         90       31.03      100.00
 ------------+-----------------------------------
-      Total |        248      100.00
+      Total |        290      100.00
 
 . 
 . keep if ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
-(571 observations deleted)
+(284 observations deleted)
 
 . save "`here'/data/git-events.dta", replace
 file

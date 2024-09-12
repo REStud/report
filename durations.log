@@ -45,7 +45,7 @@ Panel variable: MS (unbalanced)
 
 . 
 . generate spell = D.numeric_date
-(248 missing values generated)
+(290 missing values generated)
 
 . bysort MS (t): generate byte at_editor = (branch[_n-1] == branch[_n] ) | (bra
 > nch[_n-1] == "author")
@@ -75,13 +75,13 @@ MS                                                                  (unlabeled)
                   Type: Numeric (long)
 
                  Range: [17262,34171]                 Units: 1
-         Unique values: 248                       Missing .: 0/1,861
+         Unique values: 290                       Missing .: 0/2,148
 
-                  Mean: 28746.2
-             Std. dev.: 2479.09
+                  Mean: 28692.9
+             Std. dev.: 2377.38
 
            Percentiles:     10%       25%       50%       75%       90%
-                          25485     27039     28876     30613     32139
+                          25731     27104     28784   30340.5     31924
 
 . save "`here'temp/git-events-processed.dta", replace
 file
@@ -96,10 +96,10 @@ file
 .     collapse (sum) spell, by(MS year spell_id at_editor)
 
 .     drop if spell_id == 1
-(248 observations deleted)
+(290 observations deleted)
 
 .     replace spell_id = int((spell_id - 1)/2)
-(886 real changes made)
+(1,016 real changes made)
 
 . 
 .     reshape wide spell, i(MS spell_id year) j(at_editor)
@@ -107,7 +107,7 @@ file
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations              886   ->   600         
+Number of observations            1,016   ->   698         
 Number of variables                   5   ->   5           
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
@@ -132,7 +132,7 @@ file
 
 . 
 . keep if year == 2024
-(1,185 observations deleted)
+(1,472 observations deleted)
 
 . 
 . collapse (sum) spell, by(MS accepted_at spell_id at_editor)
@@ -141,7 +141,7 @@ file
 (90 observations deleted)
 
 . replace spell_id = int((spell_id - 1)/2)
-(303 real changes made)
+(294 real changes made)
 
 . 
 . reshape wide spell, i(MS spell_id) j(at_editor)
@@ -149,7 +149,7 @@ file
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations              303   ->   206         
+Number of observations              294   ->   202         
 Number of variables                   5   ->   5           
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
@@ -182,15 +182,15 @@ file
       Percentiles      Smallest
  1%            0              0
  5%            0              0
-10%            0              0       Obs                  87
-25%           12              0       Sum of wgt.          87
+10%            0              0       Obs                  88
+25%         14.5              0       Sum of wgt.          88
 
-50%           24                      Mean           22.35632
-                        Largest       Std. dev.      16.41183
+50%           24                      Mean           22.48864
+                        Largest       Std. dev.      16.07525
 75%           29             55
-90%           37             57       Variance       269.3483
-95%           48             66       Skewness       1.090488
-99%           95             95       Kurtosis       6.398857
+90%           37             57       Variance       258.4137
+95%           48             66       Skewness        1.15398
+99%           95             95       Kurtosis       6.782126
 
 . summarize time_at_editor if revision>=1, detail
 
@@ -199,15 +199,15 @@ file
       Percentiles      Smallest
  1%            0              0
  5%            0              0
-10%            0              0       Obs                  97
-25%            0              0       Sum of wgt.          97
+10%            0              0       Obs                  92
+25%            0              0       Sum of wgt.          92
 
-50%            1                      Mean           13.18557
-                        Largest       Std. dev.      18.56426
-75%           25             59
-90%           42             59       Variance       344.6319
-95%           56             62       Skewness       1.277188
-99%           67             67       Kurtosis       3.449495
+50%            1                      Mean           12.97826
+                        Largest       Std. dev.      18.39014
+75%           29             56
+90%           41             59       Variance       338.1973
+95%           56             62       Skewness        1.26965
+99%           67             67       Kurtosis       3.416388
 
 . summarize time_at_author, detail
 
@@ -216,15 +216,15 @@ file
       Percentiles      Smallest
  1%            0              0
  5%            0              0
-10%            0              0       Obs                 119
-25%            5              0       Sum of wgt.         119
+10%            0              0       Obs                 114
+25%            6              0       Sum of wgt.         114
 
-50%           13                      Mean           26.10084
-                        Largest       Std. dev.      37.30574
-75%           28            154
-90%           74            161       Variance       1391.719
-95%          125            184       Skewness       2.617122
-99%          184            184       Kurtosis       9.884171
+50%           14                      Mean           27.69298
+                        Largest       Std. dev.      37.74346
+75%           30            154
+90%           74            161       Variance       1424.569
+95%          125            184       Skewness       2.532916
+99%          184            184       Kurtosis        9.40704
 
 . twoway (histogram time_at_editor if revision==0, `opt' color(blue%30)) (histo
 > gram time_at_editor if revision>=1, `opt' color(red%30)), xtitle(Days at edit
@@ -240,13 +240,12 @@ file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/time_at_
 max_revisio |
           n |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |         10       11.49       11.49
-          1 |         45       51.72       63.22
-          2 |         25       28.74       91.95
-          3 |          4        4.60       96.55
-          4 |          3        3.45      100.00
+          0 |         11       12.50       12.50
+          1 |         48       54.55       67.05
+          2 |         21       23.86       90.91
+          3 |          8        9.09      100.00
 ------------+-----------------------------------
-      Total |         87      100.00
+      Total |         88      100.00
 
 . histogram max_revision if revision == 0, color(blue%30) discrete start(0) fre
 > quency xtitle(Accepted revision) graphregion(color(white))
