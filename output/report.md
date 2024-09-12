@@ -18,21 +18,15 @@ The majority of packages are accepted only after revisions, but the number and s
 
 ![Three quarters of packages are accepted after at most one revision](revisions_time.png){ width=70% }
 
-The average package accepted this year received their first response from the Data Editor in 15 days (up from 12 days last year). This statistic excludes papers where the Data Availability Policy does not apply. For revisions, the mean response time is 6 days, with the majority of packages decided in much shorter time (see Figure).
+The average package accepted this year received their first response from the Data Editor in 24 days (same as last year). This statistic excludes papers where the Data Availability Policy does not apply. For revisions, the mean response time is 8 days (same as last year), with the majority of packages decided in much shorter time (see Figures).
 
 ![Average time at editorial team](editor_time.png){ width=70% }
 
-![Distribution of time at editorial team](editor_time0.png){ width=70% }
+![Distribution of time at editorial team: first submissions](editor_time0.png){ width=70% }
 
-![Distribution of time at editorial team](editor_time1.png){ width=70% }
+![Distribution of time at editorial team: resubmissions](editor_time1.png){ width=70% }
 
-The average time authors spend with a revision is 25 days.
-
-## Reasons for revision
-
-The Figure shows the main reasons for sending back the first version of the package for revision. About half of the packages miss data citations, a Data Availability Statement, or both. About a third of the packages do not save or include the reproducible exhibits to be verified. Specific Stata requirements are also often inadequately explained. 
-
-![Main reasons for revision](main_issues.png){ width=60% }
+The operations have matured to a constant pace. The number and speed of processed packages are stable over time. We still struggle, however, with trivial mistakes in packages that slow down the process unnecessarily. This suggests gap in my communication with authors about what is expected in a replication package. We are working on improving this by author education (website, mini-courses) and automation (checklists, templates).
 
 ## Impact
 

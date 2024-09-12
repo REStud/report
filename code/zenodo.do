@@ -38,47 +38,30 @@ save `zenodo23', replace
 import delimited using "`here'zenodo/zenodo_data.csv", clear
 rename id zenodoid
 generate created_at = date(created,"YMD##")
-keep zenodoid unique_views unique_downloads created_at
-keep if created_at < 23626 // fy2024
-rename unique_* *
-rename downloads downloads2024
-rename views views2024
-duplicates drop zenodoid, force
-merge 1:1 zenodoid using `zenodo23', nogenerate
-
-
-reshape long views downloads, i(zenodoid) j(year)
-generate stats_at = date("2021-09-14","YMD##") if year == 2021
-replace stats_at = date("2022-09-07","YMD##") if year == 2022
-replace stats_at = date("2023-09-07","YMD##") if year == 2023
-replace stats_at = date("2024-09-07","YMD##") if year == 2024
+generate updated_at = date(update_time,"YMD##")
 
 format created_at %tdCCYY-NN-DD
-format stats_at %tdCCYY-NN-DD
+format updated_at %tdCCYY-NN-DD
 
-generate since = round((stats_at - created_at)/30)
-drop if missing(downloads) & year == 2021
-generate downloads_per_month = downloads / since
+keep zenodoid unique_views unique_downloads created_at updated_at
+rename unique_* *
 
-keep zenodo year since downloads downloads_per_month
-reshape wide since downloads downloads_per_month, i(zenodoid) j(year)
+sort zenodoid updated_at
+by zenodoid (updated_at): generate update = _n
+xtset zenodoid update
+generate spell_length = updated_at - L.updated_at
+generate new_downloads = downloads - L.downloads
+generate new_views = views - L.views
+generate days_since_upload = updated_at - created_at
+generate months_since_upload = int(days_since_upload/30)
+
+drop if spell_length < 20 | missing(spell_length)
+generate downloads_per_month = new_downloads / (spell_length/30)
+
+keep if days_since_upload > 180
+summarize downloads_per_month, detail
+
+collapse (mean) downloads_per_month, by(zenodoid)
 
 save "`here'temp/zenodo.dta", replace
-
-generate str lbl = ""
-replace lbl = "Geography and Agricultural Productivity" if zenodoid == 5259883
-replace lbl = "Quasi-Experimental Shift-Share Research Designs" if zenodoid == 4619197
-replace lbl = "Identifying Shocks via Time-Varying Volatility" if zenodoid == 4448256
-replace lbl = "Skill-Biased Structural Change" if zenodoid == 4773516
-replace lbl = "Trade and Domestic Production Networks" if zenodoid == 3997900
-replace lbl = "Measuring the Incentive to Collude" if zenodoid == 5104830
-
-scatter downloads_per_month2022 downloads_per_month2021, mcolor(blue%30) legend(off) graphregion(color(white)) mlabel(lbl) mlabposition(6) xtitle(Last year) ytitle(This year)
-graph export "`here'output/downloads.png", replace width(800)
-
-histogram downloads_per_month2022, color(blue%30) legend(off) graphregion(color(white)) frequency xtitle(Downloads per month)
-graph export "`here'output/downloads_histogram.png", replace width(800)
-
-reshape long
-summarize downloads_per_month if year==2022, detail
 
