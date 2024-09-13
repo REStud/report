@@ -30,6 +30,31 @@ Notes:
 . local here = r(here)
 
 . 
+. clear
+
+. import delimited "github-data/output/zenodo2ms.csv", clear varnames(1) case(p
+> reserve) encoding(UTF-8)
+(2 vars, 337 obs)
+
+. keep MS zenodoid
+
+. duplicates drop
+
+Duplicates in terms of all variables
+
+(3 observations deleted)
+
+. isid zenodoid
+
+. tempfile z2g
+
+. save `z2g', replace
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000001 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000001 saved
+    as .dta format
+
+. 
 . clear 
 
 . tempfile zenodo
@@ -49,9 +74,9 @@ Notes:
 . rename views views2021
 
 . save `zenodo', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St36478.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000002 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St36478.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000002 saved
     as .dta format
 
 . 
@@ -85,9 +110,9 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St36478.000001 saved
     -----------------------------------------
 
 . save `zenodo22', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St36478.000002 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000003 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St36478.000002 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000003 saved
     as .dta format
 
 . 
@@ -130,9 +155,9 @@ Duplicates in terms of zenodoid
     -----------------------------------------
 
 . save `zenodo23', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St36478.000003 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000004 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St36478.000003 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000004 saved
     as .dta format
 
 . 
@@ -157,6 +182,24 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St36478.000003 saved
 . rename unique_* *
 
 . 
+. codebook zenodoid
+
+-------------------------------------------------------------------------------
+zenodoid                                                            (unlabeled)
+-------------------------------------------------------------------------------
+
+                  Type: Numeric (long)
+
+                 Range: [3366100,13308366]            Units: 1
+         Unique values: 339                       Missing .: 0/5,597
+
+                  Mean: 6.7e+06
+             Std. dev.: 2.0e+06
+
+           Percentiles:     10%       25%       50%       75%       90%
+                        4.3e+06   5.1e+06   6.6e+06   7.7e+06   1.0e+07
+
+. 
 . sort zenodoid updated_at
 
 . by zenodoid (updated_at): generate update = _n
@@ -167,6 +210,24 @@ Panel variable: zenodoid (unbalanced)
  Time variable: update, 1 to 20
          Delta: 1 unit
 
+. codebook zenodoid
+
+-------------------------------------------------------------------------------
+zenodoid                                                            (unlabeled)
+-------------------------------------------------------------------------------
+
+                  Type: Numeric (long)
+
+                 Range: [3366100,13308366]            Units: 1
+         Unique values: 339                       Missing .: 0/5,597
+
+                  Mean: 6.7e+06
+             Std. dev.: 2.0e+06
+
+           Percentiles:     10%       25%       50%       75%       90%
+                        4.3e+06   5.1e+06   6.6e+06   7.7e+06   1.0e+07
+
+. 
 . generate spell_length = updated_at - L.updated_at
 (339 missing values generated)
 
@@ -209,6 +270,35 @@ Panel variable: zenodoid (unbalanced)
 
 . 
 . collapse (mean) downloads_per_month, by(zenodoid)
+
+. codebook zenodoid
+
+-------------------------------------------------------------------------------
+zenodoid                                                            (unlabeled)
+-------------------------------------------------------------------------------
+
+                  Type: Numeric (long)
+
+                 Range: [3366100,10713971]            Units: 1
+         Unique values: 293                       Missing .: 0/293
+
+                  Mean: 6.5e+06
+             Std. dev.: 1.7e+06
+
+           Percentiles:     10%       25%       50%       75%       90%
+                        4.3e+06   5.1e+06   6.6e+06   7.6e+06   8.3e+06
+
+. 
+. merge 1:1 zenodoid using `z2g', keep(match)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                                52  (_merge==3)
+    -----------------------------------------
+
+. 
+. collapse (sum) downloads_per_month, by(MS)
 
 . 
 . save "`here'temp/zenodo.dta", replace

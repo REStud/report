@@ -45,9 +45,9 @@ Duplicates in terms of all variables
 (1,858 observations deleted)
 
 . save `git', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St92920.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St38892.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St92920.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St38892.000001 saved
     as .dta format
 
 . 
@@ -57,7 +57,7 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St92920.000001 saved
 
 Duplicates in terms of MS
 
-(388 observations deleted)
+(0 observations are duplicates)
 
 . merge 1:1 MS using `git', keep(match using) nogenerate
 
@@ -66,6 +66,14 @@ Duplicates in terms of MS
     Not matched                             0
     Matched                               290  
     -----------------------------------------
+
+. save "`here'temp/issues.dta", replace
+(file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/issues.dt
+    > a not found)
+file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/issues.dt
+    > a saved
 
 . 
 . drop MS branch commit

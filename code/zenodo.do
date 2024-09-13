@@ -1,6 +1,14 @@
 here
 local here = r(here)
 
+clear
+import delimited "github-data/output/zenodo2ms.csv", clear varnames(1) case(preserve) encoding(UTF-8)
+keep MS zenodoid
+duplicates drop
+isid zenodoid
+tempfile z2g
+save `z2g', replace
+
 clear 
 tempfile zenodo
 import delimited using "`here'zenodo/zenodo_data_2021.csv", clear
@@ -46,9 +54,13 @@ format updated_at %tdCCYY-NN-DD
 keep zenodoid unique_views unique_downloads created_at updated_at
 rename unique_* *
 
+codebook zenodoid
+
 sort zenodoid updated_at
 by zenodoid (updated_at): generate update = _n
 xtset zenodoid update
+codebook zenodoid
+
 generate spell_length = updated_at - L.updated_at
 generate new_downloads = downloads - L.downloads
 generate new_views = views - L.views
@@ -62,6 +74,11 @@ keep if days_since_upload > 180
 summarize downloads_per_month, detail
 
 collapse (mean) downloads_per_month, by(zenodoid)
+codebook zenodoid
+
+merge 1:1 zenodoid using `z2g', keep(match)
+
+collapse (sum) downloads_per_month, by(MS)
 
 save "`here'temp/zenodo.dta", replace
 
