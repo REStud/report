@@ -30,11 +30,6 @@ The operations have matured to a constant pace. The number and speed of processe
 
 ## Impact
 
-The median replication package is downloaded from Zenodo 2 times a month. This includes views and downloads by author and editorial team. As the figure shows, there is substantial heterogeneity across packages in their download statistics, but all packages have some visibility.
+The median replication package is downloaded from Zenodo 2.8 times a month (up from 2 last year). We excluded the first six months of the package to control for views by the authors and the editorial team. As the figure shows, there is substantial heterogeneity across packages in their download statistics, with some being very successful. All packages have some visibility.
 
 ![Unique downloads of packages from Zenodo](downloads_histogram.png){ width=60% }
-
-Download statistics are highly correlated over time. Packages that were popular last year are often downloaded also this year (next Figure). This suggests that the download statistics capture genuine interest and not only driven by early downloads by authors and the editorial team.
-
-![Downloads are highly correlated over time](downloads.png){ width=60% }
-

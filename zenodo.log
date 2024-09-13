@@ -49,9 +49,9 @@ Duplicates in terms of all variables
 . tempfile z2g
 
 . save `z2g', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000001 saved
     as .dta format
 
 . 
@@ -74,9 +74,9 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000001 saved
 . rename views views2021
 
 . save `zenodo', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000002 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000002 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000002 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000002 saved
     as .dta format
 
 . 
@@ -110,9 +110,9 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000002 saved
     -----------------------------------------
 
 . save `zenodo22', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000003 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000003 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000003 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000003 saved
     as .dta format
 
 . 
@@ -155,9 +155,9 @@ Duplicates in terms of zenodoid
     -----------------------------------------
 
 . save `zenodo23', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000004 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000004 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St34863.000004 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000004 saved
     as .dta format
 
 . 
@@ -287,6 +287,32 @@ zenodoid                                                            (unlabeled)
 
            Percentiles:     10%       25%       50%       75%       90%
                         4.3e+06   5.1e+06   6.6e+06   7.6e+06   8.3e+06
+
+. 
+. summarize downloads_per_month, detail
+
+                 (mean) downloads_per_month
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%     .5717463              0
+10%     .9813682              0       Obs                 293
+25%     1.790323       .2857143       Sum of wgt.         293
+
+50%     2.849648                      Mean           4.076977
+                        Largest       Std. dev.       6.29607
+75%     4.265728       18.67059
+90%     7.281742        18.7979       Variance        39.6405
+95%     12.49563       37.84536       Skewness       9.225962
+99%      18.7979       88.90968       Kurtosis       116.7881
+
+. histogram downloads_per_month, legend(off) graphregion(color(white)) frequenc
+> y xtitle(Downloads per month)
+(bin=17, start=0, width=5.2299809)
+
+. graph export "`here'output/downloads_histogram.png", replace width(800)
+file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/download
+> s_histogram.png written in PNG format
 
 . 
 . merge 1:1 zenodoid using `z2g', keep(match)

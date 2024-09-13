@@ -76,6 +76,10 @@ summarize downloads_per_month, detail
 collapse (mean) downloads_per_month, by(zenodoid)
 codebook zenodoid
 
+summarize downloads_per_month, detail
+histogram downloads_per_month, legend(off) graphregion(color(white)) frequency xtitle(Downloads per month)
+graph export "`here'output/downloads_histogram.png", replace width(800)
+
 merge 1:1 zenodoid using `z2g', keep(match)
 
 collapse (sum) downloads_per_month, by(MS)
