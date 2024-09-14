@@ -2,10 +2,10 @@ here
 local here = r(here)
 
 clear
-import delimited "github-data/output/zenodo2ms.csv", clear varnames(1) case(preserve) encoding(UTF-8)
+import delimited "`here'github-data/output/zenodo2ms.csv", clear varnames(1) case(preserve) encoding(UTF-8)
 keep MS zenodoid
-duplicates drop
-isid zenodoid
+duplicates drop zenodoid MS, force
+isid zenodoid MS
 tempfile z2g
 save `z2g', replace
 
@@ -80,7 +80,7 @@ summarize downloads_per_month, detail
 histogram downloads_per_month, legend(off) graphregion(color(white)) frequency xtitle(Downloads per month)
 graph export "`here'output/downloads_histogram.png", replace width(800)
 
-merge 1:1 zenodoid using `z2g', keep(match)
+merge 1:m zenodoid using `z2g', keep(match)
 
 collapse (sum) downloads_per_month, by(MS)
 
