@@ -1,5 +1,7 @@
 output/report.pdf: output/report.md output/downloads.png output/downloads_histogram.png output/revisions_time.png output/editor_time.png output/main_issues.png
 	cd $(dir $@) && pandoc $(notdir $<) -o $(notdir $@)
+success.log: code/success.do temp/zenodo.dta temp/commands.dta temp/issues.dta
+	stata -b do $<
 temp/commands.dta: code/commands.do github-data/output/analysis-table.csv
 	stata -b do $<
 temp/issues.dta: code/issues.do data/git-events.dta data/issues.dta
