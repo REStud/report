@@ -32,26 +32,26 @@ Notes:
 . 
 . clear
 
-. import delimited "github-data/output/zenodo2ms.csv", clear varnames(1) case(p
-> reserve) encoding(UTF-8)
-(2 vars, 337 obs)
+. import delimited "`here'github-data/output/zenodo2ms.csv", clear varnames(1) 
+> case(preserve) encoding(UTF-8)
+(2 vars, 674 obs)
 
 . keep MS zenodoid
 
-. duplicates drop
+. duplicates drop zenodoid MS, force
 
-Duplicates in terms of all variables
+Duplicates in terms of zenodoid MS
 
-(3 observations deleted)
+(14 observations deleted)
 
-. isid zenodoid
+. isid zenodoid MS
 
 . tempfile z2g
 
 . save `z2g', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000001 saved
     as .dta format
 
 . 
@@ -74,9 +74,9 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000001 saved
 . rename views views2021
 
 . save `zenodo', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000002 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000002 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000002 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000002 saved
     as .dta format
 
 . 
@@ -110,9 +110,9 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000002 saved
     -----------------------------------------
 
 . save `zenodo22', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000003 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000003 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000003 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000003 saved
     as .dta format
 
 . 
@@ -155,9 +155,9 @@ Duplicates in terms of zenodoid
     -----------------------------------------
 
 . save `zenodo23', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000004 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000004 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51171.000004 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000004 saved
     as .dta format
 
 . 
@@ -315,12 +315,12 @@ file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/download
 > s_histogram.png written in PNG format
 
 . 
-. merge 1:1 zenodoid using `z2g', keep(match)
+. merge 1:m zenodoid using `z2g', keep(match)
 
     Result                      Number of obs
     -----------------------------------------
     Not matched                             0
-    Matched                                52  (_merge==3)
+    Matched                               230  (_merge==3)
     -----------------------------------------
 
 . 

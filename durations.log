@@ -88,6 +88,9 @@ MS                                                                  (unlabeled)
                           25731     27122     28862     30349     31976
 
 . save "`here'temp/git-events-processed.dta", replace
+(file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/git-event
+    > s-processed.dta not found)
 file
     /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/git-event
     > s-processed.dta saved
@@ -128,13 +131,15 @@ xij variables:
 .     egen max_revision = max(revision), by(MS)
 
 .     save "`here'temp/collapsed_year.dta", replace
+(file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/collapsed
+    > _year.dta not found)
 file
     /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/collapsed
     > _year.dta saved
 
 . restore
 
-. 
 . keep if year == 2024
 (1,410 observations deleted)
 
@@ -170,6 +175,9 @@ xij variables:
 . egen max_revision = max(revision), by(MS)
 
 . save "`here'temp/collapsed_accepted_at.dta", replace
+(file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/collapsed
+    > _accepted_at.dta not found)
 file
     /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/collapsed
     > _accepted_at.dta saved
@@ -235,6 +243,8 @@ file
 > or) legend(order(1 "First submission" 2 "Revision"))
 
 . graph export "`here'output/time_at_editor.png", replace width(800)
+(file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/time_at
+> _editor.png not found)
 file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/time_at_
 > editor.png written in PNG format
 
@@ -256,6 +266,8 @@ max_revisio |
 (start=0, width=1)
 
 . graph export "`here'output/revision.png", replace width(800)
+(file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/revisio
+> n.png not found)
 file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/revision
 > .png written in PNG format
 
