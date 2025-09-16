@@ -1,0 +1,40 @@
+MS
+26586
+27825
+27825
+29023
+29946
+31654
+32021
+34292
+
+
+these are the MS to be checked.
+
+time_at_editor if rev == 0
+
+102 |          2        0.52       98.44 | x
+111 |          1        0.26       98.70 | x 28198 2023
+119 |          1        0.26       98.96 | x 34292 2024.dec.9 - 2025.may.5
+138 |          1        0.26       99.22 | x 32021 
+up till here this might be normal
+535 |          1        0.26       99.48 | 25730 here I merged the Create .zenodo command
+603 |          1        0.26       99.74 | 24478 they asked for a DAS modification
+855 |          1        0.26      100.00 | 30704 .zenodo merge
+
+time_at_editor if rev == 1
+
+123  |          1        0.31       96.25 | x 29304 2023
+444  |          1        0.31       96.56 | 29359 .zenodo merge
+466  |          1        0.31       96.88 | 27915 .zenodo merge
+574  |          1        0.31       97.19 | 25418 .zenodo merge
+628  |          1        0.31       97.50 | 26332 .zenodo merge
+664  |          1        0.31       97.81 | 28617 .zenodo merge
+672  |          1        0.31       98.12 | 29470 .zenodo merge
+818  |          1        0.31       98.44 | 29592 .zenodo merge
+882  |          1        0.31       98.75 | 29894 .zenodo merge
+986  |          1        0.31       99.06 | 27453 .zenodo merge
+1187 |          1        0.31       99.38 | 25310 .zenodo merge
+1195 |          1        0.31       99.69 | 23961 .zenodo merge 27079 .zenodo merge
+1258 |          1        0.31      100.00 | 28638 .zenod merge
+

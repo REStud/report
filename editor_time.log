@@ -52,7 +52,7 @@ file output/editor_time1.png written in PNG format
 . 
 . * report median time at editor over years
 . replace revision = 1 if revision > 1
-(130 real changes made)
+(219 real changes made)
 
 . collapse (mean) time_at_editor, by(year revision)
 
