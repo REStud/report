@@ -2,7 +2,7 @@ here
 local here = r(here)
 
 clear
-import delimited "`here'github-data/output/zenodo2ms.csv", clear varnames(1) case(preserve) encoding(UTF-8)
+import delimited "`here'github-data/data/raw/zenodo2ms.csv", clear varnames(1) case(preserve) encoding(UTF-8)
 keep MS zenodoid
 duplicates drop zenodoid MS, force
 isid zenodoid MS
@@ -31,7 +31,7 @@ merge 1:1 zenodoid using `zenodo', nogenerate
 save `zenodo22', replace
 
 tempfile zenodo23
-import delimited using "`here'zenodo/zenodo_data.csv", clear
+import delimited using "`here'github-data/data/raw/zenodo-data.csv", clear
 rename id zenodoid
 generate created_at = date(created,"YMD##")
 keep zenodoid unique_views unique_downloads created_at
@@ -43,7 +43,7 @@ duplicates drop zenodoid, force
 merge 1:1 zenodoid using `zenodo22', nogenerate
 save `zenodo23', replace
 
-import delimited using "`here'zenodo/zenodo_data.csv", clear
+import delimited using "`here'github-data/data/raw/zenodo-data.csv", clear
 rename id zenodoid
 generate created_at = date(created,"YMD##")
 generate updated_at = date(update_time,"YMD##")

@@ -1,0 +1,76 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      StataNow 19.5
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-782-8272        https://www.stata.com
+                                   979-696-4600        service@stata.com
+
+Stata license: 2-user 4-core network, expiring 16 Jan 2026
+Serial number: 501909221790
+  Licensed to: CodedThinking
+               Budapest
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+. do code/editor_time.do 
+
+. use "temp/collapsed_year.dta", clear
+
+. 
+. label variable time_at_author "Days at author"
+
+. label variable time_at_editor "Days at editor"
+
+. 
+. histogram time_at_editor if revision==0, freq by(year) xtitle(Days at editor 
+> on first submission) ytitle(Number of packages)
+
+. 
+. * Export the graph
+. graph export "output/editor_time0.png", replace width(1000)
+file output/editor_time0.png written in PNG format
+
+. 
+. histogram time_at_editor if revision>0, freq by(year) xtitle(Days at editor o
+> n resubmission) ytitle(Number of packages)
+
+. 
+. * Export the graph
+. graph export "output/editor_time1.png", replace width(1000)
+file output/editor_time1.png written in PNG format
+
+. 
+. * report median time at editor over years
+. replace revision = 1 if revision > 1
+(90 real changes made)
+
+. collapse (mean) time_at_editor, by(year revision)
+
+. 
+. xtset revision year
+
+Panel variable: revision (strongly balanced)
+ Time variable: year, 2021 to 2024
+         Delta: 1 unit
+
+. xtline time_at_editor, title("Average time at editor over years") ytitle("Day
+> s") xtitle("Year") ylab(0(20)100) overlay legend(order(1 "First submission" 2
+>  "Resubmission"))
+
+. 
+. * Export the graph
+. graph export "output/editor_time.png", replace width(1000)
+file output/editor_time.png written in PNG format
+
+. 
+end of do-file

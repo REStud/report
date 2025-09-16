@@ -1,19 +1,19 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      18.0
+ /__    /   ____/   /   ____/      StataNow 19.5
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
-                                   800-STATA-PC        https://www.stata.com
-                                   979-696-4600        stata@stata.com
+                                   800-782-8272        https://www.stata.com
+                                   979-696-4600        service@stata.com
 
-Stata license: Single-user 2-core  perpetual
-Serial number: 501806323834
-  Licensed to: Miklos Koren
-               CEU MicroData
+Stata license: 2-user 4-core network, expiring 16 Jan 2026
+Serial number: 501909221790
+  Licensed to: CodedThinking
+               Budapest
 
 Notes:
       1. Stata is running in batch mode.
@@ -25,16 +25,16 @@ Notes:
 . do code/zenodo.do 
 
 . here
-/Users/koren/Tresorit/Mac/places/restud/data-editor/report/
+/home/restud/report/
 
 . local here = r(here)
 
 . 
 . clear
 
-. import delimited "`here'github-data/output/zenodo2ms.csv", clear varnames(1) 
-> case(preserve) encoding(UTF-8)
-(2 vars, 674 obs)
+. import delimited "`here'github-data/data/raw/zenodo2ms.csv", clear varnames(1
+> ) case(preserve) encoding(UTF-8)
+(2 vars, 789 obs)
 
 . keep MS zenodoid
 
@@ -42,17 +42,15 @@ Notes:
 
 Duplicates in terms of zenodoid MS
 
-(14 observations deleted)
+(17 observations deleted)
 
 . isid zenodoid MS
 
 . tempfile z2g
 
 . save `z2g', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000001 not
-    found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000001 saved
-    as .dta format
+(file /tmp/St4120428.000001 not found)
+file /tmp/St4120428.000001 saved as .dta format
 
 . 
 . clear 
@@ -74,10 +72,8 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000001 saved
 . rename views views2021
 
 . save `zenodo', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000002 not
-    found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000002 saved
-    as .dta format
+(file /tmp/St4120428.000002 not found)
+file /tmp/St4120428.000002 saved as .dta format
 
 . 
 . tempfile zenodo22
@@ -110,17 +106,15 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000002 saved
     -----------------------------------------
 
 . save `zenodo22', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000003 not
-    found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000003 saved
-    as .dta format
+(file /tmp/St4120428.000003 not found)
+file /tmp/St4120428.000003 saved as .dta format
 
 . 
 . tempfile zenodo23
 
-. import delimited using "`here'zenodo/zenodo_data.csv", clear
-(encoding automatically selected: ISO-8859-1)
-(8 vars, 5,597 obs)
+. import delimited using "`here'github-data/data/raw/zenodo-data.csv", clear
+(encoding automatically selected: UTF-8)
+(12 vars, 9,501 obs)
 
 . rename id zenodoid
 
@@ -129,7 +123,7 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000003 saved
 . keep zenodoid unique_views unique_downloads created_at
 
 . keep if created_at < 23260 // fy2023
-(759 observations deleted)
+(1,780 observations deleted)
 
 . rename unique_* *
 
@@ -141,29 +135,27 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000003 saved
 
 Duplicates in terms of zenodoid
 
-(4,571 observations deleted)
+(7,453 observations deleted)
 
 . merge 1:1 zenodoid using `zenodo22', nogenerate
 
     Result                      Number of obs
     -----------------------------------------
-    Not matched                           136
+    Not matched                           135
         from master                       135  
-        from using                          1  
+        from using                          0  
 
-    Matched                               132  
+    Matched                               133  
     -----------------------------------------
 
 . save `zenodo23', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000004 not
-    found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St25895.000004 saved
-    as .dta format
+(file /tmp/St4120428.000004 not found)
+file /tmp/St4120428.000004 saved as .dta format
 
 . 
-. import delimited using "`here'zenodo/zenodo_data.csv", clear
-(encoding automatically selected: ISO-8859-1)
-(8 vars, 5,597 obs)
+. import delimited using "`here'github-data/data/raw/zenodo-data.csv", clear
+(encoding automatically selected: UTF-8)
+(12 vars, 9,501 obs)
 
 . rename id zenodoid
 
@@ -190,14 +182,14 @@ zenodoid                                                            (unlabeled)
 
                   Type: Numeric (long)
 
-                 Range: [3366100,13308366]            Units: 1
-         Unique values: 339                       Missing .: 0/5,597
+                 Range: [3366100,16539681]            Units: 1
+         Unique values: 419                       Missing .: 0/9,501
 
-                  Mean: 6.7e+06
-             Std. dev.: 2.0e+06
+                  Mean: 7.0e+06
+             Std. dev.: 2.4e+06
 
            Percentiles:     10%       25%       50%       75%       90%
-                        4.3e+06   5.1e+06   6.6e+06   7.7e+06   1.0e+07
+                        4.3e+06   5.1e+06   6.8e+06   7.9e+06   1.1e+07
 
 . 
 . sort zenodoid updated_at
@@ -207,7 +199,7 @@ zenodoid                                                            (unlabeled)
 . xtset zenodoid update
 
 Panel variable: zenodoid (unbalanced)
- Time variable: update, 1 to 20
+ Time variable: update, 1 to 32
          Delta: 1 unit
 
 . codebook zenodoid
@@ -218,24 +210,24 @@ zenodoid                                                            (unlabeled)
 
                   Type: Numeric (long)
 
-                 Range: [3366100,13308366]            Units: 1
-         Unique values: 339                       Missing .: 0/5,597
+                 Range: [3366100,16539681]            Units: 1
+         Unique values: 419                       Missing .: 0/9,501
 
-                  Mean: 6.7e+06
-             Std. dev.: 2.0e+06
+                  Mean: 7.0e+06
+             Std. dev.: 2.4e+06
 
            Percentiles:     10%       25%       50%       75%       90%
-                        4.3e+06   5.1e+06   6.6e+06   7.7e+06   1.0e+07
+                        4.3e+06   5.1e+06   6.8e+06   7.9e+06   1.1e+07
 
 . 
 . generate spell_length = updated_at - L.updated_at
-(339 missing values generated)
+(419 missing values generated)
 
 . generate new_downloads = downloads - L.downloads
-(339 missing values generated)
+(419 missing values generated)
 
 . generate new_views = views - L.views
-(339 missing values generated)
+(419 missing values generated)
 
 . generate days_since_upload = updated_at - created_at
 
@@ -243,13 +235,13 @@ zenodoid                                                            (unlabeled)
 
 . 
 . drop if spell_length < 20 | missing(spell_length)
-(2,538 observations deleted)
+(2,618 observations deleted)
 
 . generate downloads_per_month = new_downloads / (spell_length/30)
 
 . 
 . keep if days_since_upload > 180
-(226 observations deleted)
+(500 observations deleted)
 
 . summarize downloads_per_month, detail
 
@@ -258,15 +250,15 @@ zenodoid                                                            (unlabeled)
       Percentiles      Smallest
  1%            0              0
  5%            0              0
-10%            0              0       Obs               2,833
-25%     .9677419              0       Sum of wgt.       2,833
+10%            0              0       Obs               6,383
+25%     .9677419              0       Sum of wgt.       6,383
 
-50%            2                      Mean           4.043645
-                        Largest       Std. dev.      9.399673
-75%      4.83871            110
-90%     8.709678       113.2258       Variance       88.35385
-95%           13        116.129       Skewness       17.71271
-99%     29.03226       325.1613       Kurtosis       515.7555
+50%            2                      Mean           3.680421
+                        Largest       Std. dev.      8.324057
+75%     4.054054       125.0526
+90%     7.741935       139.0909       Variance       69.28992
+95%      11.6129       160.6452       Skewness       15.87632
+99%         25.2       325.1613       Kurtosis       438.0714
 
 . 
 . collapse (mean) downloads_per_month, by(zenodoid)
@@ -279,14 +271,14 @@ zenodoid                                                            (unlabeled)
 
                   Type: Numeric (long)
 
-                 Range: [3366100,10713971]            Units: 1
-         Unique values: 293                       Missing .: 0/293
+                 Range: [3366100,14792036]            Units: 1
+         Unique values: 364                       Missing .: 0/364
 
-                  Mean: 6.5e+06
-             Std. dev.: 1.7e+06
+                  Mean: 7.6e+06
+             Std. dev.: 2.7e+06
 
            Percentiles:     10%       25%       50%       75%       90%
-                        4.3e+06   5.1e+06   6.6e+06   7.6e+06   8.3e+06
+                        4.4e+06   5.5e+06   7.2e+06   9.2e+06   1.1e+07
 
 . 
 . summarize downloads_per_month, detail
@@ -294,25 +286,24 @@ zenodoid                                                            (unlabeled)
                  (mean) downloads_per_month
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%            0              0
- 5%     .5717463              0
-10%     .9813682              0       Obs                 293
-25%     1.790323       .2857143       Sum of wgt.         293
+ 1%     .1578947              0
+ 5%     .6621988              0
+10%     .8630632       .1052632       Obs                 364
+25%     1.507767       .1578947       Sum of wgt.         364
 
-50%     2.849648                      Mean           4.076977
-                        Largest       Std. dev.       6.29607
-75%     4.265728       18.67059
-90%     7.281742        18.7979       Variance        39.6405
-95%     12.49563       37.84536       Skewness       9.225962
-99%      18.7979       88.90968       Kurtosis       116.7881
+50%     2.587929                      Mean           3.761906
+                        Largest       Std. dev.      6.397364
+75%     4.044976        23.5915
+90%     6.691457       23.80811       Variance       40.92626
+95%     10.81808       35.43806       Skewness       11.28636
+99%      23.5915       104.0656       Kurtosis       169.4119
 
 . histogram downloads_per_month, legend(off) graphregion(color(white)) frequenc
 > y xtitle(Downloads per month)
-(bin=17, start=0, width=5.2299809)
+(bin=19, start=0, width=5.4771383)
 
 . graph export "`here'output/downloads_histogram.png", replace width(800)
-file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/download
-> s_histogram.png written in PNG format
+file /home/restud/report/output/downloads_histogram.png written in PNG format
 
 . 
 . merge 1:m zenodoid using `z2g', keep(match)
@@ -320,7 +311,7 @@ file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/download
     Result                      Number of obs
     -----------------------------------------
     Not matched                             0
-    Matched                               230  (_merge==3)
+    Matched                               292  (_merge==3)
     -----------------------------------------
 
 . 
@@ -328,9 +319,7 @@ file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/download
 
 . 
 . save "`here'temp/zenodo.dta", replace
-file
-    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/zenodo.dt
-    > a saved
+file /home/restud/report/temp/zenodo.dta saved
 
 . 
 . 

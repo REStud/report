@@ -8,14 +8,14 @@ output/report.pdf: output/report.md output/downloads_histogram.png output/revisi
 	cd $(dir $@) && pandoc $(notdir $<) -o $(notdir $@)
 
 # Data preparation - github data produces two files
-data/git-events.dta data/issues.dta: code/github.do github-data/output/gitlog.csv github-data/output/report-labs.csv
+data/git-events.dta data/issues.dta: code/github.do github-data/data/raw/gitlog.csv github-data/data/temp/issues.csv
 	stata -b do $<
 
 # Durations script produces collapsed data for other analyses
 temp/collapsed_year.dta temp/collapsed_accepted_at.dta: code/durations.do data/git-events.dta
 	stata -b do $<
 
-temp/zenodo.dta: code/zenodo.do zenodo/zenodo_data.csv
+temp/zenodo.dta: code/zenodo.do 
 	stata -b do $<
 
 temp/issues.dta temp/git-events-processed.dta: code/issues.do data/git-events.dta data/issues.dta
@@ -33,7 +33,7 @@ output/editor_time.png output/editor_time0.png output/editor_time1.png: code/edi
 output/revision.png output/time_at_editor.png: code/durations.do data/git-events.dta
 	stata -b do $<
 
-output/downloads_histogram.png: code/zenodo.do zenodo/zenodo_data.csv temp/zenodo.dta
+output/downloads_histogram.png: code/zenodo.do github-data/data/raw/zenodo-data.csv temp/zenodo.dta
 	stata -b do $<
 
 output/main_issues.png: code/issues.do temp/git-events-processed.dta temp/issues.dta
