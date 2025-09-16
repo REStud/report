@@ -4,10 +4,12 @@ local here = r(here)
 
 use "`here'data/git-events.dta", clear
 
+* FIXME IS THIS THE RIGHT ORDER
 bysort MS (numeric_date branch tag): generate t = _n
 xtset MS t
 
 generate spell = D.numeric_date
+* FIXME COULD USE COMMIT MESSAGE TO FLAG
 bysort MS (t): generate byte at_editor = (branch[_n-1] == branch[_n] ) | (branch[_n-1] == "author")
 
 xtset MS t
@@ -17,6 +19,7 @@ bysort MS (t): generate byte spell_id = sum(change)
 * count of packages in pipeline
 egen last_commit = max(cond(substr(tag, 1, 6) == "accept", t, .)), by(MS)
 * drop updates after acceptance
+* FIXME THIS SHOULD BE BY TIMESTAMP NOT INDEX
 keep if t <= last_commit
 
 codebook MS
@@ -30,6 +33,7 @@ preserve
 
     reshape wide spell, i(MS spell_id year) j(at_editor)
     rename spell_id revision
+    * FIXME NO, revision comes from branch name
     rename spell0 time_at_author
     rename spell1 time_at_editor
 
