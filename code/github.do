@@ -38,10 +38,19 @@ forvalues fy = 2021/2025 {
 }
 
 egen ms_tag = tag(MS)
+keep if ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
+
+drop if regexm(message, "Merge tag 'accepted' into")
+drop if regexm(message, "Merge tag 'accept' into")
+drop if regexm(message, "Create .zenodo")
+drop if regexm(message, "Merge pull request #1 from restud-replication-packages/author")
+drop if regexm(message, "Merge pull request #2 from restud-replication-packages/author")
+drop if MS == 24478 & accepted_year == 2025 // the authors asked for revision
+drop if MS == 26586 & accepted_year == 2025 // Nunn that had to be revisited
+
 tabulate submitted_year if ms_tag == 1
 tabulate accepted_year if ms_tag == 1
 
-keep if ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
 save "`here'data/git-events.dta", replace
 
 import delimited "`here'github-data/data/temp/issues.csv", clear varn(1) case(preserve)

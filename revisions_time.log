@@ -28,7 +28,7 @@ Notes:
 
 . 
 . keep if revision == max_revision
-(453 observations deleted)
+(452 observations deleted)
 
 . collapse (count) n = MS, by(year max_revision)
 

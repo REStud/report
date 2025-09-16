@@ -35,16 +35,6 @@ Notes:
 . use "`here'data/git-events.dta", clear
 
 . 
-. drop if regexm(message, "Merge tag 'accepted' into")
-(2 observations deleted)
-
-. drop if regexm(message, "Create .zenodo")
-(144 observations deleted)
-
-. drop if MS == 26586 // Nunn that had to be revisited
-(6 observations deleted)
-
-. 
 . bysort MS (numeric_date branch tag): generate t = _n
 
 . xtset MS t
@@ -55,7 +45,7 @@ Panel variable: MS (unbalanced)
 
 . 
 . generate spell = D.numeric_date
-(384 missing values generated)
+(383 missing values generated)
 
 . bysort MS (t): generate byte at_editor = (branch[_n-1] == branch[_n] ) | (bra
 > nch[_n-1] == "author")
@@ -78,7 +68,7 @@ Panel variable: MS (unbalanced)
 
 . * drop updates after acceptance
 . keep if t <= last_commit
-(20 observations deleted)
+(24 observations deleted)
 
 . 
 . codebook MS
@@ -90,13 +80,13 @@ MS                                                                  (unlabeled)
                   Type: Numeric (long)
 
                  Range: [17262,35540]                 Units: 1
-         Unique values: 384                       Missing .: 0/2,827
+         Unique values: 383                       Missing .: 0/2,793
 
-                  Mean: 29246.3
-             Std. dev.: 2739.21
+                  Mean: 29272.1
+             Std. dev.: 2738.36
 
            Percentiles:     10%       25%       50%       75%       90%
-                          25834     27466     29304     31166     32766
+                          25834     27512     29315     31175     32766
 
 . save "`here'temp/git-events-processed.dta", replace
 file /home/restud/report/temp/git-events-processed.dta saved
@@ -109,10 +99,10 @@ file /home/restud/report/temp/git-events-processed.dta saved
 .     collapse (sum) spell, by(MS year spell_id at_editor)
 
 .     drop if spell_id == 1
-(384 observations deleted)
+(383 observations deleted)
 
 .     replace spell_id = int((spell_id - 1)/2)
-(1,275 real changes made)
+(1,269 real changes made)
 
 . 
 .     reshape wide spell, i(MS spell_id year) j(at_editor)
@@ -120,7 +110,7 @@ file /home/restud/report/temp/git-events-processed.dta saved
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations            1,275   ->   837         
+Number of observations            1,269   ->   835         
 Number of variables                   5   ->   5           
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
@@ -148,10 +138,10 @@ file /home/restud/report/temp/collapsed_year.dta saved
 . collapse (sum) spell, by(MS accepted_at spell_id at_editor)
 
 . drop if spell_id == 1
-(137 observations deleted)
+(136 observations deleted)
 
 . replace spell_id = int((spell_id - 1)/2)
-(438 real changes made)
+(432 real changes made)
 
 . 
 . reshape wide spell, i(MS spell_id) j(at_editor)
@@ -159,7 +149,7 @@ file /home/restud/report/temp/collapsed_year.dta saved
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations              438   ->   289         
+Number of observations              432   ->   287         
 Number of variables                   5   ->   5           
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
@@ -190,15 +180,15 @@ file /home/restud/report/temp/collapsed_accepted_at.dta saved
       Percentiles      Smallest
  1%            0              0
  5%            0              0
-10%            0              0       Obs                 137
-25%           14              0       Sum of wgt.         137
+10%            0              0       Obs                 136
+25%           12              0       Sum of wgt.         136
 
-50%           25                      Mean            41.9708
-                        Largest       Std. dev.      98.69911
-75%           37            138
-90%           63            535       Variance       9741.514
-95%          102            603       Skewness       6.396919
-99%          603            855       Kurtosis       46.46909
+50%           24                      Mean           28.08824
+                        Largest       Std. dev.      24.64428
+75%         36.5            102
+90%           56            102       Variance       607.3403
+95%           70            119       Skewness       1.623094
+99%          119            138       Kurtosis       6.839569
 
 . summarize time_at_editor if revision>=1, detail
 
@@ -207,15 +197,15 @@ file /home/restud/report/temp/collapsed_accepted_at.dta saved
       Percentiles      Smallest
  1%            0              0
  5%            0              0
-10%            0              0       Obs                 149
-25%            0              0       Sum of wgt.         149
+10%            0              0       Obs                 145
+25%            0              0       Sum of wgt.         145
 
-50%            4                      Mean            146.604
-                        Largest       Std. dev.      343.7814
-75%           32           1222
-90%          818           1258       Variance       118185.7
-95%         1144           1260       Skewness       2.337687
-99%         1260           1270       Kurtosis       6.932982
+50%            1                      Mean           10.17931
+                        Largest       Std. dev.      16.92207
+75%           14             66
+90%           34             67       Variance       286.3565
+95%           53             69       Skewness       2.016445
+99%           69             70       Kurtosis       6.408464
 
 . summarize time_at_author, detail
 
@@ -224,15 +214,15 @@ file /home/restud/report/temp/collapsed_accepted_at.dta saved
       Percentiles      Smallest
  1%            0              0
  5%            3              0
-10%            5              1       Obs                 152
-25%            7              1       Sum of wgt.         152
+10%            5              1       Obs                 151
+25%            7              1       Sum of wgt.         151
 
-50%         18.5                      Mean           32.29605
-                        Largest       Std. dev.      60.37519
-75%         29.5            161
-90%           57            221       Variance       3645.163
-95%          125            307       Skewness       6.156706
-99%          307            586       Kurtosis       51.07918
+50%           18                      Mean           28.62914
+                        Largest       Std. dev.      40.14982
+75%           29            154
+90%           57            161       Variance       1612.008
+95%          110            221       Skewness       3.806507
+99%          221            307       Kurtosis       21.52338
 
 . twoway (histogram time_at_editor if revision==0, `opt' color(blue%30)) (histo
 > gram time_at_editor if revision>=1, `opt' color(red%30)), xtitle(Days at edit
@@ -247,13 +237,13 @@ file /home/restud/report/output/time_at_editor.png written in PNG format
 max_revisio |
           n |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |         25       18.25       18.25
-          1 |         80       58.39       76.64
-          2 |         26       18.98       95.62
-          3 |          4        2.92       98.54
-          4 |          2        1.46      100.00
+          0 |         24       17.65       17.65
+          1 |         81       59.56       77.21
+          2 |         25       18.38       95.59
+          3 |          4        2.94       98.53
+          4 |          2        1.47      100.00
 ------------+-----------------------------------
-      Total |        137      100.00
+      Total |        136      100.00
 
 . histogram max_revision if revision == 0, color(blue%30) discrete start(0) fre
 > quency xtitle(Accepted revision) graphregion(color(white))

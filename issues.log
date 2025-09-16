@@ -42,11 +42,11 @@ Notes:
 
 Duplicates in terms of all variables
 
-(2,614 observations deleted)
+(2,434 observations deleted)
 
 . save `git', replace
-(file /tmp/St4134059.000001 not found)
-file /tmp/St4134059.000001 saved as .dta format
+(file /tmp/St180542.000001 not found)
+file /tmp/St180542.000001 saved as .dta format
 
 . 
 . use "`here'data/issues.dta", clear
@@ -65,7 +65,7 @@ Duplicates in terms of MS
         from master                         0  
         from using                         60  
 
-    Matched                               325  
+    Matched                               323  
     -----------------------------------------
 
 . save "`here'temp/issues.dta", replace

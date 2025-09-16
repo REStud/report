@@ -523,36 +523,61 @@ MS: contains nonnumeric characters; replaced as long
 . 
 . egen ms_tag = tag(MS)
 
+. keep if ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
+(365 observations deleted)
+
+. 
+. drop if regexm(message, "Merge tag 'accepted' into")
+(2 observations deleted)
+
+. drop if regexm(message, "Merge tag 'accept' into")
+(1 observation deleted)
+
+. drop if regexm(message, "Create .zenodo")
+(144 observations deleted)
+
+. drop if regexm(message, "Merge pull request #1 from restud-replication-packag
+> es/author")
+(24 observations deleted)
+
+. drop if regexm(message, "Merge pull request #2 from restud-replication-packag
+> es/author")
+(1 observation deleted)
+
+. drop if MS == 24478 & accepted_year == 2025 // the authors asked for revision
+(4 observations deleted)
+
+. drop if MS == 26586 & accepted_year == 2025 // Nunn that had to be revisited
+(6 observations deleted)
+
+. 
 . tabulate submitted_year if ms_tag == 1
 
 submitted_y |
         ear |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-       2021 |         56       12.93       12.93
-       2022 |         87       20.09       33.03
-       2023 |         91       21.02       54.04
-       2024 |         98       22.63       76.67
-       2025 |        101       23.33      100.00
+       2021 |         34       10.24       10.24
+       2022 |         72       21.69       31.93
+       2023 |         77       23.19       55.12
+       2024 |         77       23.19       78.31
+       2025 |         72       21.69      100.00
 ------------+-----------------------------------
-      Total |        433      100.00
+      Total |        332      100.00
 
 . tabulate accepted_year if ms_tag == 1
 
 accepted_ye |
          ar |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-       2021 |         23        5.97        5.97
-       2022 |         68       17.66       23.64
-       2023 |         83       21.56       45.19
-       2024 |         73       18.96       64.16
-       2025 |        138       35.84      100.00
+       2021 |         23        6.93        6.93
+       2022 |         68       20.48       27.41
+       2023 |         83       25.00       52.41
+       2024 |         71       21.39       73.80
+       2025 |         87       26.20      100.00
 ------------+-----------------------------------
-      Total |        385      100.00
+      Total |        332      100.00
 
 . 
-. keep if ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
-(365 observations deleted)
-
 . save "`here'data/git-events.dta", replace
 file /home/restud/report/data/git-events.dta saved
 

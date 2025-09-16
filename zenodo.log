@@ -49,8 +49,8 @@ Duplicates in terms of zenodoid MS
 . tempfile z2g
 
 . save `z2g', replace
-(file /tmp/St4133758.000001 not found)
-file /tmp/St4133758.000001 saved as .dta format
+(file /tmp/St179686.000001 not found)
+file /tmp/St179686.000001 saved as .dta format
 
 . 
 . clear 
@@ -72,8 +72,8 @@ file /tmp/St4133758.000001 saved as .dta format
 . rename views views2021
 
 . save `zenodo', replace
-(file /tmp/St4133758.000002 not found)
-file /tmp/St4133758.000002 saved as .dta format
+(file /tmp/St179686.000002 not found)
+file /tmp/St179686.000002 saved as .dta format
 
 . 
 . tempfile zenodo22
@@ -106,8 +106,8 @@ file /tmp/St4133758.000002 saved as .dta format
     -----------------------------------------
 
 . save `zenodo22', replace
-(file /tmp/St4133758.000003 not found)
-file /tmp/St4133758.000003 saved as .dta format
+(file /tmp/St179686.000003 not found)
+file /tmp/St179686.000003 saved as .dta format
 
 . 
 . tempfile zenodo23
@@ -149,8 +149,8 @@ Duplicates in terms of zenodoid
     -----------------------------------------
 
 . save `zenodo23', replace
-(file /tmp/St4133758.000004 not found)
-file /tmp/St4133758.000004 saved as .dta format
+(file /tmp/St179686.000004 not found)
+file /tmp/St179686.000004 saved as .dta format
 
 . 
 . import delimited using "`here'github-data/data/raw/zenodo-data.csv", clear
