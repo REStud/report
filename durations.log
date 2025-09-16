@@ -35,17 +35,27 @@ Notes:
 . use "`here'data/git-events.dta", clear
 
 . 
+. drop if regexm(message, "Merge tag 'accepted' into")
+(2 observations deleted)
+
+. drop if regexm(message, "Create .zenodo")
+(144 observations deleted)
+
+. drop if MS == 26586 // Nunn that had to be revisited
+(6 observations deleted)
+
+. 
 . bysort MS (numeric_date branch tag): generate t = _n
 
 . xtset MS t
 
 Panel variable: MS (unbalanced)
- Time variable: t, 1 to 28
+ Time variable: t, 1 to 27
          Delta: 1 unit
 
 . 
 . generate spell = D.numeric_date
-(385 missing values generated)
+(384 missing values generated)
 
 . bysort MS (t): generate byte at_editor = (branch[_n-1] == branch[_n] ) | (bra
 > nch[_n-1] == "author")
@@ -54,7 +64,7 @@ Panel variable: MS (unbalanced)
 . xtset MS t
 
 Panel variable: MS (unbalanced)
- Time variable: t, 1 to 28
+ Time variable: t, 1 to 27
          Delta: 1 unit
 
 . generate byte change = L.at_editor != at_editor
@@ -64,10 +74,11 @@ Panel variable: MS (unbalanced)
 . 
 . * count of packages in pipeline
 . egen last_commit = max(cond(substr(tag, 1, 6) == "accept", t, .)), by(MS)
+(13 missing values generated)
 
 . * drop updates after acceptance
 . keep if t <= last_commit
-(16 observations deleted)
+(20 observations deleted)
 
 . 
 . codebook MS
@@ -79,13 +90,13 @@ MS                                                                  (unlabeled)
                   Type: Numeric (long)
 
                  Range: [17262,35540]                 Units: 1
-         Unique values: 385                       Missing .: 0/2,983
+         Unique values: 384                       Missing .: 0/2,827
 
-                  Mean: 29200.9
-             Std. dev.: 2728.91
+                  Mean: 29246.3
+             Std. dev.: 2739.21
 
            Percentiles:     10%       25%       50%       75%       90%
-                          25834     27364     29293     31149     32650
+                          25834     27466     29304     31166     32766
 
 . save "`here'temp/git-events-processed.dta", replace
 file /home/restud/report/temp/git-events-processed.dta saved
@@ -98,10 +109,10 @@ file /home/restud/report/temp/git-events-processed.dta saved
 .     collapse (sum) spell, by(MS year spell_id at_editor)
 
 .     drop if spell_id == 1
-(385 observations deleted)
+(384 observations deleted)
 
 .     replace spell_id = int((spell_id - 1)/2)
-(1,424 real changes made)
+(1,275 real changes made)
 
 . 
 .     reshape wide spell, i(MS spell_id year) j(at_editor)
@@ -109,7 +120,7 @@ file /home/restud/report/temp/git-events-processed.dta saved
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations            1,424   ->   933         
+Number of observations            1,275   ->   837         
 Number of variables                   5   ->   5           
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
@@ -137,10 +148,10 @@ file /home/restud/report/temp/collapsed_year.dta saved
 . collapse (sum) spell, by(MS accepted_at spell_id at_editor)
 
 . drop if spell_id == 1
-(138 observations deleted)
+(137 observations deleted)
 
 . replace spell_id = int((spell_id - 1)/2)
-(587 real changes made)
+(438 real changes made)
 
 . 
 . reshape wide spell, i(MS spell_id) j(at_editor)
@@ -148,7 +159,7 @@ file /home/restud/report/temp/collapsed_year.dta saved
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations              587   ->   385         
+Number of observations              438   ->   289         
 Number of variables                   5   ->   5           
 j variable (2 values)         at_editor   ->   (dropped)
 xij variables:
@@ -179,15 +190,15 @@ file /home/restud/report/temp/collapsed_accepted_at.dta saved
       Percentiles      Smallest
  1%            0              0
  5%            0              0
-10%            0              0       Obs                 138
-25%           12              0       Sum of wgt.         138
+10%            0              0       Obs                 137
+25%           14              0       Sum of wgt.         137
 
-50%         24.5                      Mean           30.01449
-                        Largest       Std. dev.      32.08224
-75%           37            102
-90%           63            119       Variance        1029.27
-95%           91            138       Skewness       3.726464
-99%          138            271       Kurtosis       25.59255
+50%           25                      Mean            41.9708
+                        Largest       Std. dev.      98.69911
+75%           37            138
+90%           63            535       Variance       9741.514
+95%          102            603       Skewness       6.396919
+99%          603            855       Kurtosis       46.46909
 
 . summarize time_at_editor if revision>=1, detail
 
@@ -196,15 +207,15 @@ file /home/restud/report/temp/collapsed_accepted_at.dta saved
       Percentiles      Smallest
  1%            0              0
  5%            0              0
-10%            0              0       Obs                 202
-25%            0              0       Sum of wgt.         202
+10%            0              0       Obs                 149
+25%            0              0       Sum of wgt.         149
 
-50%            0                      Mean            33.0495
-                        Largest       Std. dev.      171.2281
-75%           11            831
-90%           35           1074       Variance       29319.06
-95%           64           1434       Skewness        7.11315
-99%         1074           1436       Kurtosis       54.15423
+50%            4                      Mean            146.604
+                        Largest       Std. dev.      343.7814
+75%           32           1222
+90%          818           1258       Variance       118185.7
+95%         1144           1260       Skewness       2.337687
+99%         1260           1270       Kurtosis       6.932982
 
 . summarize time_at_author, detail
 
@@ -212,16 +223,16 @@ file /home/restud/report/temp/collapsed_accepted_at.dta saved
 -------------------------------------------------------------
       Percentiles      Smallest
  1%            0              0
- 5%            0              0
-10%            0              0       Obs                 247
-25%            5              0       Sum of wgt.         247
+ 5%            3              0
+10%            5              1       Obs                 152
+25%            7              1       Sum of wgt.         152
 
-50%           19                      Mean           139.8259
-                        Largest       Std. dev.      293.3653
-75%           74           1258
-90%          488           1260       Variance       86063.19
-95%          931           1270       Skewness       2.666903
-99%         1260           1348       Kurtosis       9.354175
+50%         18.5                      Mean           32.29605
+                        Largest       Std. dev.      60.37519
+75%         29.5            161
+90%           57            221       Variance       3645.163
+95%          125            307       Skewness       6.156706
+99%          307            586       Kurtosis       51.07918
 
 . twoway (histogram time_at_editor if revision==0, `opt' color(blue%30)) (histo
 > gram time_at_editor if revision>=1, `opt' color(red%30)), xtitle(Days at edit
@@ -236,15 +247,13 @@ file /home/restud/report/output/time_at_editor.png written in PNG format
 max_revisio |
           n |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |         20       14.49       14.49
-          1 |         55       39.86       54.35
-          2 |         14       10.14       64.49
-          3 |         35       25.36       89.86
-          4 |         12        8.70       98.55
-          5 |          1        0.72       99.28
-          6 |          1        0.72      100.00
+          0 |         25       18.25       18.25
+          1 |         80       58.39       76.64
+          2 |         26       18.98       95.62
+          3 |          4        2.92       98.54
+          4 |          2        1.46      100.00
 ------------+-----------------------------------
-      Total |        138      100.00
+      Total |        137      100.00
 
 . histogram max_revision if revision == 0, color(blue%30) discrete start(0) fre
 > quency xtitle(Accepted revision) graphregion(color(white))

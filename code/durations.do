@@ -4,6 +4,10 @@ local here = r(here)
 
 use "`here'data/git-events.dta", clear
 
+drop if regexm(message, "Merge tag 'accepted' into")
+drop if regexm(message, "Create .zenodo")
+drop if MS == 26586 // Nunn that had to be revisited
+
 bysort MS (numeric_date branch tag): generate t = _n
 xtset MS t
 
