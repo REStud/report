@@ -32,389 +32,425 @@ Notes:
 . local here = r(here)
 
 . 
-. import delimited "`here'/github-data/data/raw/gitlog.csv", clear varn(1) case
-> (preserve)
+. import delimited "`here'github-data/data/raw/gitlog.csv", clear varn(1) case(
+> preserve)
 (encoding automatically selected: UTF-8)
-Note: Unmatched quote while processing row 572; this can be due to a
+Note: Unmatched quote while processing row 30; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 574; this can be due to a
+Note: Unmatched quote while processing row 32; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 626; this can be due to a
+Note: Unmatched quote while processing row 505; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 628; this can be due to a
+Note: Unmatched quote while processing row 507; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 652; this can be due to a
+Note: Unmatched quote while processing row 520; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 654; this can be due to a
+Note: Unmatched quote while processing row 522; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 687; this can be due to a
+Note: Unmatched quote while processing row 578; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 689; this can be due to a
+Note: Unmatched quote while processing row 580; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 721; this can be due to a
+Note: Unmatched quote while processing row 632; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 723; this can be due to a
+Note: Unmatched quote while processing row 634; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 866; this can be due to a
+Note: Unmatched quote while processing row 658; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 868; this can be due to a
+Note: Unmatched quote while processing row 660; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 883; this can be due to a
+Note: Unmatched quote while processing row 693; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 885; this can be due to a
+Note: Unmatched quote while processing row 695; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1074; this can be due to a
+Note: Unmatched quote while processing row 727; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1076; this can be due to a
+Note: Unmatched quote while processing row 729; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1259; this can be due to a
+Note: Unmatched quote while processing row 872; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1261; this can be due to a
+Note: Unmatched quote while processing row 874; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1374; this can be due to a
+Note: Unmatched quote while processing row 889; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1376; this can be due to a
+Note: Unmatched quote while processing row 891; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1388; this can be due to a
+Note: Unmatched quote while processing row 1080; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1390; this can be due to a
+Note: Unmatched quote while processing row 1082; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1426; this can be due to a
+Note: Unmatched quote while processing row 1265; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1428; this can be due to a
+Note: Unmatched quote while processing row 1267; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1489; this can be due to a
+Note: Unmatched quote while processing row 1380; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1491; this can be due to a
+Note: Unmatched quote while processing row 1382; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1509; this can be due to a
+Note: Unmatched quote while processing row 1394; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1511; this can be due to a
+Note: Unmatched quote while processing row 1396; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1533; this can be due to a
+Note: Unmatched quote while processing row 1432; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1535; this can be due to a
+Note: Unmatched quote while processing row 1434; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1575; this can be due to a
+Note: Unmatched quote while processing row 1495; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1577; this can be due to a
+Note: Unmatched quote while processing row 1497; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1697; this can be due to a
+Note: Unmatched quote while processing row 1515; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1699; this can be due to a
+Note: Unmatched quote while processing row 1517; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1776; this can be due to a
+Note: Unmatched quote while processing row 1539; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1778; this can be due to a
+Note: Unmatched quote while processing row 1541; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1900; this can be due to a
+Note: Unmatched quote while processing row 1581; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1902; this can be due to a
+Note: Unmatched quote while processing row 1583; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1970; this can be due to a
+Note: Unmatched quote while processing row 1703; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1972; this can be due to a
+Note: Unmatched quote while processing row 1705; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1979; this can be due to a
+Note: Unmatched quote while processing row 1782; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1981; this can be due to a
+Note: Unmatched quote while processing row 1784; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1984; this can be due to a
+Note: Unmatched quote while processing row 1906; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 1986; this can be due to a
+Note: Unmatched quote while processing row 1908; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 2099; this can be due to a
+Note: Unmatched quote while processing row 1976; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 2101; this can be due to a
+Note: Unmatched quote while processing row 1978; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 2117; this can be due to a
+Note: Unmatched quote while processing row 1985; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 2119; this can be due to a
+Note: Unmatched quote while processing row 1987; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 2127; this can be due to a
+Note: Unmatched quote while processing row 1990; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 2129; this can be due to a
+Note: Unmatched quote while processing row 1992; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 2307; this can be due to a
+Note: Unmatched quote while processing row 2105; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 2309; this can be due to a
+Note: Unmatched quote while processing row 2107; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3002; this can be due to a
+Note: Unmatched quote while processing row 2123; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3004; this can be due to a
+Note: Unmatched quote while processing row 2125; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3005; this can be due to a
+Note: Unmatched quote while processing row 2133; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3007; this can be due to a
+Note: Unmatched quote while processing row 2135; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3012; this can be due to a
+Note: Unmatched quote while processing row 2313; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3014; this can be due to a
+Note: Unmatched quote while processing row 2315; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3346; this can be due to a
+Note: Unmatched quote while processing row 3008; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3356; this can be due to a
+Note: Unmatched quote while processing row 3010; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3357; this can be due to a
+Note: Unmatched quote while processing row 3011; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-Note: Unmatched quote while processing row 3373; this can be due to a
+Note: Unmatched quote while processing row 3013; this can be due to a
     formatting problem in the file or because a quoted data element spans
     multiple lines. You should carefully inspect your data after importing.
     Consider using option bindquote(strict) if quoted data spans multiple
     lines or option bindquote(nobind) if quotes are not used for binding
     data.
-(7 vars, 3,729 obs)
+Note: Unmatched quote while processing row 3018; this can be due to a
+    formatting problem in the file or because a quoted data element spans
+    multiple lines. You should carefully inspect your data after importing.
+    Consider using option bindquote(strict) if quoted data spans multiple
+    lines or option bindquote(nobind) if quotes are not used for binding
+    data.
+Note: Unmatched quote while processing row 3020; this can be due to a
+    formatting problem in the file or because a quoted data element spans
+    multiple lines. You should carefully inspect your data after importing.
+    Consider using option bindquote(strict) if quoted data spans multiple
+    lines or option bindquote(nobind) if quotes are not used for binding
+    data.
+Note: Unmatched quote while processing row 3352; this can be due to a
+    formatting problem in the file or because a quoted data element spans
+    multiple lines. You should carefully inspect your data after importing.
+    Consider using option bindquote(strict) if quoted data spans multiple
+    lines or option bindquote(nobind) if quotes are not used for binding
+    data.
+Note: Unmatched quote while processing row 3362; this can be due to a
+    formatting problem in the file or because a quoted data element spans
+    multiple lines. You should carefully inspect your data after importing.
+    Consider using option bindquote(strict) if quoted data spans multiple
+    lines or option bindquote(nobind) if quotes are not used for binding
+    data.
+Note: Unmatched quote while processing row 3363; this can be due to a
+    formatting problem in the file or because a quoted data element spans
+    multiple lines. You should carefully inspect your data after importing.
+    Consider using option bindquote(strict) if quoted data spans multiple
+    lines or option bindquote(nobind) if quotes are not used for binding
+    data.
+Note: Unmatched quote while processing row 3379; this can be due to a
+    formatting problem in the file or because a quoted data element spans
+    multiple lines. You should carefully inspect your data after importing.
+    Consider using option bindquote(strict) if quoted data spans multiple
+    lines or option bindquote(nobind) if quotes are not used for binding
+    data.
+(7 vars, 3,732 obs)
 
 . replace MS = "27827" if MS == "27827-1"
 (24 real changes made)
 
 . destring MS, force replace
 MS: contains nonnumeric characters; replaced as long
-(51 missing values generated)
+(54 missing values generated)
 
 . 
 . * Julia datetime is in timestamps with seconds (2019-12-10T17:28:33Z)
@@ -422,7 +458,7 @@ MS: contains nonnumeric characters; replaced as long
 (3,681 real changes made)
 
 . gen numeric_date = date(date, "YMD")
-(48 missing values generated)
+(51 missing values generated)
 
 . scalar fy2021 = date("2020-09-01", "YMD")
 
@@ -441,7 +477,7 @@ MS: contains nonnumeric characters; replaced as long
 . * keep only packages with new branch naming
 . keep if inlist(branch, "author", "version1", "version2", "version3", "version
 > 4")
-(365 observations deleted)
+(368 observations deleted)
 
 . egen byte ever_accepted = max(tag=="accepted" | tag == "accept"), by(MS)
 
@@ -455,8 +491,7 @@ MS: contains nonnumeric characters; replaced as long
 
 . scalar dbegin = fy2021
 
-. * 2024 is a leap year
-. scalar dend = fy2025
+. scalar dend = fy2026
 
 . 
 . generate submitted_year = .
@@ -516,10 +551,10 @@ accepted_ye |
 
 . 
 . keep if ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
-(1,582 observations deleted)
+(365 observations deleted)
 
-. save "`here'/data/git-events.dta", replace
-file /home/restud/report//data/git-events.dta saved
+. save "`here'data/git-events.dta", replace
+file /home/restud/report/data/git-events.dta saved
 
 . 
 . import delimited "`here'github-data/data/temp/issues.csv", clear varn(1) case
@@ -553,8 +588,8 @@ file /home/restud/report//data/git-events.dta saved
 (1 real change made)
 
 . 
-. save "`here'/data/issues.dta", replace
-file /home/restud/report//data/issues.dta saved
+. save "`here'data/issues.dta", replace
+file /home/restud/report/data/issues.dta saved
 
 . 
 end of do-file

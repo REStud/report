@@ -36,7 +36,7 @@ preserve
     egen max_revision = max(revision), by(MS)
     save "`here'temp/collapsed_year.dta", replace
 restore
-keep if year == 2024
+keep if year == 2025
 
 collapse (sum) spell, by(MS accepted_at spell_id at_editor)
 drop if spell_id == 1

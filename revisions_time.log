@@ -28,22 +28,22 @@ Notes:
 
 . 
 . keep if revision == max_revision
-(301 observations deleted)
+(548 observations deleted)
 
 . collapse (count) n = MS, by(year max_revision)
 
 . rename max_revision revision
 
 . reshape wide n, i(year) j(revision)
-(j = 0 1 2 3 4)
+(j = 0 1 2 3 4 5 6)
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations               17   ->   4           
-Number of variables                   3   ->   6           
-j variable (5 values)          revision   ->   (dropped)
+Number of observations               24   ->   5           
+Number of variables                   3   ->   8           
+j variable (7 values)          revision   ->   (dropped)
 xij variables:
-                                      n   ->   n0 n1 ... n4
+                                      n   ->   n0 n1 ... n6
 -----------------------------------------------------------------------------
 
 . 
@@ -52,7 +52,7 @@ xij variables:
 . 
 . tsset year
 
-Time variable: year, 2021 to 2024
+Time variable: year, 2021 to 2025
         Delta: 1 unit
 
 . tsline n0 n1 n2plus, title("Distribution of Package Revisions Over Time") yti

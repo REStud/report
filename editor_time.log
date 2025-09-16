@@ -52,7 +52,7 @@ file output/editor_time1.png written in PNG format
 . 
 . * report median time at editor over years
 . replace revision = 1 if revision > 1
-(90 real changes made)
+(219 real changes made)
 
 . collapse (mean) time_at_editor, by(year revision)
 
@@ -60,7 +60,7 @@ file output/editor_time1.png written in PNG format
 . xtset revision year
 
 Panel variable: revision (strongly balanced)
- Time variable: year, 2021 to 2024
+ Time variable: year, 2021 to 2025
          Delta: 1 unit
 
 . xtline time_at_editor, title("Average time at editor over years") ytitle("Day

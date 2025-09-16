@@ -25,8 +25,7 @@ egen byte ever_accepted = max(tag=="accepted" | tag == "accept"), by(MS)
 egen submitted_at = min(numeric_date), by(MS)
 egen accepted_at = max(cond(tag=="accepted" | tag == "accept", numeric_date, .)), by(MS)
 scalar dbegin = fy2021
-* 2024 is a leap year
-scalar dend = fy2025
+scalar dend = fy2026
 
 generate submitted_year = .
 generate accepted_year = .
