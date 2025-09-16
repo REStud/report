@@ -1,19 +1,19 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      StataNow 19.5
+ /__    /   ____/   /   ____/      18.0
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
-                                   800-782-8272        https://www.stata.com
-                                   979-696-4600        service@stata.com
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
 
-Stata license: 2-user 4-core network, expiring 16 Jan 2026
-Serial number: 501909221790
-  Licensed to: CodedThinking
-               Budapest
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -27,7 +27,7 @@ Notes:
 . clear all
 
 . here
-/home/restud/report/
+/Users/koren/Tresorit/Mac/places/restud/data-editor/report/
 
 . local here = r(here)
 
@@ -523,33 +523,6 @@ MS: contains nonnumeric characters; replaced as long
 . 
 . egen ms_tag = tag(MS)
 
-. tabulate submitted_year if ms_tag == 1
-
-submitted_y |
-        ear |      Freq.     Percent        Cum.
-------------+-----------------------------------
-       2021 |         56       12.93       12.93
-       2022 |         87       20.09       33.03
-       2023 |         91       21.02       54.04
-       2024 |         98       22.63       76.67
-       2025 |        101       23.33      100.00
-------------+-----------------------------------
-      Total |        433      100.00
-
-. tabulate accepted_year if ms_tag == 1
-
-accepted_ye |
-         ar |      Freq.     Percent        Cum.
-------------+-----------------------------------
-       2021 |         23        5.97        5.97
-       2022 |         68       17.66       23.64
-       2023 |         83       21.56       45.19
-       2024 |         73       18.96       64.16
-       2025 |        138       35.84      100.00
-------------+-----------------------------------
-      Total |        385      100.00
-
-. 
 . keep if ever_accepted & (accepted_at > dbegin) * (accepted_at <= dend)
 (365 observations deleted)
 
@@ -571,11 +544,81 @@ accepted_ye |
 > es/author")
 (1 observation deleted)
 
-. drop if MS == 24478 & year == 2025 /// the authors asked for revision
-> drop if MS == 26586 & year == 2025 /// Nunn that had to be revisited
-> 
-year not found
-r(111);
+. drop if MS == 24478 & accepted_year == 2025 // the authors asked for revision
+(4 observations deleted)
 
+. drop if MS == 26586 & accepted_year == 2025 // Nunn that had to be revisited
+(6 observations deleted)
+
+. 
+. tabulate submitted_year if ms_tag == 1
+
+submitted_y |
+        ear |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       2021 |         34       10.24       10.24
+       2022 |         72       21.69       31.93
+       2023 |         77       23.19       55.12
+       2024 |         77       23.19       78.31
+       2025 |         72       21.69      100.00
+------------+-----------------------------------
+      Total |        332      100.00
+
+. tabulate accepted_year if ms_tag == 1
+
+accepted_ye |
+         ar |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       2021 |         23        6.93        6.93
+       2022 |         68       20.48       27.41
+       2023 |         83       25.00       52.41
+       2024 |         71       21.39       73.80
+       2025 |         87       26.20      100.00
+------------+-----------------------------------
+      Total |        332      100.00
+
+. 
+. save "`here'data/git-events.dta", replace
+file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/data/git-event
+    > s.dta saved
+
+. 
+. import delimited "`here'github-data/data/temp/issues.csv", clear varn(1) case
+> (preserve)
+(encoding automatically selected: ISO-8859-2)
+(18 vars, 777 obs)
+
+. *replace MS = "27827" if MS == "27827-1"
+. *destring MS, force replace
+. foreach var of varlist DAS cite_data confidential_data forward_slash requirem
+> ents include_data macosx matlab_toolboxes readme relative_path save_output st
+> ata_packages {
+  2.         generate `var'b = 0 if `var' == "false"
+  3.         replace `var'b = 1 if `var' == "true"
+  4.         drop `var'
+  5.         ren `var'b `var'
+  6. }
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 missing value generated)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 missing value generated)
+(1 real change made)
+
+. 
+. save "`here'data/issues.dta", replace
+file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/data/issues.dt
+    > a saved
+
+. 
 end of do-file
-r(111);

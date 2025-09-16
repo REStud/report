@@ -1,19 +1,19 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      StataNow 19.5
+ /__    /   ____/   /   ____/      18.0
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
-                                   800-782-8272        https://www.stata.com
-                                   979-696-4600        service@stata.com
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
 
-Stata license: 2-user 4-core network, expiring 16 Jan 2026
-Serial number: 501909221790
-  Licensed to: CodedThinking
-               Budapest
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -25,7 +25,7 @@ Notes:
 . do code/zenodo.do 
 
 . here
-/home/restud/report/
+/Users/koren/Tresorit/Mac/places/restud/data-editor/report/
 
 . local here = r(here)
 
@@ -49,8 +49,10 @@ Duplicates in terms of zenodoid MS
 . tempfile z2g
 
 . save `z2g', replace
-(file /tmp/St4150432.000001 not found)
-file /tmp/St4150432.000001 saved as .dta format
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09071.000001 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09071.000001 saved
+    as .dta format
 
 . 
 . clear 
@@ -72,8 +74,10 @@ file /tmp/St4150432.000001 saved as .dta format
 . rename views views2021
 
 . save `zenodo', replace
-(file /tmp/St4150432.000002 not found)
-file /tmp/St4150432.000002 saved as .dta format
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09071.000002 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09071.000002 saved
+    as .dta format
 
 . 
 . tempfile zenodo22
@@ -106,8 +110,10 @@ file /tmp/St4150432.000002 saved as .dta format
     -----------------------------------------
 
 . save `zenodo22', replace
-(file /tmp/St4150432.000003 not found)
-file /tmp/St4150432.000003 saved as .dta format
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09071.000003 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09071.000003 saved
+    as .dta format
 
 . 
 . tempfile zenodo23
@@ -149,8 +155,10 @@ Duplicates in terms of zenodoid
     -----------------------------------------
 
 . save `zenodo23', replace
-(file /tmp/St4150432.000004 not found)
-file /tmp/St4150432.000004 saved as .dta format
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09071.000004 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09071.000004 saved
+    as .dta format
 
 . 
 . import delimited using "`here'github-data/data/raw/zenodo-data.csv", clear
@@ -303,7 +311,8 @@ zenodoid                                                            (unlabeled)
 (bin=19, start=0, width=5.4771383)
 
 . graph export "`here'output/downloads_histogram.png", replace width(800)
-file /home/restud/report/output/downloads_histogram.png written in PNG format
+file /Users/koren/Tresorit/Mac/places/restud/data-editor/report/output/download
+> s_histogram.png written in PNG format
 
 . 
 . merge 1:m zenodoid using `z2g', keep(match)
@@ -319,7 +328,9 @@ file /home/restud/report/output/downloads_histogram.png written in PNG format
 
 . 
 . save "`here'temp/zenodo.dta", replace
-file /home/restud/report/temp/zenodo.dta saved
+file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/zenodo.dt
+    > a saved
 
 . 
 . 

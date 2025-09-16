@@ -1,19 +1,19 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      StataNow 19.5
+ /__    /   ____/   /   ____/      18.0
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
-                                   800-782-8272        https://www.stata.com
-                                   979-696-4600        service@stata.com
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
 
-Stata license: 2-user 4-core network, expiring 16 Jan 2026
-Serial number: 501909221790
-  Licensed to: CodedThinking
-               Budapest
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -52,7 +52,7 @@ file output/editor_time1.png written in PNG format
 . 
 . * report median time at editor over years
 . replace revision = 1 if revision > 1
-(219 real changes made)
+(129 real changes made)
 
 . collapse (mean) time_at_editor, by(year revision)
 

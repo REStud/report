@@ -1,19 +1,19 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      StataNow 19.5
+ /__    /   ____/   /   ____/      18.0
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
-                                   800-782-8272        https://www.stata.com
-                                   979-696-4600        service@stata.com
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
 
-Stata license: 2-user 4-core network, expiring 16 Jan 2026
-Serial number: 501909221790
-  Licensed to: CodedThinking
-               Budapest
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -27,7 +27,7 @@ Notes:
 . clear all
 
 . here
-/home/restud/report/
+/Users/koren/Tresorit/Mac/places/restud/data-editor/report/
 
 . local here = r(here)
 
@@ -42,11 +42,13 @@ Notes:
 
 Duplicates in terms of all variables
 
-(2,614 observations deleted)
+(2,434 observations deleted)
 
 . save `git', replace
-(file /tmp/St4150782.000001 not found)
-file /tmp/St4150782.000001 saved as .dta format
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09929.000001 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St09929.000001 saved
+    as .dta format
 
 . 
 . use "`here'data/issues.dta", clear
@@ -65,11 +67,13 @@ Duplicates in terms of MS
         from master                         0  
         from using                         60  
 
-    Matched                               325  
+    Matched                               323  
     -----------------------------------------
 
 . save "`here'temp/issues.dta", replace
-file /home/restud/report/temp/issues.dta saved
+file
+    /Users/koren/Tresorit/Mac/places/restud/data-editor/report/temp/issues.dt
+    > a saved
 
 . 
 . drop MS branch commit

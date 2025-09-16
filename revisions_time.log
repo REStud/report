@@ -1,19 +1,19 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      StataNow 19.5
+ /__    /   ____/   /   ____/      18.0
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
-                                   800-782-8272        https://www.stata.com
-                                   979-696-4600        service@stata.com
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
 
-Stata license: 2-user 4-core network, expiring 16 Jan 2026
-Serial number: 501909221790
-  Licensed to: CodedThinking
-               Budapest
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -28,22 +28,22 @@ Notes:
 
 . 
 . keep if revision == max_revision
-(548 observations deleted)
+(452 observations deleted)
 
 . collapse (count) n = MS, by(year max_revision)
 
 . rename max_revision revision
 
 . reshape wide n, i(year) j(revision)
-(j = 0 1 2 3 4 5 6)
+(j = 0 1 2 3 4)
 
 Data                               Long   ->   Wide
 -----------------------------------------------------------------------------
-Number of observations               24   ->   5           
-Number of variables                   3   ->   8           
-j variable (7 values)          revision   ->   (dropped)
+Number of observations               22   ->   5           
+Number of variables                   3   ->   6           
+j variable (5 values)          revision   ->   (dropped)
 xij variables:
-                                      n   ->   n0 n1 ... n6
+                                      n   ->   n0 n1 ... n4
 -----------------------------------------------------------------------------
 
 . 

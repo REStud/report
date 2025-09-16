@@ -4,7 +4,6 @@ local here = r(here)
 
 use "`here'data/git-events.dta", clear
 
-* FIXME IS THIS THE RIGHT ORDER
 bysort MS (numeric_date branch tag): generate t = _n
 xtset MS t
 
