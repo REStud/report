@@ -19,11 +19,14 @@ scalar fy2026 = fy2025 + 365
 
 * keep only packages with new branch naming
 keep if inlist(branch, "author", "version1", "version2", "version3", "version4")
-egen byte ever_accepted = max(tag=="accepted" | tag == "accept"), by(MS)
+gen byte accepted_tag = tag=="accepted" | tag == "accept"
+* there are some duplicate tags
+egen first_accepted = min(cond(accepted_tag, numeric_date, .)), by(MS)
+generate byte ever_accepted = !missing(first_accepted)
 
-* keep backages accepted in 2021 fiscal year
+* keep packages accepted in 2021 fiscal year
 egen submitted_at = min(numeric_date), by(MS)
-egen accepted_at = max(cond(tag=="accepted" | tag == "accept", numeric_date, .)), by(MS)
+generate accepted_at = first_accepted
 scalar dbegin = fy2021
 scalar dend = fy2026
 

@@ -479,14 +479,19 @@ MS: contains nonnumeric characters; replaced as long
 > 4")
 (368 observations deleted)
 
-. egen byte ever_accepted = max(tag=="accepted" | tag == "accept"), by(MS)
+. gen byte accepted_tag = tag=="accepted" | tag == "accept"
+
+. * there are some duplicate tags
+. egen first_accepted = min(cond(accepted_tag, numeric_date, .)), by(MS)
+(365 missing values generated)
+
+. generate byte ever_accepted = !missing(first_accepted)
 
 . 
-. * keep backages accepted in 2021 fiscal year
+. * keep packages accepted in 2021 fiscal year
 . egen submitted_at = min(numeric_date), by(MS)
 
-. egen accepted_at = max(cond(tag=="accepted" | tag == "accept", numeric_date, 
-> .)), by(MS)
+. generate accepted_at = first_accepted
 (365 missing values generated)
 
 . scalar dbegin = fy2021
@@ -510,15 +515,15 @@ MS: contains nonnumeric characters; replaced as long
 > date') & accepted_year == .
   6. }
 (563 real changes made)
-(186 real changes made)
+(288 real changes made)
 (739 real changes made)
-(559 real changes made)
+(740 real changes made)
 (555 real changes made)
-(478 real changes made)
+(566 real changes made)
 (803 real changes made)
-(559 real changes made)
+(773 real changes made)
 (681 real changes made)
-(1,217 real changes made)
+(632 real changes made)
 
 . 
 . egen ms_tag = tag(MS)
@@ -545,7 +550,7 @@ MS: contains nonnumeric characters; replaced as long
 (1 observation deleted)
 
 . drop if MS == 24478 & accepted_year == 2025 // the authors asked for revision
-(4 observations deleted)
+(0 observations deleted)
 
 . drop if MS == 26586 & accepted_year == 2025 // Nunn that had to be revisited
 (6 observations deleted)
@@ -569,11 +574,11 @@ submitted_y |
 accepted_ye |
          ar |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-       2021 |         23        6.93        6.93
-       2022 |         68       20.48       27.41
-       2023 |         83       25.00       52.41
-       2024 |         71       21.39       73.80
-       2025 |         87       26.20      100.00
+       2021 |         24        7.23        7.23
+       2022 |         69       20.78       28.01
+       2023 |         84       25.30       53.31
+       2024 |         72       21.69       75.00
+       2025 |         83       25.00      100.00
 ------------+-----------------------------------
       Total |        332      100.00
 
