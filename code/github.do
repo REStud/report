@@ -2,7 +2,7 @@ clear all
 here
 local here = r(here)
 
-import delimited "`here'github-data/data/raw/gitlog.csv", clear varn(1) case(preserve)
+import delimited "`here'github-data/data/raw/gitlog.csv", clear varn(1) case(preserve) bindquotes(strict)
 replace MS = "27827" if MS == "27827-1"
 destring MS, force replace
 
