@@ -3,6 +3,10 @@ name: Download Zenodo Metadata Monthly
 on:
   schedule:
     - cron: '0 0 1 * *'  # Runs at 00:00 on the 1st day of every month
+  workflow_dispatch:      # enables the "Run workflow" button
+
+permissions:
+  contents: write         # needed so the final git push works
 
 jobs:
   download:
@@ -10,22 +14,22 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.x'
+        python-version: '3.12'
 
     - name: Install Poetry
       run: pip install poetry
-      
+
     - name: Install Dependencies using Poetry
       run: poetry install --no-root
       working-directory: ./zenodo
-      
+
     - name: Download Zenodo Metadata
-      working-directory: ./zenodo  # Adjust if your pyproject.toml is in another directory
+      working-directory: ./zenodo
       run: poetry run python zenodo_pull.py
 
     - name: Commit and Push
