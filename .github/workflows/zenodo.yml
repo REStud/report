@@ -6,7 +6,7 @@ on:
 
 jobs:
   download:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-late
 
     steps:
     - name: Checkout repository
@@ -19,11 +19,11 @@ jobs:
 
     - name: Install Poetry
       run: pip install poetry
-
+      
     - name: Install Dependencies using Poetry
-      run: poetry install
-      working-directory: ./zenodo  # Adjust if your pyproject.toml is in another directory
-
+      run: poetry install --no-root
+      working-directory: ./zenodo
+      
     - name: Download Zenodo Metadata
       working-directory: ./zenodo  # Adjust if your pyproject.toml is in another directory
       run: poetry run python zenodo_pull.py
