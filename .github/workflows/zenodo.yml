@@ -2,11 +2,11 @@ name: Download Zenodo Metadata Monthly
 
 on:
   schedule:
-    - cron: '0 0 1 * *'  # Runs at 00:00 on the 1st day of every month
-  workflow_dispatch:      # enables the "Run workflow" button
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
 
 permissions:
-  contents: write         # needed so the final git push works
+  contents: write
 
 jobs:
   download:
@@ -30,6 +30,8 @@ jobs:
 
     - name: Download Zenodo Metadata
       working-directory: ./zenodo
+      env:
+        ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
       run: poetry run python zenodo_pull.py
 
     - name: Commit and Push
